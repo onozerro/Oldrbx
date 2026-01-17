@@ -7,120 +7,21 @@
     <link rel="icon" type="image/png" href="img/ic.png" />
     <title>Register - OLDRBX</title>
     <meta name="description" content="Create an account. You must provide an approved Application ID to register." />
-    <meta name="twitter:card" content="summary" />
-    <meta property="og:site_name" content="OLDRBX" />
-    <meta property="og:url" content="https://OLDRBX.lol" />
-    <meta property="og:title" content="Register" />
-    <meta property="og:description" content="Create an account. You must provide an approved Application ID to register." />
-    <meta property="og:image" content="https://OLDRBX.lol/img/OLDRBXC.png" />
     <style>
-        body {
-        background-color: #0c0c0cff !important;
-        color: #ffffff !important;
-        }
-        .navbar.bg-dark {
-            background-color: #0b0b0b !important;
-            border-bottom: 2px solid #3d3d3dff !important;
-        }
-        .navbar.bg-light {
-            background-color: #121212 !important;
-            border-bottom: none !important;
-        }
-        .navbar-dark .navbar-nav .nav-link {
-            color: #bbbbbbb0 !important;
-        }
-        .navbar-dark .navbar-nav .nav-link:hover {
-            color: #ffffff !important;
-        }
-        .navbar-auth .nav-link {
-            color: #bbbbbbb0 !important;
-        }
-        .navbar-auth .nav-link:hover {
-            color: #ffffff !important;
-        }
-        footer.bg-dark {
-            background-color: #0b0b0b !important;
-            border-top: 2px solid #3d3d3dff !important;
-        }
-        footer .text-muted {
-            color: #3d3d3dff !important;
-        }
-        .exchcont {
-            max-width: 420px;
-            margin: 50px auto;
-        }
-        .exchcard {
-            background-color: #121212;
-            border: 1px solid #2a2a2a;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
-            padding: 25px;
-        }
-        .exchcard h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            font-weight: 700;
-            color: #ffffff;
-        }
-        .exchcard p {
-            color: #ffffff;
-            font-size: 0.95rem;
-        }
-        .exchcard .text-success,
-        .exchcard .text-danger {
-            text-align: center;
-            margin-bottom: 10px;
-        }
-        .exchcard .form-control {
-            background-color: #1b1b1b;
-            color: #ffffff;
-            border: 1px solid #3a3a3a;
-            border-radius: 5px;
-            padding: 8px;
-            width: 100%;
-            margin-top: 10px;
-        }
-        .exchcard .form-control:focus {
-            background-color: #1e1e1e;
-            border-color: #1a73e8;
-            box-shadow: 0 0 0 0.2rem rgba(26, 115, 232, 0.25);
-            color: #ffffff;
-        }
-        .exchcard label {
-            font-weight: 600;
-            margin-top: 10px;
-        }
-        .exchcard .btn-primary {
-            background-color: #1a73e8;
-            border-color: #1a73e8;
-            color: #fff;
-            width: 100%;
-            margin-top: 15px;
-            transition: all 0.2s ease-in-out;
-        }
-        .exchcard .btn-primary:hover {
-            background-color: #155ab6;
-            border-color: #155ab6;
-        }
-        .alert-warning {
-            background-color: #2a2200;
-            color: #ffcc00;
-            border: 1px solid #ffcc00;
-            margin-bottom: 20px;
-        }
-        .h-captcha {
-            display: flex;
-            justify-content: center;
-            margin-top: 15px;
-            margin-bottom: 15px;
-        }
-        .exchcard a {
-            color: #1a73e8 !important;
-            text-decoration: underline;
-        }
-        .exchcard a:hover {
-            color: #63a4ff !important;
-        }
+        body { background-color: #0c0c0cff !important; color: #ffffff !important; }
+        .navbar.bg-dark { background-color: #0b0b0b !important; border-bottom: 2px solid #3d3d3dff !important; }
+        .navbar-dark .navbar-nav .nav-link { color: #bbbbbbb0 !important; }
+        .navbar-dark .navbar-nav .nav-link:hover { color: #ffffff !important; }
+        .exchcont { max-width: 420px; margin: 50px auto; }
+        .exchcard { background-color: #121212; border: 1px solid #2a2a2a; border-radius: 10px; box-shadow: 0 0 20px rgba(255,255,255,0.05); padding: 25px; }
+        .exchcard h2 { text-align: center; margin-bottom: 20px; font-weight: 700; color: #ffffff; }
+        .exchcard p { color: #ffffff; font-size: 0.95rem; }
+        .exchcard .form-control { background-color: #1b1b1b; color: #ffffff; border: 1px solid #3a3a3a; border-radius: 5px; padding: 8px; width: 100%; margin-top: 10px; }
+        .exchcard .form-control:focus { background-color: #1e1e1e; border-color: #1a73e8; box-shadow: 0 0 0 0.2rem rgba(26,115,232,0.25); color: #ffffff; }
+        .exchcard .btn-primary { background-color: #1a73e8; border-color: #1a73e8; color: #fff; width: 100%; margin-top: 15px; transition: all 0.2s ease-in-out; }
+        .exchcard .btn-primary:hover { background-color: #155ab6; border-color: #155ab6; }
+        .alert-warning { background-color: #2a2200; color: #ffcc00; border: 1px solid #ffcc00; margin-bottom: 20px; }
+        .h-captcha { display: flex; justify-content: center; margin-top: 15px; margin-bottom: 15px; }
         .small-note { color:#dcdcdc; font-size:13px; }
     </style>
 </head>
@@ -147,14 +48,11 @@
 <main class="flex-shrink-0">
 <div class="exchcont">
     <div class="alert alert-warning" id="warnNoTicket" style="display:none">
-        <p class="mb-0">
-            <span class="fw-bolder">Warning:</span> No application ID is set. If your application was approved, you can ignore this message.
-        </p>
+        <p class="mb-0"><span class="fw-bolder">Warning:</span> No application ID is set. If your application was approved, you can ignore this message.</p>
     </div>
 
     <div class="exchcard">
         <h2>Register</h2>
-
         <p class="text-center">To create an account you must provide a Username, Password and your Application ID (the application must be approved). Each Application ID can be used only once.</p>
 
         <form id="regForm" class="mt-3">
@@ -181,98 +79,77 @@
 </footer>
 
 <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-  const SUPA_URL = "https://nkvvnnjukqtfhmegyzek.supabase.co";
-  const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rdnZubmp1a3F0ZmhtZWd5emVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2NjQ5MTIsImV4cCI6MjA4NDI0MDkxMn0.2jp9X2KQunFargrstYM7oGBYs75Kq7AEHs7iRARxexs";
-  const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
-
+  const EDGE_URL = '/.netlify/functions/verify-register';
   const form = document.getElementById("regForm");
   const msg = document.getElementById("msg");
   const appIdInput = document.getElementById("appId");
   const warnNoTicket = document.getElementById("warnNoTicket");
-
-  function getParam(name) {
-    const url = new URL(location.href);
-    return url.searchParams.get(name);
-  }
-
-  async function sha256Hex(str) {
-    const enc = new TextEncoder().encode(str);
-    const buf = await crypto.subtle.digest("SHA-256", enc);
-    const b = new Uint8Array(buf);
-    return Array.from(b).map(x => x.toString(16).padStart(2, "0")).join("");
-  }
-
+  function getParam(name) { const url = new URL(location.href); return url.searchParams.get(name); }
+  async function sha256Hex(str) { const enc = new TextEncoder().encode(str); const buf = await crypto.subtle.digest("SHA-256", enc); const b = new Uint8Array(buf); return Array.from(b).map(x => x.toString(16).padStart(2,"0")).join(""); }
   const paramTicket = getParam("ticket");
   if (paramTicket) appIdInput.value = paramTicket;
-  else {
-    const last = localStorage.getItem("lastTicket");
-    if (last) appIdInput.value = last;
-    else warnNoTicket.style.display = "block";
+  else { const last = localStorage.getItem("lastTicket"); if (last) appIdInput.value = last; else warnNoTicket.style.display = "block"; }
+  function display(type, text) { if (type === 'info') msg.innerHTML = '<div style="color:#8f8f8f;text-align:center;margin-bottom:8px">' + text + '</div>'; else if (type === 'success') msg.innerHTML = '<div class="alert alert-success text-center">' + text + '</div>'; else msg.innerHTML = '<div class="alert alert-danger text-center">' + text + '</div>'; }
+  async function postRegister(ticket, username, password_hash, hcaptcha_token) {
+    try {
+      const resp = await fetch(EDGE_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ticket, username, password_hash, hcaptcha_token }) });
+      let body;
+      try { body = await resp.json(); } catch (e) { body = { parse_error: true, text: await resp.text() }; }
+      if (!resp.ok) {
+        console.error('Server returned error status', resp.status, body);
+        const msgText = body?.error || body?.err || JSON.stringify(body);
+        return { ok: false, status: resp.status, body, message: msgText };
+      }
+      return { ok: true, status: resp.status, body };
+    } catch (err) {
+      console.error('Fetch exception', err);
+      return { ok: false, networkError: true, error: err };
+    }
   }
-
-  function display(type, text) {
-    if (type === 'info') msg.innerHTML = '<div style="color:#8f8f8f;text-align:center;margin-bottom:8px">' + text + '</div>';
-    else if (type === 'success') msg.innerHTML = '<div class="alert alert-success text-center">' + text + '</div>';
-    else msg.innerHTML = '<div class="alert alert-danger text-center">' + text + '</div>';
-  }
-
   form.addEventListener("submit", async function (e) {
     e.preventDefault();
     msg.innerHTML = "";
     const username = document.getElementById("username").value.trim();
     const password = document.getElementById("password").value;
     const appId = appIdInput.value.trim();
-    if (!username || !password || !appId) {
-      display('error', 'Fill all fields');
-      return;
-    }
-
-    const captchaToken = (typeof hcaptcha !== 'undefined') ? hcaptcha.getResponse() : '';
-    if (!captchaToken) {
-      display('error', 'Please complete the captcha');
-      return;
-    }
-
+    if (!username || !password || !appId) { display('error', 'Fill all fields'); return; }
+    if (typeof hcaptcha === 'undefined') { display('error', 'Captcha not loaded'); return; }
+    const captchaToken = hcaptcha.getResponse();
+    if (!captchaToken) { display('error', 'Please complete the captcha'); return; }
     display('info', 'Processing registration...');
-
+    document.getElementById("submitBtn").disabled = true;
     try {
       const hash = await sha256Hex(password);
-
-      const edgeUrl = '/.netlify/functions/verify-register';
-
-      const resp = await fetch(edgeUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ticket: appId,
-          username: username,
-          password_hash: hash,
-          hcaptcha_token: captchaToken
-        })
-      });
-
-      const body = await resp.json();
-      if (!resp.ok) {
-        display('error', body?.error || (body?.err || 'Registration failed'));
+      const result = await postRegister(appId, username, hash, captchaToken);
+      if (!result.ok) {
+        if (result.networkError) {
+          display('error', 'Network error: ' + (result.error && result.error.message ? result.error.message : String(result.error)));
+          console.log('Network error details:', result.error);
+        } else {
+          display('error', 'Server error (' + result.status + '): ' + (result.body?.error || result.body?.err || JSON.stringify(result.body)));
+          console.log('Server response:', result.body);
+        }
+        if (typeof hcaptcha !== 'undefined') hcaptcha.reset();
+        document.getElementById("submitBtn").disabled = false;
         return;
       }
-
-      if (body.err) {
-        display('error', body.err);
-        return;
-      }
-
+      const body = result.body;
+      const res = Array.isArray(body) ? body[0] : body;
+      if (!res) { display('error', 'Unexpected server response'); console.log('Unexpected response body:', body); if (typeof hcaptcha !== 'undefined') hcaptcha.reset(); document.getElementById("submitBtn").disabled = false; return; }
+      if (res.err) { display('error', res.err); console.log('RPC error:', res); if (typeof hcaptcha !== 'undefined') hcaptcha.reset(); document.getElementById("submitBtn").disabled = false; return; }
       localStorage.setItem('lastTicket', appId);
       display('success', 'Account created. <a href="login.html">Login</a>');
       form.reset();
       if (typeof hcaptcha !== 'undefined') hcaptcha.reset();
     } catch (err) {
-      console.error(err);
-      display('error', 'Unexpected error');
+      console.error('Client exception', err);
+      display('error', 'Unexpected error: ' + (err && err.message ? err.message : String(err)));
+      if (typeof hcaptcha !== 'undefined') hcaptcha.reset();
+    } finally {
+      document.getElementById("submitBtn").disabled = false;
     }
   });
 });
