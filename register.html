@@ -1,266 +1,138 @@
 <!doctype html>
 <html lang="en" class="h-100">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-    <link rel="icon" type="image/png" href="img/ic.png" />
-    <title>Register - OLDRBX</title>
-    <meta name="description" content="Create an account. You must provide an approved Application ID to register." />
-    <meta name="twitter:card" content="summary" />
-    <meta property="og:site_name" content="OLDRBX" />
-    <meta property="og:url" content="https://OLDRBX.lol" />
-    <meta property="og:title" content="Register" />
-    <meta property="og:description" content="Create an account. You must provide an approved Application ID to register." />
-    <meta property="og:image" content="https://OLDRBX.lol/img/OLDRBXC.png" />
-    <style>
-        body {
-        background-color: #0c0c0cff !important;
-        color: #ffffff !important;
-        }
-        .navbar.bg-dark {
-            background-color: #0b0b0b !important;
-            border-bottom: 2px solid #3d3d3dff !important;
-        }
-        .navbar.bg-light {
-            background-color: #121212 !important;
-            border-bottom: none !important;
-        }
-        .navbar-dark .navbar-nav .nav-link {
-            color: #bbbbbbb0 !important;
-        }
-        .navbar-dark .navbar-nav .nav-link:hover {
-            color: #ffffff !important;
-        }
-        .navbar-auth .nav-link {
-            color: #bbbbbbb0 !important;
-        }
-        .navbar-auth .nav-link:hover {
-            color: #ffffff !important;
-        }
-        footer.bg-dark {
-            background-color: #0b0b0b !important;
-            border-top: 2px solid #3d3d3dff !important;
-        }
-        footer .text-muted {
-            color: #3d3d3dff !important;
-        }
-        .exchcont {
-            max-width: 420px;
-            margin: 50px auto;
-        }
-        .exchcard {
-            background-color: #121212;
-            border: 1px solid #2a2a2a;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
-            padding: 25px;
-        }
-        .exchcard h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            font-weight: 700;
-            color: #ffffff;
-        }
-        .exchcard p {
-            color: #ffffff;
-            font-size: 0.95rem;
-        }
-        .exchcard .text-success,
-        .exchcard .text-danger {
-            text-align: center;
-            margin-bottom: 10px;
-        }
-        .exchcard .form-control {
-            background-color: #1b1b1b;
-            color: #ffffff;
-            border: 1px solid #3a3a3a;
-            border-radius: 5px;
-            padding: 8px;
-            width: 100%;
-            margin-top: 10px;
-        }
-        .exchcard .form-control:focus {
-            background-color: #1e1e1e;
-            border-color: #1a73e8;
-            box-shadow: 0 0 0 0.2rem rgba(26, 115, 232, 0.25);
-            color: #ffffff;
-        }
-        .exchcard label {
-            font-weight: 600;
-            margin-top: 10px;
-        }
-        .exchcard .btn-primary {
-            background-color: #1a73e8;
-            border-color: #1a73e8;
-            color: #fff;
-            width: 100%;
-            margin-top: 15px;
-            transition: all 0.2s ease-in-out;
-        }
-        .exchcard .btn-primary:hover {
-            background-color: #155ab6;
-            border-color: #155ab6;
-        }
-        .alert-warning {
-            background-color: #2a2200;
-            color: #ffcc00;
-            border: 1px solid #ffcc00;
-            margin-bottom: 20px;
-        }
-        .exchcard a {
-            color: #1a73e8 !important;
-            text-decoration: underline;
-        }
-        .exchcard a:hover {
-            color: #63a4ff !important;
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  <link rel="icon" type="image/png" href="img/ic.png" />
+  <title>Register - OLDRBX</title>
+  <style>
+    body { background-color:#0c0c0cff; color:#fff; }
+    .exchcont { max-width:420px; margin:50px auto; }
+    .exchcard { background:#121212; border:1px solid #2a2a2a; border-radius:10px; padding:25px; box-shadow:0 0 20px rgba(255,255,255,0.03); }
+    .exchcard .form-control { background:#1b1b1b; color:#fff; border:1px solid #3a3a3a; margin-top:10px; }
+    .h-captcha { display:flex; justify-content:center; margin-top:12px; margin-bottom:10px; }
+  </style>
 </head>
 <body class="d-flex flex-column h-100">
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom">
     <div class="container-fluid">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link" href="home.html">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
-                <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
-                <li class="nav-item"><a class="nav-link" href="discord.html">Discord</a></li>
-                <li class="nav-item"><a class="nav-link" href="tos.html">Terms of Service</a></li>
-                <li class="nav-item"><a class="nav-link" href="privacy.html">Privacy</a></li>
-                <li class="nav-item"><a class="nav-link" href="account-deletion.html">Account Deletion</a></li>
-            </ul>
-        </div>
+      <a class="navbar-brand" href="#">OLDRBX</a>
     </div>
-</nav>
+  </nav>
 
-<main class="flex-shrink-0">
-<div class="exchcont">
-    <div class="exchcard">
-        <h2>Register</h2>
-        <p class="text-center">To create an account you must provide a Username, Password and your Application ID (the application must be approved). Each Application ID can be used only once.</p>
+  <main class="flex-shrink-0">
+    <div class="exchcont">
+      <div class="exchcard">
+        <h2 class="text-center">Register</h2>
+        <p class="text-center">Provide Username, Password and Application ID (application must be approved). Each Application ID can be used only once.</p>
 
-        <form id="regForm" class="mt-3">
-            <input id="username" type="text" placeholder="Username" class="form-control" maxlength="64" />
-            <input id="password" type="password" placeholder="Password" class="form-control" />
-            <input id="appId" type="text" placeholder="Application ID" class="form-control" maxlength="128" />
-            <input type="submit" class="btn btn-primary mt-3" value="Create account" />
+        <form id="regForm" class="mt-3" onsubmit="return false;">
+          <input id="username" type="text" class="form-control" placeholder="Username" maxlength="64" />
+          <input id="password" type="password" class="form-control" placeholder="Password" />
+          <input id="appId" type="text" class="form-control" placeholder="Application ID" maxlength="128" />
+
+          <div class="mt-3 text-center">
+            <div class="h-captcha" data-sitekey="1b42e17a-9bb0-42f2-a5d8-d6aa0c6a3b88" data-theme="dark"></div>
+          </div>
+
+          <input id="submitBtn" type="submit" class="btn btn-primary mt-3 w-100" value="Create account" />
         </form>
 
         <div id="msg" style="margin-top:12px"></div>
-        <div class="small-note text-center mt-3">If your application was approved but you can't register, check the Application ID on the application status page.</div>
+      </div>
     </div>
-</div>
-</main>
+  </main>
 
-<footer class="footer mt-auto py-3 bg-dark">
-    <div class="container">
-        <p class="text-muted text-center">This website is not affiliated, endorsed, and/or sponsored by any companies mentioned.</p>
-        <p class="text-muted mb-0 text-center">&copy; 2026 OLDRBX</p>
+  <footer class="footer mt-auto py-3 bg-dark">
+    <div class="container text-center">
+      <p class="text-muted mb-0">&copy; 2026 OLDRBX</p>
     </div>
-</footer>
+  </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  const SUPA_URL = "https://nkvvnnjukqtfhmegyzek.supabase.co";
-  const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rdnZubmp1a3F0ZmhtZWd5emVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2NjQ5MTIsImV4cCI6MjA4NDI0MDkxMn0.2jp9X2KQunFargrstYM7oGBYs75Kq7AEHs7iRARxexs";
-  const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
+  <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  const form = document.getElementById("regForm");
-  const msg = document.getElementById("msg");
-  const appIdInput = document.getElementById("appId");
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const SUPA_URL = "https://nkvvnnjukqtfhmegyzek.supabase.co";
+      const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rdnZubmp1a3F0ZmhtZWd5emVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2NjQ5MTIsImV4cCI6MjA4NDI0MDkxMn0.2jp9X2KQunFargrstYM7oGBYs75Kq7AEHs7iRARxexs";
+      const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
 
-  function getParam(name) {
-    const url = new URL(location.href);
-    return url.searchParams.get(name);
-  }
+      const form = document.getElementById("regForm");
+      const msg = document.getElementById("msg");
 
-  async function sha256Hex(str) {
-    const enc = new TextEncoder().encode(str);
-    const buf = await crypto.subtle.digest("SHA-256", enc);
-    const b = new Uint8Array(buf);
-    return Array.from(b).map(x => x.toString(16).padStart(2, "0")).join("");
-  }
-
-  const paramTicket = getParam("ticket");
-  if (paramTicket) appIdInput.value = paramTicket;
-  else {
-    const last = localStorage.getItem("lastTicket");
-    if (last) appIdInput.value = last;
-  }
-
-  function displayMsg(type, text) {
-    if (type === 'success') msg.innerHTML = '<div class="alert alert-success text-center">' + text + '</div>';
-    else if (type === 'info') msg.innerHTML = '<div style="color:#8f8f8f;margin-bottom:8px;text-align:center">' + text + '</div>';
-    else msg.innerHTML = '<div class="alert alert-danger text-center">' + text + '</div>';
-  }
-
-  form.addEventListener("submit", async function (e) {
-    e.preventDefault();
-    msg.innerHTML = "";
-    const username = document.getElementById("username").value.trim();
-    const password = document.getElementById("password").value;
-    const appId = appIdInput.value.trim();
-    if (!username || !password || !appId) {
-      displayMsg('error', 'Fill all fields');
-      return;
-    }
-
-    displayMsg('info', 'Checking username and application...');
-
-    try {
-      const { data: userCheck, error: userCheckErr } = await sb.from('users').select('id').eq('username', username).limit(1);
-      if (userCheckErr) {
-        displayMsg('error', 'Error checking username');
-        return;
-      }
-      if (userCheck && userCheck.length) {
-        displayMsg('error', 'Username already taken');
-        return;
+      function display(type, text) {
+        if (type === 'info') msg.innerHTML = '<div style="color:#8f8f8f;text-align:center;margin-bottom:8px">' + text + '</div>';
+        else if (type === 'success') msg.innerHTML = '<div class="alert alert-success text-center">' + text + '</div>';
+        else msg.innerHTML = '<div class="alert alert-danger text-center">' + text + '</div>';
       }
 
-      const hash = await sha256Hex(password);
+      async function sha256Hex(str) {
+        const enc = new TextEncoder().encode(str);
+        const buf = await crypto.subtle.digest("SHA-256", enc);
+        const b = new Uint8Array(buf);
+        return Array.from(b).map(x => x.toString(16).padStart(2, "0")).join("");
+      }
 
-      displayMsg('info', 'Processing registration...');
+      form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        display('', '');
+        const username = document.getElementById("username").value.trim();
+        const password = document.getElementById("password").value;
+        const appId = document.getElementById("appId").value.trim();
 
-      const { data, error } = await sb.rpc('register_with_application', {
-        p_ticket_id: appId,
-        p_username: username,
-        p_password_hash: hash
+        if (!username || !password || !appId) {
+          display('error', 'Fill all fields');
+          return;
+        }
+
+        const captchaToken = (typeof hcaptcha !== 'undefined') ? hcaptcha.getResponse() : '';
+        if (!captchaToken) {
+          display('error', 'Please complete the captcha');
+          return;
+        }
+
+        display('info', 'Processing registration...');
+
+        try {
+          const hash = await sha256Hex(password);
+
+          const edgeUrl = '/.netlify/functions/verify-register'; // <-- пример: ваш endpoint (см. пример Edge-функции ниже)
+          const resp = await fetch(edgeUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              ticket: appId,
+              username: username,
+              password_hash: hash,
+              hcaptcha_token: captchaToken
+            })
+          });
+
+          const body = await resp.json();
+          if (!resp.ok) {
+            display('error', body?.error || 'Registration failed');
+            return;
+          }
+
+          if (body.err) {
+            display('error', body.err);
+            return;
+          }
+
+          localStorage.setItem('lastTicket', appId);
+          display('success', 'Account created. <a href="login.html">Login</a>');
+          form.reset();
+          if (typeof hcaptcha !== 'undefined') hcaptcha.reset();
+        } catch (err) {
+          console.error(err);
+          display('error', 'Unexpected error');
+        }
       });
+    });
+  </script>
 
-      if (error) {
-        const msgText = error.message || 'RPC error';
-        if (/duplicate|unique/i.test(msgText)) displayMsg('error', 'Username already taken');
-        else displayMsg('error', msgText);
-        return;
-      }
-
-      const res = Array.isArray(data) ? data[0] : data;
-      if (!res) {
-        displayMsg('error', 'Unexpected server response');
-        return;
-      }
-      if (res.err) {
-        displayMsg('error', res.err);
-        return;
-      }
-
-      localStorage.setItem('lastTicket', appId);
-      displayMsg('success', 'Account created. <a href="login.html">Login</a>');
-      form.reset();
-    } catch (err) {
-      console.error(err);
-      displayMsg('error', 'Unexpected error');
-    }
-  });
-});
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>
 </html>
