@@ -22,6 +22,22 @@
             background-color: #0b0b0b !important;
             border-bottom: 2px solid #3d3d3dff !important;
         }
+        .navbar.bg-light {
+            background-color: #121212 !important;
+            border-bottom: none !important;
+        }
+        .navbar-dark .navbar-nav .nav-link {
+            color: #bbbbbbb0 !important;
+        }
+        .navbar-dark .navbar-nav .nav-link:hover {
+            color: #ffffff !important;
+        }
+        .navbar-auth .nav-link {
+            color: #bbbbbbb0 !important;
+        }
+        .navbar-auth .nav-link:hover {
+            color: #ffffff !important;
+        }
         footer.bg-dark {
             background-color: #0b0b0b !important;
             border-top: 2px solid #3d3d3dff !important;
@@ -50,6 +66,11 @@
             color: #ffffff;
             font-size: 0.95rem;
         }
+        .exchcard .text-success,
+        .exchcard .text-danger {
+            text-align: center;
+            margin-bottom: 10px;
+        }
         .exchcard .form-control {
             background-color: #1b1b1b;
             color: #ffffff;
@@ -65,12 +86,40 @@
             box-shadow: 0 0 0 0.2rem rgba(26, 115, 232, 0.25);
             color: #ffffff;
         }
+        .exchcard label {
+            font-weight: 600;
+            margin-top: 10px;
+        }
         .exchcard .btn-primary {
             background-color: #1a73e8;
             border-color: #1a73e8;
             color: #fff;
             width: 100%;
             margin-top: 15px;
+            transition: all 0.2s ease-in-out;
+        }
+        .exchcard .btn-primary:hover {
+            background-color: #155ab6;
+            border-color: #155ab6;
+        }
+        .alert-warning {
+            background-color: #2a2200;
+            color: #ffcc00;
+            border: 1px solid #ffcc00;
+            margin-bottom: 20px;
+        }
+        .h-captcha {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+        .exchcard a {
+            color: #1a73e8 !important;
+            text-decoration: underline;
+        }
+        .exchcard a:hover {
+            color: #63a4ff !important;
         }
         .table-row {
             background: rgba(255,255,255,0.02);
@@ -94,16 +143,40 @@
     </style>
 </head>
 <body class="d-flex flex-column h-100">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="home.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
+                <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                <li class="nav-item"><a class="nav-link" href="discord.html">Discord</a></li>
+                <li class="nav-item"><a class="nav-link" href="tos.html">Terms of Service</a></li>
+                <li class="nav-item"><a class="nav-link" href="privacy.html">Privacy</a></li>
+                <li class="nav-item"><a class="nav-link" href="account-deletion.html">Account Deletion</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
 <main class="flex-shrink-0">
 <div class="exchcont">
     <div class="exchcard">
         <h2>View Application Status</h2>
+        <p>If you filled out your application on another browser or cleared your site data, you can paste your application ID below to view its status. If you did not save your application ID, you will need to submit a new application.</p>
 
         <form id="lookupForm" class="mt-3">
             <input id="ticketInput" type="text" class="form-control" placeholder="Application ID" maxlength="128" />
             <input type="submit" class="btn btn-primary mt-4" value="Lookup" />
         </form>
+
+        <div class="d-flex gap-2 mt-3">
+            <button id="useLastBtn" class="btn btn-outline-primary">Use last ticket</button>
+            <button id="refreshBtn" class="btn btn-outline-primary">Refresh</button>
+        </div>
 
         <div id="resultArea" class="mt-3"></div>
     </div>
@@ -112,6 +185,7 @@
 
 <footer class="footer mt-auto py-3 bg-dark">
     <div class="container">
+        <p class="text-muted text-center">This website is not affiliated, endorsed, and/or sponsored by any companies mentioned.</p>
         <p class="text-muted mb-0 text-center">&copy; 2026 OLDRBX</p>
     </div>
 </footer>
@@ -126,59 +200,94 @@ document.addEventListener("DOMContentLoaded", function () {
   const ticketInput = document.getElementById("ticketInput");
   const lookupForm = document.getElementById("lookupForm");
   const resultArea = document.getElementById("resultArea");
+  const useLastBtn = document.getElementById("useLastBtn");
+  const refreshBtn = document.getElementById("refreshBtn");
+
+  function getParam(name) {
+    const url = new URL(location.href);
+    return url.searchParams.get(name);
+  }
 
   async function fetchApplication(ticket) {
-    resultArea.innerHTML = '<div style="color:#8f8f8f">Searching...</div>';
+    resultArea.innerHTML = '<div style="color:#8f8f8f;margin-bottom:8px">Searching...</div>';
+    try {
+      const { data, error } = await sb.from("applications").select("*").eq("ticket_id", ticket).limit(1).order("created_at", { ascending: false });
+      if (error || !data || !data.length) {
+        resultArea.innerHTML = '<div class="not-found">Application not found</div>';
+        return;
+      }
+      const app = data[0];
+      const rows = [];
+      rows.push({ label: "Ticket", value: app.ticket_id || "" });
+      rows.push({ label: "About", value: app.about || "" });
+      rows.push({ label: "Social URL", value: app.social_url || "" });
+      rows.push({ label: "Status", value: app.status || "" });
+      rows.push({ label: "Created At", value: app.created_at ? new Date(app.created_at).toLocaleString() : "" });
 
-    const { data } = await sb
-      .from("applications")
-      .select("*")
-      .eq("ticket_id", ticket)
-      .limit(1)
-      .order("created_at", { ascending: false });
-
-    if (!data || !data.length) {
-      resultArea.innerHTML = '<div class="not-found">Application not found</div>';
-      return;
+      const wrap = document.createElement("div");
+      for (const r of rows) {
+        const el = document.createElement("div");
+        el.className = "table-row";
+        el.innerHTML = '<div class="label">' + r.label + '</div><div class="value" style="margin-top:6px">' + (r.value || "&mdash;") + '</div>';
+        wrap.appendChild(el);
+      }
+      if (app.status && /approved/i.test(app.status)) {
+        const btn = document.createElement("a");
+        btn.href = "register.html";
+        btn.className = "btn btn-primary mt-2";
+        btn.textContent = "Register";
+        wrap.appendChild(btn);
+      }
+      resultArea.innerHTML = "";
+      resultArea.appendChild(wrap);
+    } catch (e) {
+      resultArea.innerHTML = '<div class="not-found">Error fetching application</div>';
+      console.error(e);
     }
-
-    const app = data[0];
-    const wrap = document.createElement("div");
-
-    [
-      ["Ticket", app.ticket_id],
-      ["About", app.about],
-      ["Social URL", app.social_url],
-      ["Status", app.status],
-      ["Created At", app.created_at ? new Date(app.created_at).toLocaleString() : ""]
-    ].forEach(r => {
-      const el = document.createElement("div");
-      el.className = "table-row";
-      el.innerHTML = `<div class="label">${r[0]}</div><div class="value">${r[1] || "&mdash;"}</div>`;
-      wrap.appendChild(el);
-    });
-
-    if (app.status && app.status.toLowerCase() === "approved") {
-      const btn = document.createElement("a");
-      btn.href = "register.html";
-      btn.className = "btn btn-primary";
-      btn.textContent = "REGISTER";
-      wrap.appendChild(btn);
-    }
-
-    resultArea.innerHTML = "";
-    resultArea.appendChild(wrap);
   }
 
   lookupForm.addEventListener("submit", function (e) {
     e.preventDefault();
-    if (ticketInput.value.trim()) {
-      fetchApplication(ticketInput.value.trim());
+    const ticket = ticketInput.value.trim();
+    if (!ticket) {
+      resultArea.innerHTML = '<div class="not-found">Enter a ticket number</div>';
+      return;
     }
+    fetchApplication(ticket);
   });
+
+  useLastBtn.addEventListener("click", function () {
+    const last = localStorage.getItem("lastTicket");
+    if (!last) {
+      resultArea.innerHTML = '<div class="not-found">No last ticket found in this browser</div>';
+      return;
+    }
+    ticketInput.value = last;
+    fetchApplication(last);
+  });
+
+  refreshBtn.addEventListener("click", function () {
+    const ticket = ticketInput.value.trim();
+    if (!ticket) {
+      resultArea.innerHTML = '<div class="not-found">Enter a ticket number</div>';
+      return;
+    }
+    fetchApplication(ticket);
+  });
+
+  const paramTicket = getParam("ticket");
+  if (paramTicket) {
+    ticketInput.value = paramTicket;
+    fetchApplication(paramTicket);
+  } else {
+    const last = localStorage.getItem("lastTicket");
+    if (last) {
+      ticketInput.value = last;
+    }
+  }
 });
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>
 </html>
