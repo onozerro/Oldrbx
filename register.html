@@ -8,91 +8,19 @@
     <title>Register - OLDRBX</title>
     <meta name="description" content="Create an account. You must provide an approved Application ID to register." />
     <style>
-        body {
-        background-color: #0c0c0cff !important;
-        color: #ffffff !important;
-        }
-        .navbar.bg-dark {
-            background-color: #0b0b0b !important;
-            border-bottom: 2px solid #3d3d3dff !important;
-        }
-        .navbar.bg-light {
-            background-color: #121212 !important;
-            border-bottom: none !important;
-        }
-        .navbar-dark .navbar-nav .nav-link {
-            color: #bbbbbbb0 !important;
-        }
-        .navbar-dark .navbar-nav .nav-link:hover {
-            color: #ffffff !important;
-        }
-        .navbar-auth .nav-link {
-            color: #bbbbbbb0 !important;
-        }
-        .navbar-auth .nav-link:hover {
-            color: #ffffff !important;
-        }
-        footer.bg-dark {
-            background-color: #0b0b0b !important;
-            border-top: 2px solid #3d3d3dff !important;
-        }
-        footer .text-muted {
-            color: #3d3d3dff !important;
-        }
-        .exchcont {
-            max-width: 420px;
-            margin: 50px auto;
-        }
-        .exchcard {
-            background-color: #121212;
-            border: 1px solid #2a2a2a;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
-            padding: 25px;
-        }
-        .exchcard h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            font-weight: 700;
-            color: #ffffff;
-        }
-        .exchcard p {
-            color: #ffffff;
-            font-size: 0.95rem;
-        }
-        .exchcard .form-control {
-            background-color: #1b1b1b;
-            color: #ffffff;
-            border: 1px solid #3a3a3a;
-            border-radius: 5px;
-            padding: 8px;
-            width: 100%;
-            margin-top: 10px;
-        }
-        .exchcard .form-control:focus {
-            background-color: #1e1e1e;
-            border-color: #1a73e8;
-            box-shadow: 0 0 0 0.2rem rgba(26, 115, 232, 0.25);
-            color: #ffffff;
-        }
-        .exchcard .btn-primary {
-            background-color: #1a73e8;
-            border-color: #1a73e8;
-            color: #fff;
-            width: 100%;
-            margin-top: 15px;
-            transition: all 0.2s ease-in-out;
-        }
-        .exchcard .btn-primary:hover {
-            background-color: #155ab6;
-            border-color: #155ab6;
-        }
-        .alert-warning {
-            background-color: #2a2200;
-            color: #ffcc00;
-            border: 1px solid #ffcc00;
-            margin-bottom: 20px;
-        }
+        body { background-color: #0c0c0cff !important; color: #ffffff !important; }
+        .navbar.bg-dark { background-color: #0b0b0b !important; border-bottom: 2px solid #3d3d3dff !important; }
+        .navbar-dark .navbar-nav .nav-link { color: #bbbbbbb0 !important; }
+        .navbar-dark .navbar-nav .nav-link:hover { color: #ffffff !important; }
+        .exchcont { max-width: 420px; margin: 50px auto; }
+        .exchcard { background-color: #121212; border: 1px solid #2a2a2a; border-radius: 10px; box-shadow: 0 0 20px rgba(255,255,255,0.05); padding: 25px; }
+        .exchcard h2 { text-align: center; margin-bottom: 20px; font-weight: 700; color: #ffffff; }
+        .exchcard p { color: #ffffff; font-size: 0.95rem; }
+        .exchcard .form-control { background-color: #1b1b1b; color: #ffffff; border: 1px solid #3a3a3a; border-radius: 5px; padding: 8px; width: 100%; margin-top: 10px; }
+        .exchcard .form-control:focus { background-color: #1e1e1e; border-color: #1a73e8; box-shadow: 0 0 0 0.2rem rgba(26,115,232,0.25); color: #ffffff; }
+        .exchcard .btn-primary { background-color: #1a73e8; border-color: #1a73e8; color: #fff; width: 100%; margin-top: 15px; transition: all 0.2s ease-in-out; }
+        .exchcard .btn-primary:hover { background-color: #155ab6; border-color: #155ab6; }
+        .alert-warning { background-color: #2a2200; color: #ffcc00; border: 1px solid #ffcc00; margin-bottom: 20px; }
         .small-note { color:#dcdcdc; font-size:13px; }
     </style>
 </head>
@@ -172,6 +100,12 @@ document.addEventListener("DOMContentLoaded", function () {
     if (last) appIdInput.value = last;
   }
 
+  function displayMsg(type, text) {
+    if (type === 'success') msg.innerHTML = '<div class="alert alert-success text-center">' + text + '</div>';
+    else if (type === 'info') msg.innerHTML = '<div style="color:#8f8f8f;margin-bottom:8px;text-align:center">' + text + '</div>';
+    else msg.innerHTML = '<div class="alert alert-danger text-center">' + text + '</div>';
+  }
+
   form.addEventListener("submit", async function (e) {
     e.preventDefault();
     msg.innerHTML = "";
@@ -179,76 +113,56 @@ document.addEventListener("DOMContentLoaded", function () {
     const password = document.getElementById("password").value;
     const appId = appIdInput.value.trim();
     if (!username || !password || !appId) {
-      msg.innerHTML = '<div class="alert alert-danger text-center">Fill all fields</div>';
+      displayMsg('error', 'Fill all fields');
       return;
     }
 
-    msg.innerHTML = '<div style="color:#8f8f8f;margin-bottom:8px">Checking application...</div>';
+    displayMsg('info', 'Checking username and application...');
 
     try {
-      const { data: appData, error: appErr } = await sb.from("applications").select("*").eq("ticket_id", appId).limit(1).order("created_at", { ascending: false });
-      if (appErr || !appData || !appData.length) {
-        msg.innerHTML = '<div class="alert alert-danger text-center">Application not found</div>';
+      const { data: userCheck, error: userCheckErr } = await sb.from('users').select('id').eq('username', username).limit(1);
+      if (userCheckErr) {
+        displayMsg('error', 'Error checking username');
         return;
       }
-      const appRow = appData[0];
-      const status = appRow.status || "";
-      const used = appRow.used === true;
-      if (used) {
-        msg.innerHTML = '<div class="alert alert-danger text-center">This Application ID has already been used</div>';
+      if (userCheck && userCheck.length) {
+        displayMsg('error', 'Username already taken');
         return;
       }
-      if (!/approved/i.test(status)) {
-        msg.innerHTML = '<div class="alert alert-danger text-center">Application is not approved</div>';
-        return;
-      }
-
-      msg.innerHTML = '<div style="color:#8f8f8f;margin-bottom:8px">Checking username...</div>';
-
-      const { data: exists, error: existsErr } = await sb.from("users").select("id").eq("username", username).limit(1);
-      if (existsErr) {
-        msg.innerHTML = '<div class="alert alert-danger text-center">Error checking username</div>';
-        return;
-      }
-      if (exists && exists.length) {
-        msg.innerHTML = '<div class="alert alert-danger text-center">Username already taken</div>';
-        return;
-      }
-
-      msg.innerHTML = '<div style="color:#8f8f8f;margin-bottom:8px">Registering account...</div>';
 
       const hash = await sha256Hex(password);
 
-      const { data: userData, error: insErr } = await sb.from("users").insert({
-        username: username,
-        password_hash: hash,
-        verified: true,
-        is_admin: false,
-        balance: 0
-      }).select("id").single();
+      displayMsg('info', 'Processing registration...');
 
-      if (insErr || !userData) {
-        msg.innerHTML = '<div class="alert alert-danger text-center">Error creating account</div>';
+      const { data, error } = await sb.rpc('register_with_application', {
+        p_ticket_id: appId,
+        p_username: username,
+        p_password_hash: hash
+      });
+
+      if (error) {
+        const msgText = error.message || 'RPC error';
+        if (/duplicate|unique/i.test(msgText)) displayMsg('error', 'Username already taken');
+        else displayMsg('error', msgText);
         return;
       }
 
-      const { data: updData, error: updErr } = await sb.from("applications").update({
-        used: true,
-        registered_user: userData.id,
-        used_at: new Date().toISOString()
-      }).eq("ticket_id", appId).eq("used", false).select("id").single();
-
-      if (updErr || !updData) {
-        await sb.from("users").delete().eq("id", userData.id);
-        msg.innerHTML = '<div class="alert alert-danger text-center">This Application ID was just used by someone else. Try again with a different Application ID</div>';
+      const res = Array.isArray(data) ? data[0] : data;
+      if (!res) {
+        displayMsg('error', 'Unexpected server response');
+        return;
+      }
+      if (res.err) {
+        displayMsg('error', res.err);
         return;
       }
 
-      msg.innerHTML = '<div class="alert alert-success text-center">Account created. <a href="login.html">Login</a></div>';
+      localStorage.setItem('lastTicket', appId);
+      displayMsg('success', 'Account created. <a href="login.html">Login</a>');
       form.reset();
-    } catch (e) {
-      msg.innerHTML = '<div class="alert alert-danger text-center">Unexpected error</div>';
-      console.error(e);
+    } catch (err) {
+      console.error(err);
+      displayMsg('error', 'Unexpected error');
     }
   });
 });
