@@ -225,10 +225,13 @@ document.addEventListener("DOMContentLoaded", function () {
         wrap.appendChild(el);
       }
       if (app.status && /approved/i.test(app.status)) {
-        const btn = document.createElement("a");
-        btn.href = "register.html";
+        const btn = document.createElement("button");
+        btn.type = "button";
         btn.className = "btn btn-primary mt-2";
         btn.textContent = "Register";
+        btn.addEventListener("click", function () {
+          location.href = "register.html";
+        });
         wrap.appendChild(btn);
       }
       resultArea.innerHTML = "";
