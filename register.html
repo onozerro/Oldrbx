@@ -8,18 +8,91 @@
     <title>Register - OLDRBX</title>
     <meta name="description" content="Create an account. You must provide an approved Application ID to register." />
     <style>
-        body { background-color: #0c0c0cff !important; color: #ffffff !important; }
-        .navbar.bg-dark { background-color: #0b0b0b !important; border-bottom: 2px solid #3d3d3dff !important; }
-        .navbar-dark .navbar-nav .nav-link { color: #bbbbbbb0 !important; }
-        .navbar-dark .navbar-nav .nav-link:hover { color: #ffffff !important; }
-        .exchcont { max-width: 420px; margin: 50px auto; }
-        .exchcard { background-color: #121212; border: 1px solid #2a2a2a; border-radius: 10px; box-shadow: 0 0 20px rgba(255,255,255,0.05); padding: 25px; }
-        .exchcard h2 { text-align: center; margin-bottom: 20px; font-weight: 700; color: #ffffff; }
-        .exchcard .form-control { background-color: #1b1b1b; color: #ffffff; border: 1px solid #3a3a3a; border-radius: 5px; padding: 8px; width: 100%; margin-top: 10px; }
-        .exchcard .form-control:focus { background-color: #1e1e1e; border-color: #1a73e8; box-shadow: 0 0 0 0.2rem rgba(26,115,232,0.25); color: #ffffff; }
-        .exchcard .btn-primary { background-color: #1a73e8; border-color: #1a73e8; color: #fff; width: 100%; margin-top: 15px; transition: all 0.2s ease-in-out; }
-        .exchcard .btn-primary:hover { background-color: #155ab6; border-color: #155ab6; }
-        .alert-warning { background-color: #2a2200; color: #ffcc00; border: 1px solid #ffcc00; margin-bottom: 20px; }
+        body {
+        background-color: #0c0c0cff !important;
+        color: #ffffff !important;
+        }
+        .navbar.bg-dark {
+            background-color: #0b0b0b !important;
+            border-bottom: 2px solid #3d3d3dff !important;
+        }
+        .navbar.bg-light {
+            background-color: #121212 !important;
+            border-bottom: none !important;
+        }
+        .navbar-dark .navbar-nav .nav-link {
+            color: #bbbbbbb0 !important;
+        }
+        .navbar-dark .navbar-nav .nav-link:hover {
+            color: #ffffff !important;
+        }
+        .navbar-auth .nav-link {
+            color: #bbbbbbb0 !important;
+        }
+        .navbar-auth .nav-link:hover {
+            color: #ffffff !important;
+        }
+        footer.bg-dark {
+            background-color: #0b0b0b !important;
+            border-top: 2px solid #3d3d3dff !important;
+        }
+        footer .text-muted {
+            color: #3d3d3dff !important;
+        }
+        .exchcont {
+            max-width: 420px;
+            margin: 50px auto;
+        }
+        .exchcard {
+            background-color: #121212;
+            border: 1px solid #2a2a2a;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+            padding: 25px;
+        }
+        .exchcard h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+        .exchcard p {
+            color: #ffffff;
+            font-size: 0.95rem;
+        }
+        .exchcard .form-control {
+            background-color: #1b1b1b;
+            color: #ffffff;
+            border: 1px solid #3a3a3a;
+            border-radius: 5px;
+            padding: 8px;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .exchcard .form-control:focus {
+            background-color: #1e1e1e;
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 0.2rem rgba(26, 115, 232, 0.25);
+            color: #ffffff;
+        }
+        .exchcard .btn-primary {
+            background-color: #1a73e8;
+            border-color: #1a73e8;
+            color: #fff;
+            width: 100%;
+            margin-top: 15px;
+            transition: all 0.2s ease-in-out;
+        }
+        .exchcard .btn-primary:hover {
+            background-color: #155ab6;
+            border-color: #155ab6;
+        }
+        .alert-warning {
+            background-color: #2a2200;
+            color: #ffcc00;
+            border: 1px solid #ffcc00;
+            margin-bottom: 20px;
+        }
         .small-note { color:#dcdcdc; font-size:13px; }
     </style>
 </head>
@@ -73,11 +146,17 @@
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   const SUPA_URL = "https://nkvvnnjukqtfhmegyzek.supabase.co";
-  const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rdnZubmp1a3F0ZmhtZWd5emd5emVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2NjQ5MTIsImV4cCI6MjA4NDI0MDkxMn0.2jp9X2KQunFargrstYM7oGBYs75Kq7AEHs7iRARxexs";
+  const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rdnZubmp1a3F0ZmhtZWd5emVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2NjQ5MTIsImV4cCI6MjA4NDI0MDkxMn0.2jp9X2KQunFargrstYM7oGBYs75Kq7AEHs7iRARxexs";
   const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
 
   const form = document.getElementById("regForm");
   const msg = document.getElementById("msg");
+  const appIdInput = document.getElementById("appId");
+
+  function getParam(name) {
+    const url = new URL(location.href);
+    return url.searchParams.get(name);
+  }
 
   async function sha256Hex(str) {
     const enc = new TextEncoder().encode(str);
@@ -86,12 +165,19 @@ document.addEventListener("DOMContentLoaded", function () {
     return Array.from(b).map(x => x.toString(16).padStart(2, "0")).join("");
   }
 
+  const paramTicket = getParam("ticket");
+  if (paramTicket) appIdInput.value = paramTicket;
+  else {
+    const last = localStorage.getItem("lastTicket");
+    if (last) appIdInput.value = last;
+  }
+
   form.addEventListener("submit", async function (e) {
     e.preventDefault();
     msg.innerHTML = "";
     const username = document.getElementById("username").value.trim();
     const password = document.getElementById("password").value;
-    const appId = document.getElementById("appId").value.trim();
+    const appId = appIdInput.value.trim();
     if (!username || !password || !appId) {
       msg.innerHTML = '<div class="alert alert-danger text-center">Fill all fields</div>';
       return;
@@ -100,7 +186,7 @@ document.addEventListener("DOMContentLoaded", function () {
     msg.innerHTML = '<div style="color:#8f8f8f;margin-bottom:8px">Checking application...</div>';
 
     try {
-      const { data: appData, error: appErr } = await sb.from("applications").select("id,status,used").eq("ticket_id", appId).limit(1).order("created_at", { ascending: false });
+      const { data: appData, error: appErr } = await sb.from("applications").select("*").eq("ticket_id", appId).limit(1).order("created_at", { ascending: false });
       if (appErr || !appData || !appData.length) {
         msg.innerHTML = '<div class="alert alert-danger text-center">Application not found</div>';
         return;
