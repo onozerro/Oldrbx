@@ -173,11 +173,6 @@
             <input type="submit" class="btn btn-primary mt-4" value="Lookup" />
         </form>
 
-        <div class="d-flex gap-2 mt-3">
-            <button id="useLastBtn" class="btn btn-outline-primary">Use last ticket</button>
-            <button id="refreshBtn" class="btn btn-outline-primary">Refresh</button>
-        </div>
-
         <div id="resultArea" class="mt-3"></div>
     </div>
 </div>
@@ -200,8 +195,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const ticketInput = document.getElementById("ticketInput");
   const lookupForm = document.getElementById("lookupForm");
   const resultArea = document.getElementById("resultArea");
-  const useLastBtn = document.getElementById("useLastBtn");
-  const refreshBtn = document.getElementById("refreshBtn");
 
   function getParam(name) {
     const url = new URL(location.href);
@@ -248,25 +241,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   lookupForm.addEventListener("submit", function (e) {
     e.preventDefault();
-    const ticket = ticketInput.value.trim();
-    if (!ticket) {
-      resultArea.innerHTML = '<div class="not-found">Enter a ticket number</div>';
-      return;
-    }
-    fetchApplication(ticket);
-  });
-
-  useLastBtn.addEventListener("click", function () {
-    const last = localStorage.getItem("lastTicket");
-    if (!last) {
-      resultArea.innerHTML = '<div class="not-found">No last ticket found in this browser</div>';
-      return;
-    }
-    ticketInput.value = last;
-    fetchApplication(last);
-  });
-
-  refreshBtn.addEventListener("click", function () {
     const ticket = ticketInput.value.trim();
     if (!ticket) {
       resultArea.innerHTML = '<div class="not-found">Enter a ticket number</div>';
