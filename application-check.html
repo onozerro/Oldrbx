@@ -231,6 +231,15 @@ document.addEventListener("DOMContentLoaded", function () {
         el.innerHTML = '<div class="label">' + r.label + '</div><div class="value" style="margin-top:6px">' + (r.value || "&mdash;") + '</div>';
         wrap.appendChild(el);
       }
+
+      if (app.status && /approved/i.test(app.status)) {
+        const btn = document.createElement("a");
+        btn.href = "register.html";
+        btn.className = "btn btn-primary mt-2";
+        btn.textContent = "REGISTER";
+        wrap.appendChild(btn);
+      }
+
       resultArea.innerHTML = "";
       resultArea.appendChild(wrap);
     } catch (e) {
