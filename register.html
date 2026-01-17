@@ -7,120 +7,21 @@
     <link rel="icon" type="image/png" href="img/ic.png" />
     <title>Register - OLDRBX</title>
     <meta name="description" content="Create an account. You must provide an approved Application ID to register." />
-    <meta name="twitter:card" content="summary" />
-    <meta property="og:site_name" content="OLDRBX" />
-    <meta property="og:url" content="https://OLDRBX.lol" />
-    <meta property="og:title" content="Register" />
-    <meta property="og:description" content="Create an account. You must provide an approved Application ID to register." />
-    <meta property="og:image" content="https://OLDRBX.lol/img/OLDRBXC.png" />
     <style>
-        body {
-        background-color: #0c0c0cff !important;
-        color: #ffffff !important;
-        }
-        .navbar.bg-dark {
-            background-color: #0b0b0b !important;
-            border-bottom: 2px solid #3d3d3dff !important;
-        }
-        .navbar.bg-light {
-            background-color: #121212 !important;
-            border-bottom: none !important;
-        }
-        .navbar-dark .navbar-nav .nav-link {
-            color: #bbbbbbb0 !important;
-        }
-        .navbar-dark .navbar-nav .nav-link:hover {
-            color: #ffffff !important;
-        }
-        .navbar-auth .nav-link {
-            color: #bbbbbbb0 !important;
-        }
-        .navbar-auth .nav-link:hover {
-            color: #ffffff !important;
-        }
-        footer.bg-dark {
-            background-color: #0b0b0b !important;
-            border-top: 2px solid #3d3d3dff !important;
-        }
-        footer .text-muted {
-            color: #3d3d3dff !important;
-        }
-        .exchcont {
-            max-width: 420px;
-            margin: 50px auto;
-        }
-        .exchcard {
-            background-color: #121212;
-            border: 1px solid #2a2a2a;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
-            padding: 25px;
-        }
-        .exchcard h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            font-weight: 700;
-            color: #ffffff;
-        }
-        .exchcard p {
-            color: #ffffff;
-            font-size: 0.95rem;
-        }
-        .exchcard .text-success,
-        .exchcard .text-danger {
-            text-align: center;
-            margin-bottom: 10px;
-        }
-        .exchcard .form-control {
-            background-color: #1b1b1b;
-            color: #ffffff;
-            border: 1px solid #3a3a3a;
-            border-radius: 5px;
-            padding: 8px;
-            width: 100%;
-            margin-top: 10px;
-        }
-        .exchcard .form-control:focus {
-            background-color: #1e1e1e;
-            border-color: #1a73e8;
-            box-shadow: 0 0 0 0.2rem rgba(26, 115, 232, 0.25);
-            color: #ffffff;
-        }
-        .exchcard label {
-            font-weight: 600;
-            margin-top: 10px;
-        }
-        .exchcard .btn-primary {
-            background-color: #1a73e8;
-            border-color: #1a73e8;
-            color: #fff;
-            width: 100%;
-            margin-top: 15px;
-            transition: all 0.2s ease-in-out;
-        }
-        .exchcard .btn-primary:hover {
-            background-color: #155ab6;
-            border-color: #155ab6;
-        }
-        .alert-warning {
-            background-color: #2a2200;
-            color: #ffcc00;
-            border: 1px solid #ffcc00;
-            margin-bottom: 20px;
-        }
-        .h-captcha {
-            display: flex;
-            justify-content: center;
-            margin-top: 15px;
-            margin-bottom: 15px;
-        }
-        .exchcard a {
-            color: #1a73e8 !important;
-            text-decoration: underline;
-        }
-        .exchcard a:hover {
-            color: #63a4ff !important;
-        }
+        body { background-color: #0c0c0cff !important; color: #ffffff !important; }
+        .navbar.bg-dark { background-color: #0b0b0b !important; border-bottom: 2px solid #3d3d3dff !important; }
+        .navbar-dark .navbar-nav .nav-link { color: #bbbbbbb0 !important; }
+        .navbar-dark .navbar-nav .nav-link:hover { color: #ffffff !important; }
+        .exchcont { max-width: 420px; margin: 50px auto; }
+        .exchcard { background-color: #121212; border: 1px solid #2a2a2a; border-radius: 10px; box-shadow: 0 0 20px rgba(255,255,255,0.05); padding: 25px; }
+        .exchcard h2 { text-align: center; margin-bottom: 20px; font-weight: 700; color: #ffffff; }
+        .exchcard p { color: #ffffff; font-size: 0.95rem; }
+        .exchcard .form-control { background-color: #1b1b1b; color: #ffffff; border: 1px solid #3a3a3a; border-radius: 5px; padding: 8px; width: 100%; margin-top: 10px; }
+        .exchcard .form-control:focus { background-color: #1e1e1e; border-color: #1a73e8; box-shadow: 0 0 0 0.2rem rgba(26,115,232,0.25); color: #ffffff; }
+        .exchcard .btn-primary { background-color: #1a73e8; border-color: #1a73e8; color: #fff; width: 100%; margin-top: 15px; transition: all 0.2s ease-in-out; }
+        .exchcard .btn-primary:hover { background-color: #155ab6; border-color: #155ab6; }
+        .alert-warning { background-color: #2a2200; color: #ffcc00; border: 1px solid #ffcc00; margin-bottom: 20px; }
+        .h-captcha { display: flex; justify-content: center; margin-top: 15px; margin-bottom: 15px; }
         .small-note { color:#dcdcdc; font-size:13px; }
     </style>
 </head>
@@ -147,10 +48,7 @@
 <main class="flex-shrink-0">
 <div class="exchcont">
     <div class="alert alert-warning" id="warnNoTicket" style="display:none">
-        <p class="mb-0">
-            <span class="fw-bolder">Warning:</span> No application ID is set.
-            If your application was approved, you can ignore this message.
-        </p>
+        <p class="mb-0"><span class="fw-bolder">Warning:</span> No application ID is set. If your application was approved, you can ignore this message.</p>
     </div>
 
     <div class="exchcard">
@@ -175,7 +73,7 @@
 
 <footer class="footer mt-auto py-3 bg-dark">
     <div class="container">
-        <p class="text-muted text-center">This website is not affiliated, endorsed, and/or sponsored by any companies, trademarks, or copyrighted names mentioned. No copyright infringement is intended.</p>
+        <p class="text-muted text-center">This website is not affiliated, endorsed, and/or sponsored by any companies mentioned.</p>
         <p class="text-muted mb-0 text-center">&copy; 2026 OLDRBX</p>
     </div>
 </footer>
