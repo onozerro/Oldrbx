@@ -108,6 +108,12 @@
             border: 1px solid #ffcc00;
             margin-bottom: 20px;
         }
+        .h-captcha {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
         .exchcard a {
             color: #1a73e8 !important;
             text-decoration: underline;
@@ -115,12 +121,7 @@
         .exchcard a:hover {
             color: #63a4ff !important;
         }
-        .h-captcha {
-            display: flex;
-            justify-content: center;
-            margin-top: 15px;
-            margin-bottom: 10px;
-        }
+        .small-note { color:#dcdcdc; font-size:13px; }
     </style>
 </head>
 <body class="d-flex flex-column h-100">
@@ -145,21 +146,28 @@
 
 <main class="flex-shrink-0">
 <div class="exchcont">
+    <div class="alert alert-warning" id="warnNoTicket" style="display:none">
+        <p class="mb-0">
+            <span class="fw-bolder">Warning:</span> No application ID is set.
+            If your application was approved, you can ignore this message.
+        </p>
+    </div>
+
     <div class="exchcard">
         <h2>Register</h2>
         <p class="text-center">To create an account you must provide a Username, Password and your Application ID (the application must be approved). Each Application ID can be used only once.</p>
 
         <form id="regForm" class="mt-3">
-            <input id="username" type="text" placeholder="Username" class="form-control" maxlength="64" />
-            <input id="password" type="password" placeholder="Password" class="form-control" />
-            <input id="appId" type="text" placeholder="Application ID" class="form-control" maxlength="128" />
+            <input id="username" type="text" placeholder="Username" name="username" class="form-control" maxlength="64" />
+            <input id="password" type="password" placeholder="Password" name="password" class="form-control" />
+            <input id="appId" type="text" placeholder="Application ID" name="application_id" class="form-control" maxlength="128" />
 
             <div class="h-captcha" data-sitekey="1b42e17a-9bb0-42f2-a5d8-d6aa0c6a3b88" data-theme="dark"></div>
 
-            <input type="submit" class="btn btn-primary mt-3" value="Create account" />
+            <div id="msg" style="margin-top:12px"></div>
+            <input id="submitBtn" class="btn btn-primary" type="submit" value="Create account" />
         </form>
 
-        <div id="msg" style="margin-top:12px"></div>
         <div class="small-note text-center mt-3">If your application was approved but you can't register, check the Application ID on the application status page.</div>
     </div>
 </div>
@@ -167,118 +175,88 @@
 
 <footer class="footer mt-auto py-3 bg-dark">
     <div class="container">
-        <p class="text-muted text-center">This website is not affiliated, endorsed, and/or sponsored by any companies mentioned.</p>
+        <p class="text-muted text-center">This website is not affiliated, endorsed, and/or sponsored by any companies, trademarks, or copyrighted names mentioned. No copyright infringement is intended.</p>
         <p class="text-muted mb-0 text-center">&copy; 2026 OLDRBX</p>
     </div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-  const SUPA_URL = "https://nkvvnnjukqtfhmegyzek.supabase.co";
-  const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rdnZubmp1a3F0ZmhtZWd5emVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2NjQ5MTIsImV4cCI6MjA4NDI0MDkxMn0.2jp9X2KQunFargrstYM7oGBYs75Kq7AEHs7iRARxexs";
-  const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
-
+  const EDGE_URL = '/.netlify/functions/verify-register';
   const form = document.getElementById("regForm");
   const msg = document.getElementById("msg");
   const appIdInput = document.getElementById("appId");
-
-  function getParam(name) {
-    const url = new URL(location.href);
-    return url.searchParams.get(name);
-  }
-
-  async function sha256Hex(str) {
-    const enc = new TextEncoder().encode(str);
-    const buf = await crypto.subtle.digest("SHA-256", enc);
-    const b = new Uint8Array(buf);
-    return Array.from(b).map(x => x.toString(16).padStart(2, "0")).join("");
-  }
-
+  const warnNoTicket = document.getElementById("warnNoTicket");
+  function getParam(name) { const url = new URL(location.href); return url.searchParams.get(name); }
+  async function sha256Hex(str) { const enc = new TextEncoder().encode(str); const buf = await crypto.subtle.digest("SHA-256", enc); const b = new Uint8Array(buf); return Array.from(b).map(x => x.toString(16).padStart(2,"0")).join(""); }
   const paramTicket = getParam("ticket");
   if (paramTicket) appIdInput.value = paramTicket;
-  else {
-    const last = localStorage.getItem("lastTicket");
-    if (last) appIdInput.value = last;
+  else { const last = localStorage.getItem("lastTicket"); if (last) appIdInput.value = last; else warnNoTicket.style.display = "block"; }
+  function display(type, text) { if (type === 'info') msg.innerHTML = '<div style="color:#8f8f8f;text-align:center;margin-bottom:8px">' + text + '</div>'; else if (type === 'success') msg.innerHTML = '<div class="alert alert-success text-center">' + text + '</div>'; else msg.innerHTML = '<div class="alert alert-danger text-center">' + text + '</div>'; }
+  async function postRegister(ticket, username, password_hash, hcaptcha_token) {
+    try {
+      const resp = await fetch(EDGE_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ticket, username, password_hash, hcaptcha_token }) });
+      let body;
+      try { body = await resp.json(); } catch (e) { body = { parse_error: true, text: await resp.text() }; }
+      if (!resp.ok) {
+        console.error('Server returned error status', resp.status, body);
+        const msgText = body?.error || body?.err || JSON.stringify(body);
+        return { ok: false, status: resp.status, body, message: msgText };
+      }
+      return { ok: true, status: resp.status, body };
+    } catch (err) {
+      console.error('Fetch exception', err);
+      return { ok: false, networkError: true, error: err };
+    }
   }
-
-  function displayMsg(type, text) {
-    if (type === 'success') msg.innerHTML = '<div class="alert alert-success text-center">' + text + '</div>';
-    else if (type === 'info') msg.innerHTML = '<div style="color:#8f8f8f;margin-bottom:8px;text-align:center">' + text + '</div>';
-    else msg.innerHTML = '<div class="alert alert-danger text-center">' + text + '</div>';
-  }
-
   form.addEventListener("submit", async function (e) {
     e.preventDefault();
     msg.innerHTML = "";
     const username = document.getElementById("username").value.trim();
     const password = document.getElementById("password").value;
     const appId = appIdInput.value.trim();
-    if (!username || !password || !appId) {
-      displayMsg('error', 'Fill all fields');
-      return;
-    }
-
-    const captchaInput = document.querySelector('[name="h-captcha-response"]');
-    const captchaToken = captchaInput ? captchaInput.value : "";
-    if (!captchaToken) {
-      displayMsg('error', 'Please complete the captcha');
-      return;
-    }
-
-    displayMsg('info', 'Checking username and application...');
-
+    if (!username || !password || !appId) { display('error', 'Fill all fields'); return; }
+    if (typeof hcaptcha === 'undefined') { display('error', 'Captcha not loaded'); return; }
+    const captchaToken = hcaptcha.getResponse();
+    if (!captchaToken) { display('error', 'Please complete the captcha'); return; }
+    display('info', 'Processing registration...');
+    document.getElementById("submitBtn").disabled = true;
     try {
-      const { data: userCheck, error: userCheckErr } = await sb.from('users').select('id').eq('username', username).limit(1);
-      if (userCheckErr) {
-        displayMsg('error', 'Error checking username');
-        return;
-      }
-      if (userCheck && userCheck.length) {
-        displayMsg('error', 'Username already taken');
-        return;
-      }
-
       const hash = await sha256Hex(password);
-
-      displayMsg('info', 'Processing registration...');
-
-      const { data, error } = await sb.rpc('register_with_application', {
-        p_ticket_id: appId,
-        p_username: username,
-        p_password_hash: hash,
-        p_captcha_token: captchaToken
-      });
-
-      if (error) {
-        const msgText = error.message || 'RPC error';
-        if (/duplicate|unique/i.test(msgText)) displayMsg('error', 'Username already taken');
-        else displayMsg('error', msgText);
+      const result = await postRegister(appId, username, hash, captchaToken);
+      if (!result.ok) {
+        if (result.networkError) {
+          display('error', 'Network error: ' + (result.error && result.error.message ? result.error.message : String(result.error)));
+          console.log('Network error details:', result.error);
+        } else {
+          display('error', 'Server error (' + result.status + '): ' + (result.body?.error || result.body?.err || JSON.stringify(result.body)));
+          console.log('Server response:', result.body);
+        }
+        if (typeof hcaptcha !== 'undefined') hcaptcha.reset();
+        document.getElementById("submitBtn").disabled = false;
         return;
       }
-
-      const res = Array.isArray(data) ? data[0] : data;
-      if (!res) {
-        displayMsg('error', 'Unexpected server response');
-        return;
-      }
-      if (res.err) {
-        displayMsg('error', res.err);
-        return;
-      }
-
+      const body = result.body;
+      const res = Array.isArray(body) ? body[0] : body;
+      if (!res) { display('error', 'Unexpected server response'); console.log('Unexpected response body:', body); if (typeof hcaptcha !== 'undefined') hcaptcha.reset(); document.getElementById("submitBtn").disabled = false; return; }
+      if (res.err) { display('error', res.err); console.log('RPC error:', res); if (typeof hcaptcha !== 'undefined') hcaptcha.reset(); document.getElementById("submitBtn").disabled = false; return; }
       localStorage.setItem('lastTicket', appId);
-      displayMsg('success', 'Account created. <a href="login.html">Login</a>');
+      display('success', 'Account created. <a href="login.html">Login</a>');
       form.reset();
+      if (typeof hcaptcha !== 'undefined') hcaptcha.reset();
     } catch (err) {
-      console.error(err);
-      displayMsg('error', 'Unexpected error');
+      console.error('Client exception', err);
+      display('error', 'Unexpected error: ' + (err && err.message ? err.message : String(err)));
+      if (typeof hcaptcha !== 'undefined') hcaptcha.reset();
+    } finally {
+      document.getElementById("submitBtn").disabled = false;
     }
   });
 });
 </script>
 
-<script src="https://js.hcaptcha.com/1/api.js" async defer></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>
 </html>
