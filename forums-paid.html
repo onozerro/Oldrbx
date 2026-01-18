@@ -19,13 +19,10 @@ html,body{height:100%;margin:0;background:var(--bg);color:#111;font-family:Arial
 .topbar{height:56px;background:var(--top);display:flex;align-items:center;padding:0 14px;gap:12px;box-sizing:border-box}
 .hamburger{width:44px;height:44px;border-radius:6px;background:transparent;border:none;color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer}
 .logo-img{height:34px}
-.kebab{width:44px;height:44px;border-radius:6px;background:transparent;border:none;color:#fff;font-size:24px;display:flex;align-items:center;justify-content:center;cursor:pointer}
-.kebab-wrap{position:relative}
-.kebab-menu{position:absolute;right:0;top:52px;background:var(--panel);border:1px solid var(--border);border-radius:6px;box-shadow:0 6px 18px var(--shadow);min-width:160px;overflow:hidden;display:none;z-index:1200}
-.kebab-menu .item{padding:10px 12px;font-weight:800;cursor:pointer;border-bottom:1px solid var(--border)}
-.kebab-menu .item:last-child{border-bottom:none}
-.kebab-menu .item:hover{background:#f4f6f7}
-.top-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.top-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.money-wrap{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.06);padding:6px 8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);font-weight:800;color:#fff}
+.money-icon{width:28px;height:28px;border-radius:50%;overflow:hidden;background:#fff;display:flex;align-items:center;justify-content:center}
+.money-icon img{width:100%;height:100%;object-fit:cover}
 .avatar{width:40px;height:40px;border-radius:50%;overflow:hidden;background:var(--panel);display:flex;align-items:center;justify-content:center}
 .avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
 .container{padding:18px;box-sizing:border-box}
@@ -35,12 +32,12 @@ html,body{height:100%;margin:0;background:var(--bg);color:#111;font-family:Arial
 .sidebar{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:12px;box-sizing:border-box}
 .topics-panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:12px;box-sizing:border-box}
 .topics-grid{display:flex;flex-direction:column;gap:10px}
-.topic-btn{display:flex;align-items:center;justify-content:space-between;padding:12px;background:#fff;border:1px solid var(--border);border-radius:4px;cursor:pointer;font-weight:800;box-shadow:0 2px 6px var(--shadow);gap:12px}
+.topic-btn{display:flex;align-items:center;justify-content:space-between;padding:12px;background:#fff;border:1px solid var(--border);border-radius:6px;cursor:pointer;font-weight:800;box-shadow:0 6px 14px var(--shadow);gap:12px}
 .topic-btn .left{display:flex;flex-direction:column;gap:4px;align-items:flex-start}
 .topic-btn .title{font-weight:800}
 .topic-btn .meta{font-size:12px;color:var(--muted);font-weight:700}
 .topic-btn .right{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
-.count-pill{background:#f3f5f6;border:1px solid var(--border);padding:6px 10px;border-radius:4px;font-weight:800;font-size:13px}
+.count-pill{background:#f3f5f6;border:1px solid var(--border);padding:6px 10px;border-radius:6px;font-weight:800;font-size:13px}
 .mainpanel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:14px;min-height:420px;display:flex;flex-direction:column}
 .back-btn{display:none;margin-bottom:12px;color:var(--accent);font-weight:800;cursor:pointer}
 .topic-header{font-weight:800;margin-bottom:8px}
@@ -51,15 +48,14 @@ html,body{height:100%;margin:0;background:var(--bg);color:#111;font-family:Arial
 .post .body{flex:1}
 .post .meta{font-size:12px;color:var(--muted);margin-bottom:6px}
 .composer{margin-top:12px;display:flex;gap:10px;align-items:flex-start}
-.composer textarea{flex:1;min-height:90px;background:#fafafa;border:1px solid var(--border);color:#111;padding:10px;border-radius:4px;resize:vertical}
-.composer button{height:40px;border-radius:4px;background:var(--accent);color:#fff;border:none;padding:8px 14px;cursor:pointer;font-weight:800}
+.composer textarea{flex:1;min-height:90px;background:#fafafa;border:1px solid var(--border);color:#111;padding:10px;border-radius:6px;resize:vertical}
+.composer button{height:40px;border-radius:6px;background:var(--accent);color:#fff;border:none;padding:8px 14px;cursor:pointer;font-weight:800;box-shadow:0 6px 14px var(--shadow)}
 .empty{color:var(--muted);padding:18px;text-align:center}
 .footer{background:var(--panel);border-top:1px solid var(--border);padding:10px;text-align:center;color:var(--muted);margin-top:18px;border-radius:6px}
 @media(max-width:1000px){
   .container-layout{grid-template-columns:1fr;padding:12px}
   .sidebar{position:fixed;left:-360px;top:56px;height:calc(100% - 56px);z-index:1050;transition:left .18s ease}
   .sidebar.open{left:0}
-  .kebab-menu{right:12px}
 }
 </style>
 </head>
@@ -68,14 +64,9 @@ html,body{height:100%;margin:0;background:var(--bg);color:#111;font-family:Arial
   <button id="hamb" class="hamburger" aria-label="menu">&#9776;</button>
   <img src="img/logo.png" class="logo-img" alt="logo">
   <div class="top-right">
-    <div class="kebab-wrap">
-      <button id="kebab" class="kebab" aria-label="menu">⋯</button>
-      <div id="kebabMenu" class="kebab-menu">
-        <div class="item" data-href="home-paid.html">Home</div>
-        <div class="item" data-href="forums-paid.html">Forums</div>
-        <div class="item" data-href="messages.html">Messages</div>
-        <div class="item" data-href="profile.html">Profile</div>
-      </div>
+    <div class="money-wrap">
+      <div class="money-icon"><img id="moneyIcon" src="img/money.png" alt="money"></div>
+      <div class="balance" id="balanceText">0</div>
     </div>
     <div class="avatar"><img id="topAv" src="img/user.png" alt="avatar"></div>
   </div>
@@ -88,11 +79,10 @@ html,body{height:100%;margin:0;background:var(--bg);color:#111;font-family:Arial
 
   <div class="container-layout">
     <aside class="sidebar" id="leftSidebar">
-      <div style="font-weight:800;margin-bottom:8px">Quick links</div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <div class="topic-btn" onclick="go('home-paid.html')"><div class="left"><div class="title">Home</div></div></div>
-        <div class="topic-btn" onclick="go('forums-paid.html')"><div class="left"><div class="title">Forums</div></div></div>
-        <div class="topic-btn" onclick="go('messages.html')"><div class="left"><div class="title">Messages</div></div></div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div class="topic-btn" onclick="location.href='home-paid.html'"><div class="left"><div class="title">Home</div></div></div>
+        <div class="topic-btn" onclick="location.href='forums-paid.html'"><div class="left"><div class="title">Forums</div></div></div>
+        <div class="topic-btn" onclick="location.href='messages.html'"><div class="left"><div class="title">Messages</div></div></div>
       </div>
     </aside>
 
@@ -136,13 +126,11 @@ document.addEventListener('DOMContentLoaded', async function(){
   document.getElementById('meName').innerText = auth.username;
   document.getElementById('meAv').src = auth.avatarUrl || 'img/user.png';
   document.getElementById('topAv').src = auth.avatarUrl || 'img/user.png';
+  var bal = (typeof auth.balance !== 'undefined' && auth.balance !== null) ? auth.balance : 0
+  document.getElementById('balanceText').innerText = String(bal)
+  document.getElementById('moneyIcon').src = 'img/money.png'
 
   document.getElementById('hamb').addEventListener('click', function(){ document.getElementById('leftSidebar').classList.toggle('open') });
-  const keb = document.getElementById('kebab');
-  const km = document.getElementById('kebabMenu');
-  keb.addEventListener('click', function(e){ km.style.display = (km.style.display==='block') ? 'none' : 'block' });
-  document.addEventListener('click', function(e){ if(!km.contains(e.target) && e.target !== keb) km.style.display='none' });
-  function go(h){ location.href = h }
 
   async function ensureTopics(){
     const { data, error } = await sb.from('forum_topics').select('*').order('id',{ascending:true});
@@ -170,22 +158,21 @@ document.addEventListener('DOMContentLoaded', async function(){
     container.innerHTML = '';
     const topics = (data && data.length) ? data : [];
     for(const t of topics){
-      const last = await sb.from('forum_posts').select('created_at,username').eq('topic_id',t.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
+      const lastQ = await sb.from('forum_posts').select('created_at,username').eq('topic_id',t.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
       const cntResp = await sb.from('forum_posts').select('id', { count: 'exact', head: true }).eq('topic_id', t.id);
       const count = cntResp.count || 0;
-      const lastAt = last && last.data ? new Date(last.data.created_at) : null;
+      const lastAt = lastQ && lastQ.data ? new Date(lastQ.data.created_at) : null;
       const lastText = lastAt ? timeAgo(lastAt) : '—';
       const el = document.createElement('div');
       el.className = 'topic-btn';
       el.dataset.id = t.id;
-      el.innerHTML = '<div class="left"><div class="title">'+escapeHtml(t.title)+'</div><div class="meta">'+(last && last.data && last.data.username ? escapeHtml(last.data.username) + ' • ' + lastText : 'No messages yet')+'</div></div><div class="right"><div class="count-pill">'+count+'</div><div style="font-size:12px;color:var(--muted)">'+lastText+'</div></div>';
+      el.innerHTML = '<div class="left"><div class="title">'+escapeHtml(t.title)+'</div><div class="meta">'+(lastQ && lastQ.data && lastQ.data.username ? escapeHtml(lastQ.data.username) + ' • ' + lastText : 'No messages yet')+'</div></div><div class="right"><div class="count-pill">'+count+'</div><div style="font-size:12px;color:var(--muted)">'+lastText+'</div></div>';
       el.addEventListener('click', function(){ selectTopic(t.id, t.title) });
       container.appendChild(el);
     }
   }
 
   function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g,function(m){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]}) }
-
   function timeAgo(d){
     const s = Math.floor((Date.now() - d.getTime())/1000);
     if(s < 60) return s + 's';
