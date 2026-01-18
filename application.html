@@ -3,19 +3,16 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
     <link rel="icon" type="image/png" href="img/ic.png" />
-    
     <title>Application - OLDRBX</title>
-    <meta name="description" content="Relive 2020 for free, no invite keys required. The most secure and private website of its kind." />
+    <meta name="description" content="Submit an application to join OLDRBX." />
     <meta name="twitter:card" content="summary" />
     <meta property="og:site_name" content="OLDRBX" />
     <meta property="og:url" content="https://OLDRBX.lol" />
     <meta property="og:title" content="Application" />
     <meta property="og:description" content="Submit an application to join OLDRBX." />
     <meta property="og:image" content="https://OLDRBX.lol/img/OLDRBXC.png" />
-
-
     <style>
         body {
         background-color: #0c0c0cff !important;
@@ -35,14 +32,12 @@
         .navbar-dark .navbar-nav .nav-link:hover {
             color: #ffffff !important;
         }
-
         .navbar-auth .nav-link {
             color: #bbbbbbb0 !important;
         }
         .navbar-auth .nav-link:hover {
             color: #ffffff !important;
         }
-
         footer.bg-dark {
             background-color: #0b0b0b !important;
             border-top: 2px solid #3d3d3dff !important;
@@ -50,8 +45,114 @@
         footer .text-muted {
             color: #3d3d3dff !important;
         }
+        .card {
+            background-color: #121212;
+            border: 1px solid #2a2a2a;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+        }
+        .card h3 {
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        h4 {
+            background-color: #212529;
+            color: #ffffff;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+        p, li, label {
+            color: #dcdcdc;
+        }
+        .form-control {
+            background-color: #1b1b1b;
+            color: #ffffff;
+            border: 1px solid #3a3a3a;
+        }
+        .form-control:focus {
+            background-color: #1e1e1e;
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 0.2rem rgba(26, 115, 232, 0.25);
+            color: #ffffff;
+        }
+        a {
+            color: #1a73e8 !important;
+            text-decoration: underline;
+        }
+        a:hover {
+            color: #63a4ff !important;
+        }
+        .btn-primary {
+            background-color: #1a73e8;
+            border-color: #1a73e8;
+            color: #fff;
+            width: 100%;
+            transition: all 0.2s ease-in-out;
+        }
+        .btn-primary:hover {
+            background-color: #155ab6;
+            border-color: #155ab6;
+        }
+        .btn-outline-primary {
+            color: #1a73e8;
+            border-color: #1a73e8;
+        }
+        .btn-outline-primary:hover {
+            background-color: #1a73e8;
+            color: #fff;
+        }
+        .alert-warning {
+            background-color: #2a2200;
+            color: #ffcc00;
+            border: 1px solid #ffcc00;
+        }
+        .alert-danger {
+            background-color: #2a0000;
+            color: #ff6666;
+            border: 1px solid #ff6666;
+        }
+        .alert-primary {
+            background-color: #0d1a33;
+            border: 1px solid #1a73e8;
+            color: #ffffff;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            border-radius:6px;
+            padding:12px;
+        }
+        .alert-primary p {
+            margin: 0;
+            text-align:center;
+            font-weight:600;
+            letter-spacing:0.3px;
+        }
+        .input-padding {
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+        .h-captcha {
+            display: flex;
+            justify-content: center;
+        }
+        .hidden { display: none !important; }
+        .sent-box {
+            background-color: #121212;
+            border: 1px solid #2a2a2a;
+            padding: 18px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .sent-title {
+            color: #ffffff;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+        .sent-sub {
+            color: #dcdcdc;
+            margin-bottom: 14px;
+        }
     </style>
-
 </head>
 <body class="d-flex flex-column h-100">
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom">
@@ -73,144 +174,26 @@
     </div>
 </nav>
 
-
 <main class="flex-shrink-0">
-    
-
-
-<style>
-    body {
-        background-color: #0c0c0cff !important;
-        color: #ffffff !important;
-    }
-
-    .card {
-        background-color: #121212;
-        border: 1px solid #2a2a2a;
-        box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
-    }
-
-        .card h3 {
-            color: #ffffff;
-            text-align: center;
-            margin-bottom: 1rem;
-        }
-
-    h4 {
-        background-color: #212529;
-        color: #ffffff;
-        padding: 0.5rem 1rem;
-        border-radius: 4px;
-    }
-
-    p, li, label {
-        color: #dcdcdc;
-    }
-
-    .form-control {
-        background-color: #1b1b1b;
-        color: #ffffff;
-        border: 1px solid #3a3a3a;
-    }
-
-        .form-control:focus {
-            background-color: #1e1e1e;
-            border-color: #1a73e8;
-            box-shadow: 0 0 0 0.2rem rgba(26, 115, 232, 0.25);
-            color: #ffffff;
-        }
-
-    a {
-        color: #1a73e8 !important;
-        text-decoration: underline;
-    }
-
-        a:hover {
-            color: #63a4ff !important;
-        }
-
-    .btn-primary {
-        background-color: #1a73e8;
-        border-color: #1a73e8;
-        color: #fff;
-        width: 100%;
-        transition: all 0.2s ease-in-out;
-    }
-
-        .btn-primary:hover {
-            background-color: #155ab6;
-            border-color: #155ab6;
-        }
-
-    .btn-outline-primary {
-        color: #1a73e8;
-        border-color: #1a73e8;
-    }
-
-        .btn-outline-primary:hover {
-            background-color: #1a73e8;
-            color: #fff;
-        }
-
-    .alert-warning {
-        background-color: #2a2200;
-        color: #ffcc00;
-        border: 1px solid #ffcc00;
-    }
-
-    .alert-danger {
-        background-color: #2a0000;
-        color: #ff6666;
-        border: 1px solid #ff6666;
-    }
-
-    .alert-primary {
-        background-color: #0d1a33;
-        border: 1px solid #1a73e8;
-        color: #ffffff;
-    }
-
-        .alert-primary p {
-            margin: 0;
-        }
-
-    .input-padding {
-        margin-top: 2rem;
-        margin-bottom: 2rem;
-    }
-
-    .h-captcha {
-        display: flex;
-        justify-content: center;
-    }
-</style>
-
-
 <div class="container mt-4 mb-4">
     <div class="row">
         <div class="col-12 col-xl-6 offset-xl-3 col-md-8 offset-md-2">
-            <div class="card card-body">
-
+            <div class="card card-body" id="cardRoot">
                 <h3>Application</h3>
-                <p>
-                    To join OLDRBX, you must fill out an application.
-                    This is done to prevent bots and malicious users from joining.
-                </p>
 
-                <p class="mb-0">
-                    <span class="fw-bold">Already filled out the application?</span>
-                    Click <a href="application-check.html">here</a> to view its status.
-                </p>
+                <div id="introText">
+                    <p>To join OLDRBX, you must fill out an application. This is done to prevent bots and malicious users from joining.</p>
+                    <p class="mb-0"><span class="fw-bold">Already filled out the application?</span> Click <a href="application-check.html">here</a> to view its status.</p>
+                </div>
 
-
-                <form onsubmit="return false;">
+                <form id="appForm">
                     <div class="input-padding"></div>
 
                     <div>
                         <h4>Requirements</h4>
                         <ul>
                             <li>You must be 13 years of age or older.</li>
-                            <li>You must have an active account on Roblox (This will soon be changing).</li>
+                            <li>You must have an active account on Roblox.</li>
                         </ul>
                     </div>
 
@@ -220,16 +203,8 @@
                         <div class="stage-1">
                             <h4>Step 1 - About Me</h4>
                             <div class="p-2">
-                                <p class="mb-1">
-                                    You can list some interests, favorite video games, why you want to join,
-                                    things you can create (e.g. clothing or games), etc. A sentence or two is fine.
-                                    <span class="fw-bolder">
-                                        Do <span class="text-decoration-underline">NOT</span> put personal information such as your age or email address.
-                                    </span>
-                                </p>
-                                <textarea placeholder="About me (up to 4,000 characters)"
-                                          class="form-control w-100" rows="4" name="about"
-                                          maxlength="4096"></textarea>
+                                <p class="mb-1">You can list some interests, favorite video games, why you want to join, things you can create (e.g. clothing or games). Do NOT put personal information such as your age or email address.</p>
+                                <textarea placeholder="About me (up to 4,000 characters)" class="form-control w-100" rows="4" name="about" maxlength="4096"></textarea>
                             </div>
                         </div>
 
@@ -238,15 +213,9 @@
                         <div class="stage-2">
                             <h4>Step 2 - Social URL</h4>
                             <div class="p-2">
-                                <p class="mb-0">
-                                    Paste a link to your profile on Roblox (This will be changing soon).
-                                </p>
-                                <p class="mb-2 mt-2">
-                                    <span class="fw-bold">Your account must have some activity on it</span>,
-                                    such as friends/followers, posts, games, or whatever constitutes activity.
-                                </p>
-                                <input placeholder="Roblox Profile URL" type="text"
-                                       class="form-control" name="socialUrl" maxlength="128" />
+                                <p class="mb-0">Paste a link to your profile on Roblox.</p>
+                                <p class="mb-2 mt-2"><span class="fw-bold">Your account must have some activity</span>, such as friends/followers, posts, games, or other activity.</p>
+                                <input placeholder="Roblox Profile URL" type="text" class="form-control" name="socialUrl" maxlength="128" />
                             </div>
                         </div>
 
@@ -255,17 +224,12 @@
                         <div class="stage-3">
                             <h4>Step 3 - Verification</h4>
                             <div class="p-2">
-                                <p class="mb-0">
-                                    Copy the entire phrase in the blue box below and paste it into your profile description. This is done so we can verify you
-                                    aren't impersonating someone.
-                                </p>
+                                <p class="mb-0">Copy the entire phrase in the blue box below and paste it into your profile description.</p>
                                 <div class="alert alert-primary mt-2 mb-2">
-                                    <p class="mb-0">OLDRBX orange windstorm wood scared tin snowflake</p>
+                                    <p id="verifyText"></p>
                                 </div>
-
                                 <div class="mt-2 text-center">
-                                    <label>Code not working or getting filtered?</label><br><br>
-                                    <input type="button" id="regen" class="btn btn-outline-primary btn-sm mt-2" value="Regenerate Code" />
+                                    <input type="button" class="btn btn-outline-primary btn-sm mt-2" id="regenBtn" value="Get New Code" />
                                 </div>
                             </div>
                         </div>
@@ -284,89 +248,125 @@
                     <div class="stage-submit">
                         <div class="input-padding"></div>
                         <input type="submit" id="submitBtn" class="btn btn-primary mt-2" value="Submit Application" />
-                        <input name="__RequestVerificationToken" type="hidden" value="CfDJ8BvMVnu2_1dDlGmwlHOlZtIdrAwztghIpXE88PgfoiSlvHEiUp4u-XR16-NzIfbhiwN4HZvpVx7nDMagisydFmxYiD4wZW_i_rZEodPfw1T2dkIZpUuJW9KHM8I_QtnykpVle6qSzfD-xa6uh_f_j3U" />
                     </div>
                 </form>
+
+                <div id="resultBox" style="display:none;margin-top:16px;"></div>
+
             </div>
         </div>
     </div>
 </div>
-
-<script src="https://js.hcaptcha.com/1/api.js" async defer></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-const supabase = supabase.createClient("https://nkvvnnjukqtfhmegyzek.supabase.co","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rdnZubmp1a3F0ZmhtZWd5emVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2NjQ5MTIsImV4cCI6MjA4NDI0MDkxMn0.2jp9X2KQunFargrstYM7oGBYs75Kq7AEHs7iRARxexs");
-const words = ["orange","windstorm","wood","scared","tin","snowflake","silver","static","ember","midnight","echo","frost","shadow","neon","cloud","crystal","void","glimmer","sage","breeze"];
-function genVerify(){
-  const arr = [];
-  const pool = words.slice();
-  for(let i=0;i<4;i++){
-    const idx = Math.floor(Math.random()*pool.length);
-    arr.push(pool.splice(idx,1)[0]);
-  }
-  return "OLDRBX " + arr.join(" ");
-}
-let verifyCode = genVerify();
-document.querySelector(".alert-primary p").innerText = verifyCode;
-document.getElementById("regen").addEventListener("click", function(){
-  verifyCode = genVerify();
-  document.querySelector(".alert-primary p").innerText = verifyCode;
-});
-const form = document.querySelector("form");
-const card = document.querySelector(".card.card-body");
-const resultDiv = document.createElement("div");
-card.prepend(resultDiv);
-document.getElementById("submitBtn").addEventListener("click", async function(){
-  resultDiv.innerHTML = "";
-  const about = document.querySelector('[name="about"]').value.trim();
-  const social = document.querySelector('[name="socialUrl"]').value.trim();
-  if(!about || !social){
-    resultDiv.innerHTML = '<div class="alert alert-danger text-center">Fill all fields</div>';
-    return;
-  }
-  let device = localStorage.getItem("device_id");
-  if(!device){
-    device = crypto.randomUUID();
-    localStorage.setItem("device_id", device);
-  }
-  const last = parseInt(localStorage.getItem("lastApplicationTS")||"0",10);
-  const week = 7*24*60*60*1000;
-  if(Date.now() - last < week){
-    resultDiv.innerHTML = '<div class="alert alert-danger text-center">You can submit only once per week</div>';
-    return;
-  }
-  const ticket = "APP-" + Math.floor(100000 + Math.random()*900000);
-  const { error } = await supabase.from("applications").insert({
-    ticket_id: ticket,
-    about: about,
-    social_url: social,
-    status: null,
-    verify_code: verifyCode,
-    device_id: device
-  });
-  if(error){
-    resultDiv.innerHTML = '<div class="alert alert-danger text-center">Error sending application</div>';
-    return;
-  }
-  localStorage.setItem("lastApplicationTS", String(Date.now()));
-  resultDiv.innerHTML = '<div class="alert alert-success text-center">Your Application ID: <b>' + ticket + '</b></div>';
-  form.reset();
-  verifyCode = genVerify();
-  document.querySelector(".alert-primary p").innerText = verifyCode;
-});
-</script>
 </main>
 
 <footer class="footer mt-auto py-3 bg-dark">
     <div class="container">
-        <p class="text-muted text-center">This website is not affiliated, endorsed, and/or sponsored by any companies, trademarks, or copyrighted names mentioned. No copyright infringement is intended.</p>
+        <p class="text-muted text-center">This website is not affiliated, endorsed, and/or sponsored by any companies mentioned.</p>
         <p class="text-muted mb-0 text-center">&copy; 2026 OLDRBX</p>
     </div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9bf779667d2bea60',t:'MTc2ODY2OTkxMg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const SUPA_URL = "https://nkvvnnjukqtfhmegyzek.supabase.co";
+  const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rdnZubmp1a3F0ZmhtZWd5emVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2NjQ5MTIsImV4cCI6MjA4NDI0MDkxMn0.2jp9X2KQunFargrstYM7oGBYs75Kq7AEHs7iRARxexs";
+  const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
+  const wordsFallback = ["orange","windstorm","wood","scared","tin","snowflake","silver","static","ember","midnight","echo","frost","shadow","neon","cloud","crystal","void"];
+  const verifyEl = document.getElementById("verifyText");
+  const regenBtn = document.getElementById("regenBtn");
+
+  async function fetchWords() {
+    try {
+      const { data, error } = await sb.from("verify_words").select("word");
+      if (error || !data || !data.length) throw new Error("no-data");
+      return data.map(r => r.word).filter(Boolean);
+    } catch (e) {
+      return wordsFallback;
+    }
+  }
+
+  function genCodeFromList(list) {
+    const pool = list.slice();
+    const out = [];
+    while (out.length < 4 && pool.length) {
+      const i = Math.floor(Math.random() * pool.length);
+      out.push(pool.splice(i, 1)[0]);
+    }
+    return out.join(" ");
+  }
+
+  (async function initVerify(){
+    const list = await fetchWords();
+    verifyEl.textContent = genCodeFromList(list);
+  })();
+
+  regenBtn.addEventListener("click", async function (e) {
+    e.preventDefault();
+    const list = await fetchWords();
+    verifyEl.textContent = genCodeFromList(list);
+  });
+
+  const form = document.getElementById("appForm");
+  const resultBox = document.getElementById("resultBox");
+  const intro = document.getElementById("introText");
+
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    resultBox.style.display = "none";
+    resultBox.innerHTML = "";
+    const about = form.querySelector('[name="about"]').value.trim();
+    const social = form.querySelector('[name="socialUrl"]').value.trim();
+    if (!about || !social) {
+      resultBox.innerHTML = '<div class="alert alert-danger text-center">Fill all fields</div>';
+      resultBox.style.display = "block";
+      return;
+    }
+    const last = parseInt(localStorage.getItem("lastApplicationTS")||"0", 10);
+    const week = 7*24*60*60*1000;
+    if (Date.now() - last < week) {
+      resultBox.innerHTML = '<div class="alert alert-danger text-center">You can submit only once per week</div>';
+      resultBox.style.display = "block";
+      return;
+    }
+    const ticket = "APP-" + Math.floor(100000 + Math.random()*900000);
+    const { error } = await sb.from("applications").insert({
+      ticket_id: ticket,
+      about: about,
+      social_url: social,
+      status: "pending"
+    });
+    if (error) {
+      resultBox.innerHTML = '<div class="alert alert-danger text-center">Error sending application</div>';
+      resultBox.style.display = "block";
+      console.error(error);
+      return;
+    }
+    localStorage.setItem("lastApplicationTS", String(Date.now()));
+    localStorage.setItem("lastTicket", ticket);
+    form.classList.add("hidden");
+    if (intro) intro.style.display = "none";
+    resultBox.innerHTML = ''
+      + '<div class="sent-box">'
+      + '<div class="sent-title">Application sent</div>'
+      + '<div class="sent-sub">Ticket number: <b>' + ticket + '</b></div>'
+      + '<div style="margin-bottom:12px;"><a id="viewLink" href="application-check.html?ticket=' + ticket + '" class="btn btn-outline-primary">View application</a></div>'
+      + '<div class="small-note">You can submit a new application no earlier than 7 days from now.</div>'
+      + '</div>';
+    resultBox.style.display = "block";
+    form.querySelector('textarea[name="about"]').value = "";
+    form.querySelector('input[name="socialUrl"]').value = "";
+    verifyEl.textContent = "";
+  });
+});
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+</body>
 </html>
+
+
+
 
 
