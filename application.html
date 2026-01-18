@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en" class="h-100">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="icon" type="image/png" href="https://www.caelus.lol/img/caelusC.png" />
+    
+    <title>Application - Caelus</title>
+    <meta name="description" content="Relive 2020 for free, no invite keys required. The most secure and private website of its kind." />
+    <meta name="twitter:card" content="summary" />
+    <meta property="og:site_name" content="Caelus" />
+    <meta property="og:url" content="https://caelus.lol" />
+    <meta property="og:title" content="Application" />
+    <meta property="og:description" content="Submit an application to join Caelus." />
+    <meta property="og:image" content="https://caelus.lol/img/caelusC.png" />
+
+
+    <style>
+        body {
+        background-color: #0c0c0cff !important;
+        color: #ffffff !important;
+        }
+        .navbar.bg-dark {
+            background-color: #0b0b0b !important;
+            border-bottom: 2px solid #3d3d3dff !important;
+        }
+        .navbar.bg-light {
+            background-color: #121212 !important;
+            border-bottom: none !important;
+        }
+        .navbar-dark .navbar-nav .nav-link {
+            color: #bbbbbbb0 !important;
+        }
+        .navbar-dark .navbar-nav .nav-link:hover {
+            color: #ffffff !important;
+        }
+
+        .navbar-auth .nav-link {
+            color: #bbbbbbb0 !important;
+        }
+        .navbar-auth .nav-link:hover {
+            color: #ffffff !important;
+        }
+
+        footer.bg-dark {
+            background-color: #0b0b0b !important;
+            border-top: 2px solid #3d3d3dff !important;
+        }
+        footer .text-muted {
+            color: #3d3d3dff !important;
+        }
+    </style>
+
+</head>
+<body class="d-flex flex-column h-100">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="home.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
+                <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                <li class="nav-item"><a class="nav-link" href="discord.html">Discord</a></li>
+                <li class="nav-item"><a class="nav-link" href="tos.html">Terms of Service</a></li>
+                <li class="nav-item"><a class="nav-link" href="privacy.html">Privacy</a></li>
+                <li class="nav-item"><a class="nav-link" href="account-deletion.html">Account Deletion</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<main class="flex-shrink-0">
+    
+
+
+<style>
+    body {
+        background-color: #0c0c0cff !important;
+        color: #ffffff !important;
+    }
+
+    .card {
+        background-color: #121212;
+        border: 1px solid #2a2a2a;
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+    }
+
+        .card h3 {
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+    h4 {
+        background-color: #212529;
+        color: #ffffff;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+    }
+
+    p, li, label {
+        color: #dcdcdc;
+    }
+
+    .form-control {
+        background-color: #1b1b1b;
+        color: #ffffff;
+        border: 1px solid #3a3a3a;
+    }
+
+        .form-control:focus {
+            background-color: #1e1e1e;
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 0.2rem rgba(26, 115, 232, 0.25);
+            color: #ffffff;
+        }
+
+    a {
+        color: #1a73e8 !important;
+        text-decoration: underline;
+    }
+
+        a:hover {
+            color: #63a4ff !important;
+        }
+
+    .btn-primary {
+        background-color: #1a73e8;
+        border-color: #1a73e8;
+        color: #fff;
+        width: 100%;
+        transition: all 0.2s ease-in-out;
+    }
+
+        .btn-primary:hover {
+            background-color: #155ab6;
+            border-color: #155ab6;
+        }
+
+    .btn-outline-primary {
+        color: #1a73e8;
+        border-color: #1a73e8;
+    }
+
+        .btn-outline-primary:hover {
+            background-color: #1a73e8;
+            color: #fff;
+        }
+
+    .alert-warning {
+        background-color: #2a2200;
+        color: #ffcc00;
+        border: 1px solid #ffcc00;
+    }
+
+    .alert-danger {
+        background-color: #2a0000;
+        color: #ff6666;
+        border: 1px solid #ff6666;
+    }
+
+    .alert-primary {
+        background-color: #0d1a33;
+        border: 1px solid #1a73e8;
+        color: #ffffff;
+    }
+
+        .alert-primary p {
+            margin: 0;
+        }
+
+    .input-padding {
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .h-captcha {
+        display: flex;
+        justify-content: center;
+    }
+</style>
+
+
+<div class="container mt-4 mb-4">
+    <div class="row">
+        <div class="col-12 col-xl-6 offset-xl-3 col-md-8 offset-md-2">
+            <div class="card card-body">
+
+                <h3>Application</h3>
+                <p>
+                    To join Caelus, you must fill out an application.
+                    This is done to prevent bots and malicious users from joining.
+                </p>
+
+                <p class="mb-0">
+                    <span class="fw-bold">Already filled out the application?</span>
+                    Click <a href="application-check.html">here</a> to view its status.
+                </p>
+
+
+                <form method="post">
+                    <div class="input-padding"></div>
+
+                    <div>
+                        <h4>Requirements</h4>
+                        <ul>
+                            <li>You must be 13 years of age or older.</li>
+                            <li>You must have an active account on Roblox (This will soon be changing).</li>
+                        </ul>
+                    </div>
+
+                    <div class="input-padding"></div>
+
+                    <div class="application-form-entry">
+                        <div class="stage-1">
+                            <h4>Step 1 - About Me</h4>
+                            <div class="p-2">
+                                <p class="mb-1">
+                                    You can list some interests, favorite video games, why you want to join,
+                                    things you can create (e.g. clothing or games), etc. A sentence or two is fine.
+                                    <span class="fw-bolder">
+                                        Do <span class="text-decoration-underline">NOT</span> put personal information such as your age or email address.
+                                    </span>
+                                </p>
+                                <textarea placeholder="About me (up to 4,000 characters)"
+                                          class="form-control w-100" rows="4" name="about"
+                                          maxlength="4096"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="input-padding"></div>
+
+                        <div class="stage-2">
+                            <h4>Step 2 - Social URL</h4>
+                            <div class="p-2">
+                                <p class="mb-0">
+                                    Paste a link to your profile on Roblox (This will be changing soon).
+                                </p>
+                                <p class="mb-2 mt-2">
+                                    <span class="fw-bold">Your account must have some activity on it</span>,
+                                    such as friends/followers, posts, games, or whatever constitutes activity.
+                                </p>
+                                <input placeholder="Roblox Profile URL" type="text"
+                                       class="form-control" name="socialUrl" maxlength="128" />
+                            </div>
+                        </div>
+
+                        <div class="input-padding"></div>
+
+                        <div class="stage-3">
+                            <h4>Step 3 - Verification</h4>
+                            <div class="p-2">
+                                <p class="mb-0">
+                                    Copy the entire phrase in the blue box below and paste it into your profile description. This is done so we can verify you
+                                    aren't impersonating someone.
+                                </p>
+                                <div class="alert alert-primary mt-2 mb-2">
+                                    <p class="mb-0">caelus orange windstorm wood scared tin snowflake</p>
+                                </div>
+
+                                <div class="mt-2 text-center">
+                                    <label>Code not working or getting filtered?</label><br><br>
+                                    <input type="submit" class="btn btn-outline-primary btn-sm mt-2" name="action" value="Get New Code" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="input-padding"></div>
+
+                        <div class="stage-4">
+                            <h4>Step 4 - Captcha</h4>
+                            <div class="p-2">
+                                <p class="mb-0 text-center">We just have to make sure you aren't a robot.</p>
+                                <div class="h-captcha mt-4" data-sitekey="1b42e17a-9bb0-42f2-a5d8-d6aa0c6a3b88" data-theme="dark"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stage-submit">
+                        <div class="input-padding"></div>
+                        <input type="submit" class="btn btn-primary mt-2" value="Submit Application" />
+                        <input name="__RequestVerificationToken" type="hidden" value="CfDJ8BvMVnu2_1dDlGmwlHOlZtIdrAwztghIpXE88PgfoiSlvHEiUp4u-XR16-NzIfbhiwN4HZvpVx7nDMagisydFmxYiD4wZW_i_rZEodPfw1T2dkIZpUuJW9KHM8I_QtnykpVle6qSzfD-xa6uh_f_j3U" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+</main>
+
+<footer class="footer mt-auto py-3 bg-dark">
+    <div class="container">
+        <p class="text-muted text-center">This website is not affiliated, endorsed, and/or sponsored by any companies, trademarks, or copyrighted names mentioned. No copyright infringement is intended.</p>
+        <p class="text-muted mb-0 text-center">&copy; 2026 Caelus</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9bf779667d2bea60',t:'MTc2ODY2OTkxMg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
