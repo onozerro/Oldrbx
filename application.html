@@ -203,7 +203,7 @@
                 </p>
 
 
-                <form method="post">
+                <form onsubmit="return false;">
                     <div class="input-padding"></div>
 
                     <div>
@@ -265,7 +265,7 @@
 
                                 <div class="mt-2 text-center">
                                     <label>Code not working or getting filtered?</label><br><br>
-                                    <input type="submit" class="btn btn-outline-primary btn-sm mt-2" name="action" value="Get New Code" />
+                                    <input type="button" id="regen" class="btn btn-outline-primary btn-sm mt-2" value="Regenerate Code" />
                                 </div>
                             </div>
                         </div>
@@ -283,7 +283,7 @@
 
                     <div class="stage-submit">
                         <div class="input-padding"></div>
-                        <input type="submit" class="btn btn-primary mt-2" value="Submit Application" />
+                        <input type="submit" id="submitBtn" class="btn btn-primary mt-2" value="Submit Application" />
                         <input name="__RequestVerificationToken" type="hidden" value="CfDJ8BvMVnu2_1dDlGmwlHOlZtIdrAwztghIpXE88PgfoiSlvHEiUp4u-XR16-NzIfbhiwN4HZvpVx7nDMagisydFmxYiD4wZW_i_rZEodPfw1T2dkIZpUuJW9KHM8I_QtnykpVle6qSzfD-xa6uh_f_j3U" />
                     </div>
                 </form>
@@ -296,13 +296,28 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-const supabase = supabase.createClient("https://nkvvnnjukqtfhmegyzek.supabase.co","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rdnZubmp1a3F0ZmhtZWd5emVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2NjQ5MTIsImV4cCI6MjA4NDI0MDkxMn0.2jp9X2KQunFargrstYM7oGBYs75Kq7AEHs7iRARxexs");
+const supabase = supabase.createClient("https://nkvvnnjukqtfhmegyzek.supabase.co","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rdnZubmp1a3F0ZmhtZWd5emVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2NjQ5MTIsImV4cCI6MjA4NDI0MDkxMn0.2jp9X2KQunFargrstYM7oGBYs75Kq7AEHs7iRARxexs");
+const words = ["orange","windstorm","wood","scared","tin","snowflake","silver","static","ember","midnight","echo","frost","shadow","neon","cloud","crystal","void","glimmer","sage","breeze"];
+function genVerify(){
+  const arr = [];
+  const pool = words.slice();
+  for(let i=0;i<4;i++){
+    const idx = Math.floor(Math.random()*pool.length);
+    arr.push(pool.splice(idx,1)[0]);
+  }
+  return "OLDRBX " + arr.join(" ");
+}
+let verifyCode = genVerify();
+document.querySelector(".alert-primary p").innerText = verifyCode;
+document.getElementById("regen").addEventListener("click", function(){
+  verifyCode = genVerify();
+  document.querySelector(".alert-primary p").innerText = verifyCode;
+});
 const form = document.querySelector("form");
 const card = document.querySelector(".card.card-body");
 const resultDiv = document.createElement("div");
 card.prepend(resultDiv);
-form.addEventListener("submit", async function(e){
-  e.preventDefault();
+document.getElementById("submitBtn").addEventListener("click", async function(){
   resultDiv.innerHTML = "";
   const about = document.querySelector('[name="about"]').value.trim();
   const social = document.querySelector('[name="socialUrl"]').value.trim();
@@ -315,7 +330,7 @@ form.addEventListener("submit", async function(e){
     device = crypto.randomUUID();
     localStorage.setItem("device_id", device);
   }
-  const last = parseInt(localStorage.getItem("lastApplicationTS") || "0",10);
+  const last = parseInt(localStorage.getItem("lastApplicationTS")||"0",10);
   const week = 7*24*60*60*1000;
   if(Date.now() - last < week){
     resultDiv.innerHTML = '<div class="alert alert-danger text-center">You can submit only once per week</div>';
@@ -327,6 +342,7 @@ form.addEventListener("submit", async function(e){
     about: about,
     social_url: social,
     status: null,
+    verify_code: verifyCode,
     device_id: device
   });
   if(error){
@@ -336,6 +352,8 @@ form.addEventListener("submit", async function(e){
   localStorage.setItem("lastApplicationTS", String(Date.now()));
   resultDiv.innerHTML = '<div class="alert alert-success text-center">Your Application ID: <b>' + ticket + '</b></div>';
   form.reset();
+  verifyCode = genVerify();
+  document.querySelector(".alert-primary p").innerText = verifyCode;
 });
 </script>
 </main>
@@ -350,4 +368,5 @@ form.addEventListener("submit", async function(e){
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9bf779667d2bea60',t:'MTc2ODY2OTkxMg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
+
 
