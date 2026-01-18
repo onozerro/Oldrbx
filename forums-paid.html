@@ -20,16 +20,24 @@ html,body{height:100%;margin:0;background:var(--bg);color:#111;font-family:Arial
 .hamburger{width:44px;height:44px;border-radius:6px;background:transparent;border:none;color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer}
 .logo-img{height:34px}
 .top-right{margin-left:auto;display:flex;align-items:center;gap:10px}
-.money-wrap{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.06);padding:6px 8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);font-weight:800;color:#fff}
-.money-icon{width:28px;height:28px;border-radius:50%;overflow:hidden;background:#fff;display:flex;align-items:center;justify-content:center}
-.money-icon img{width:100%;height:100%;object-fit:cover}
-.avatar{width:40px;height:40px;border-radius:50%;overflow:hidden;background:var(--panel);display:flex;align-items:center;justify-content:center}
+
+/* Money simplified (no translucent box) */
+.money-wrap{display:flex;align-items:center;gap:8px;padding:0;border:0;color:#fff;font-weight:800}
+.money-icon{width:32px;height:32px;border-radius:50%;overflow:hidden;background:transparent;display:flex;align-items:center;justify-content:center}
+.money-icon img{width:28px;height:28px;object-fit:contain;display:block}
+.balance{color:#fff;font-weight:800;line-height:1}
+
+/* avatar clickable */
+.avatar{width:40px;height:40px;border-radius:50%;overflow:hidden;background:var(--panel);display:flex;align-items:center;justify-content:center;cursor:pointer}
 .avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+
+/* layout */
 .container{padding:18px;box-sizing:border-box}
 .header-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
 .header-title{font-weight:800;font-size:18px}
 .container-layout{display:grid;grid-template-columns:320px 1fr;gap:18px}
 .sidebar{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:12px;box-sizing:border-box}
+.nav-item{padding:12px;border-radius:6px;display:flex;align-items:center;justify-content:space-between;font-weight:800;color:#111;text-decoration:none;cursor:pointer;background:#fff;border:1px solid var(--border);box-shadow:0 6px 14px var(--shadow);margin-bottom:8px}
 .topics-panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:12px;box-sizing:border-box}
 .topics-grid{display:flex;flex-direction:column;gap:10px}
 .topic-btn{display:flex;align-items:center;justify-content:space-between;padding:12px;background:#fff;border:1px solid var(--border);border-radius:6px;cursor:pointer;font-weight:800;box-shadow:0 6px 14px var(--shadow);gap:12px}
@@ -38,7 +46,7 @@ html,body{height:100%;margin:0;background:var(--bg);color:#111;font-family:Arial
 .topic-btn .meta{font-size:12px;color:var(--muted);font-weight:700}
 .topic-btn .right{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
 .count-pill{background:#f3f5f6;border:1px solid var(--border);padding:6px 10px;border-radius:6px;font-weight:800;font-size:13px}
-.mainpanel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:14px;min-height:420px;display:flex;flex-direction:column}
+.mainpanel{background:transparent;border-radius:0;padding:14px;min-height:420px;display:flex;flex-direction:column}
 .back-btn{display:none;margin-bottom:12px;color:var(--accent);font-weight:800;cursor:pointer}
 .topic-header{font-weight:800;margin-bottom:8px}
 .posts{flex:1;overflow:auto;padding-right:6px}
@@ -51,7 +59,11 @@ html,body{height:100%;margin:0;background:var(--bg);color:#111;font-family:Arial
 .composer textarea{flex:1;min-height:90px;background:#fafafa;border:1px solid var(--border);color:#111;padding:10px;border-radius:6px;resize:vertical}
 .composer button{height:40px;border-radius:6px;background:var(--accent);color:#fff;border:none;padding:8px 14px;cursor:pointer;font-weight:800;box-shadow:0 6px 14px var(--shadow)}
 .empty{color:var(--muted);padding:18px;text-align:center}
-.footer{background:var(--panel);border-top:1px solid var(--border);padding:10px;text-align:center;color:var(--muted);margin-top:18px;border-radius:6px}
+
+/* footer full width */
+.site-footer{width:100%;background:var(--panel);border-top:1px solid var(--border);padding:10px 18px;color:var(--muted);box-sizing:border-box;margin-top:18px;border-radius:0}
+
+/* responsive */
 @media(max-width:1000px){
   .container-layout{grid-template-columns:1fr;padding:12px}
   .sidebar{position:fixed;left:-360px;top:56px;height:calc(100% - 56px);z-index:1050;transition:left .18s ease}
@@ -64,11 +76,11 @@ html,body{height:100%;margin:0;background:var(--bg);color:#111;font-family:Arial
   <button id="hamb" class="hamburger" aria-label="menu">&#9776;</button>
   <img src="img/logo.png" class="logo-img" alt="logo">
   <div class="top-right">
-    <div class="money-wrap">
+    <div class="money-wrap" title="Balance">
       <div class="money-icon"><img id="moneyIcon" src="img/money.png" alt="money"></div>
       <div class="balance" id="balanceText">0</div>
     </div>
-    <div class="avatar"><img id="topAv" src="img/user.png" alt="avatar"></div>
+    <a id="profileLink" href="profile-paid.html" title="Profile" class="avatar"><img id="topAv" src="img/user.png" alt="avatar"></a>
   </div>
 </div>
 
@@ -80,8 +92,8 @@ html,body{height:100%;margin:0;background:var(--bg);color:#111;font-family:Arial
   <div class="container-layout">
     <aside class="sidebar" id="leftSidebar">
       <div style="display:flex;flex-direction:column;gap:10px">
-        <div class="topic-btn" onclick="location.href='home-paid.html'"><div class="left"><div class="title">Home</div></div></div>
-        <div class="topic-btn" onclick="location.href='forums-paid.html'"><div class="left"><div class="title">Forums</div></div></div>
+        <div class="nav-item" onclick="location.href='home-paid.html'"><div>Home</div></div>
+        <div class="nav-item" onclick="location.href='forums-paid.html'"><div>Forums</div></div>
         <div class="nav-item locked" id="navProfile">Profile</div>
       </div>
     </aside>
@@ -108,9 +120,9 @@ html,body{height:100%;margin:0;background:var(--bg);color:#111;font-family:Arial
       </div>
     </main>
   </div>
-
-  <div class="footer">&copy; 2026 OLDRBX</div>
 </div>
+
+<div class="site-footer">&copy; 2026 OLDRBX</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -123,6 +135,8 @@ document.addEventListener('DOMContentLoaded', async function(){
   let auth = null;
   try{ auth = JSON.parse(localStorage.getItem('auth')) }catch(e){ auth = null }
   if(!auth || !auth.username){ location.replace('login.html'); return }
+
+  // consistent profile + avatar + balance handling (copied logic from home)
   document.getElementById('meName').innerText = auth.username;
   document.getElementById('meAv').src = auth.avatarUrl || 'img/user.png';
   document.getElementById('topAv').src = auth.avatarUrl || 'img/user.png';
@@ -132,6 +146,7 @@ document.addEventListener('DOMContentLoaded', async function(){
 
   document.getElementById('hamb').addEventListener('click', function(){ document.getElementById('leftSidebar').classList.toggle('open') });
 
+  // Ensure forum topics exist and render them
   async function ensureTopics(){
     const { data, error } = await sb.from('forum_topics').select('*').order('id',{ascending:true});
     if(error) return [];
