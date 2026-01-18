@@ -15,44 +15,39 @@
   --accent:#0074bd;
 }
 html,body{height:100%;margin:0;background:var(--bg);color:#111;font-family:Arial,Helvetica,sans-serif}
-.topbar{height:64px;background:var(--top);display:flex;align-items:center;gap:12px;padding:0 14px;box-sizing:border-box;color:#fff}
-.hamburger{width:46px;height:46px;border-radius:8px;background:rgba(255,255,255,0.08);border:none;color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer}
-.logo-img{height:36px}
-.search{margin-left:12px;flex:1;max-width:520px}
-.search input{width:100%;height:40px;border-radius:8px;border:1px solid rgba(255,255,255,0.12);padding:8px 12px;font-weight:600}
+.topbar{height:56px;background:var(--top);display:flex;align-items:center;padding:0 14px;gap:12px;box-sizing:border-box}
+.hamburger{width:44px;height:44px;border-radius:6px;background:transparent;border:none;color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.logo-img{height:34px}
 .top-right{margin-left:auto;display:flex;align-items:center;gap:12px}
-.currency{display:flex;align-items:center;gap:8px;padding:6px 10px;background:rgba(255,255,255,0.06);border-radius:8px;font-weight:700}
+.avatar{width:40px;height:40px;border-radius:50%;overflow:hidden;background:var(--panel);display:flex;align-items:center;justify-content:center}
+.avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
 .container-layout{display:grid;grid-template-columns:320px 1fr;gap:18px;padding:18px;box-sizing:border-box}
-.sidebar{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:12px;box-sizing:border-box}
+.sidebar{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:12px;box-sizing:border-box}
 .topics-list{display:flex;flex-direction:column;gap:8px}
-.topic{padding:12px;border-radius:8px;display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:800}
+.topic{padding:12px;border-radius:4px;display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:800}
 .topic:hover{background:#f4f6f7}
-.topic.active{background:rgba(0,116,189,0.08);border-left:3px solid var(--accent)}
-.mainpanel{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:14px;min-height:420px;display:flex;flex-direction:column}
+.topic.active{background:rgba(0,116,189,0.08);border-left:3px solid var(--accent);padding-left:10px}
+.mainpanel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:14px;min-height:420px;display:flex;flex-direction:column}
 .posts{flex:1;overflow:auto;padding-right:6px}
-.post{display:flex;gap:12px;padding:12px;border-radius:8px;border-bottom:1px solid var(--border);align-items:flex-start;background:#fff}
+.post{display:flex;gap:12px;padding:12px;border-radius:6px;border-bottom:1px solid var(--border);align-items:flex-start;background:#fff}
 .post .avatar{width:52px;height:52px;border-radius:50%;overflow:hidden;background:var(--border);flex:0 0 52px}
 .post .avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
 .post .body{flex:1}
 .post .meta{font-size:12px;color:var(--muted);margin-bottom:6px}
 .composer{margin-top:12px;display:flex;gap:10px;align-items:flex-start}
-.composer textarea{flex:1;min-height:90px;background:#fafafa;border:1px solid var(--border);color:#111;padding:10px;border-radius:8px;resize:vertical}
-.composer button{height:40px;border-radius:8px;background:var(--accent);color:#fff;border:none;padding:8px 14px;cursor:pointer}
+.composer textarea{flex:1;min-height:90px;background:#fafafa;border:1px solid var(--border);color:#111;padding:10px;border-radius:4px;resize:vertical}
+.composer button{height:40px;border-radius:4px;background:var(--accent);color:#fff;border:none;padding:8px 14px;cursor:pointer}
 .empty{color:var(--muted);padding:18px;text-align:center}
-.footer{background:var(--panel);border-top:1px solid var(--border);padding:10px;text-align:center;color:var(--muted)}
-@media(max-width:1000px){.container-layout{grid-template-columns:1fr;padding:12px}.sidebar{position:fixed;left:-360px;top:64px;height:calc(100% - 64px);z-index:1050;transition:left .18s ease}.sidebar.open{left:0}.hamburger{display:inline-flex}}
+.back-btn{display:none;margin-bottom:12px;color:var(--accent);font-weight:800;cursor:pointer}
+@media(max-width:1000px){.container-layout{grid-template-columns:1fr;padding:12px}.sidebar{position:fixed;left:-360px;top:56px;height:calc(100% - 56px);z-index:1050;transition:left .18s ease}.sidebar.open{left:0}.hamburger{display:inline-flex}}
 </style>
 </head>
 <body>
 <div class="topbar">
   <button id="hamb" class="hamburger" aria-label="menu">&#9776;</button>
   <img src="img/logo.png" class="logo-img" alt="logo">
-  <div class="search"><input placeholder="Search forums" id="searchInput"></div>
   <div class="top-right">
-    <div class="currency">R$ <span id="robuxCount">1620</span></div>
-    <div class="currency">Tix <span id="tixCount">1050</span></div>
-    <div style="width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center">⚙</div>
-    <div class="avatar" style="width:40px;height:40px"><img id="topAv" src="img/user.png" style="width:40px;height:40px;border-radius:50%" alt="avatar"></div>
+    <div class="avatar"><img id="topAv" src="img/user.png" alt="avatar"></div>
   </div>
 </div>
 
@@ -63,6 +58,7 @@ html,body{height:100%;margin:0;background:var(--bg);color:#111;font-family:Arial
   </aside>
 
   <section class="mainpanel">
+    <div id="backBtn" class="back-btn">← Back to topics</div>
     <div id="topicHeader" style="font-weight:800;margin-bottom:8px">Select a topic</div>
     <div class="posts" id="postsList"><div class="empty">Choose a topic on the left to view posts</div></div>
     <div id="composerWrap" style="margin-top:12px;display:none">
@@ -78,13 +74,13 @@ html,body{height:100%;margin:0;background:var(--bg);color:#111;font-family:Arial
   </section>
 </div>
 
-<footer class="footer">&copy; 2026 OLDRBX</footer>
+<footer class="footer" style="background:var(--panel);border-top:1px solid var(--border);padding:10px;text-align:center;color:var(--muted)">&copy; 2026 OLDRBX</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async function(){
   const SUPA_URL = "https://nkvvnnjukqtfhmegyzek.supabase.co";
-  const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rdnZubmp1a3F0ZmhtZWd5emciLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc2ODY2NDkxMiwiZXhwIjoyMDg0MjQwOTEyfQ.2jp9X2KQunFargrstYM7oGBYs75Kq7AEHs7iRARxexs";
+  const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rdnZubmp1a3F0ZmhtZWd5emVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2NjQ5MTIsImV4cCI6MjA4NDI0MDkxMn0.2jp9X2KQunFargrstYM7oGBYs75Kq7AEHs7iRARxexs";
   const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
   let currentTopicSlug = null;
   let currentTopicId = null;
@@ -95,11 +91,13 @@ document.addEventListener('DOMContentLoaded', async function(){
   document.getElementById('meAv').src = auth.avatarUrl || 'img/user.png'
   document.getElementById('topAv').src = auth.avatarUrl || 'img/user.png'
   document.getElementById('hamb').addEventListener('click', function(){ document.getElementById('sidebar').classList.toggle('open') })
+
   async function ensureTopics(){
     const { data, error } = await sb.from('forum_topics').select('*').order('id',{ascending:true})
     if(error) return []
     return data || []
   }
+
   async function createDefaultTopicsIfMissing(){
     const t = await ensureTopics()
     if(!t || !t.length){
@@ -113,6 +111,7 @@ document.addEventListener('DOMContentLoaded', async function(){
       }
     }
   }
+
   async function loadTopicsToUI(){
     await createDefaultTopicsIfMissing()
     const { data, error } = await sb.from('forum_topics').select('*').order('id',{ascending:true})
@@ -129,6 +128,7 @@ document.addEventListener('DOMContentLoaded', async function(){
       container.appendChild(el)
     })
   }
+
   async function selectTopic(slug, title, id){
     currentTopicSlug = slug
     currentTopicId = id || null
@@ -148,13 +148,16 @@ document.addEventListener('DOMContentLoaded', async function(){
     }
     await loadPosts(currentTopicId)
     document.getElementById('composerWrap').style.display = 'block'
+    document.getElementById('sidebar').style.display = 'none'
+    document.getElementById('backBtn').style.display = 'block'
   }
+
   async function loadPosts(topicId){
     const { data:posts, error } = await sb.from('forum_posts').select('*').eq('topic_id',topicId).order('created_at',{ascending:true})
     const list = document.getElementById('postsList')
     list.innerHTML = ''
     if(error || !posts || !posts.length){
-      list.innerHTML = '<div class="empty">No posts yet. Choose a topic and be the first to post.</div>'
+      list.innerHTML = '<div class="empty">No posts yet. Choose a topic on the left to be the first to post.</div>'
       return
     }
     posts.forEach(p=>{
@@ -175,6 +178,18 @@ document.addEventListener('DOMContentLoaded', async function(){
     })
     list.scrollTop = list.scrollHeight
   }
+
+  document.getElementById('backBtn').addEventListener('click', function(){
+    document.getElementById('sidebar').style.display = ''
+    document.getElementById('backBtn').style.display = 'none'
+    document.getElementById('topicHeader').innerText = 'Select a topic'
+    document.getElementById('postsList').innerHTML = '<div class="empty">Choose a topic on the left to view posts</div>'
+    document.getElementById('composerWrap').style.display = 'none'
+    currentTopicId = null
+    const elems = document.querySelectorAll('.topic')
+    elems.forEach(e => e.classList.remove('active'))
+  })
+
   document.getElementById('sendBtn').addEventListener('click', async function(){
     const txt = document.getElementById('msgInput').value.trim()
     if(!txt || !currentTopicId) return
@@ -187,6 +202,7 @@ document.addEventListener('DOMContentLoaded', async function(){
     document.getElementById('msgInput').value = ''
     await loadPosts(currentTopicId)
   })
+
   await loadTopicsToUI()
 })
 </script>
