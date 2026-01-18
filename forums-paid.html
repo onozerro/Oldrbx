@@ -7,10 +7,9 @@
 <link rel="icon" type="image/png" href="img/ic.png">
 <style>
 :root{
-  --bg:#eef3f8;
+  --bg:#f0f4f8;
   --panel:#ffffff;
-  --card:#ffffff;
-  --border:#d3dae3;
+  --border:#d7dbe0;
   --muted:#6b7280;
   --accent:#3b6ea5;
   --text:#0f1724;
@@ -18,20 +17,23 @@
 }
 *{box-sizing:border-box}
 html,body{height:100%;margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
-.header{height:64px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 12px;gap:10px}
-.brand{display:flex;align-items:center;gap:8px}
+.header{height:64px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 10px;gap:8px}
+.brand{display:flex;align-items:center;gap:6px}
 .hamburger{width:44px;height:44px;border-radius:4px;border:none;background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
-.hamburger .bar{display:block;width:20px;height:2px;background:var(--text);box-shadow:0 7px 0 0 var(--text),0 -7px 0 0 var(--text);border-radius:1px}
-.logo{height:32px}
-.container{display:flex;gap:20px;padding:22px;justify-content:center}
+.hamburger .bar{display:block;width:22px;height:2px;background:var(--text);box-shadow:0 7px 0 0 var(--text),0 -7px 0 0 var(--text);border-radius:1px}
+.logo{height:36px}
+.wrapper{display:flex;min-height:calc(100vh - 64px)}
 .sidebar{width:220px;background:var(--panel);border-right:1px solid var(--border);padding:14px;display:flex;flex-direction:column;gap:8px}
-.center{width:100%;max-width:980px;display:flex;gap:20px}
-.card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:16px}
+.menu a{display:block;padding:10px 12px;border-radius:6px;text-decoration:none;color:var(--text);font-weight:800;border:1px solid transparent;background:transparent}
+.menu a.active{border-left:4px solid var(--accent);background:linear-gradient(180deg,rgba(59,110,165,0.06),transparent)}
+.center{flex:1;padding:22px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:16px}
 .top-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .topic-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
 .topic{padding:16px;border-radius:6px;border:1px solid var(--border);cursor:pointer;font-weight:900;display:flex;align-items:center;justify-content:center;min-height:88px;background:linear-gradient(180deg,#fff,#f7fbff)}
 .topic:hover{box-shadow:0 8px 18px rgba(15,23,36,0.04)}
-.right-panel{width:420px;min-height:240px;display:none;flex-direction:column;gap:12px}
+.topic-count{font-weight:800;color:var(--muted)}
+.topic-view{display:none;flex-direction:column;gap:12px}
 .posts{display:flex;flex-direction:column;gap:12px;max-height:420px;overflow:auto;padding-right:6px}
 .post{display:flex;gap:12px;padding:12px;border-radius:6px;border:1px solid var(--border);align-items:flex-start;background:#fff}
 .post .avatar{width:48px;height:48px;border-radius:50%;overflow:hidden;border:1px solid var(--border)}
@@ -41,17 +43,13 @@ html,body{height:100%;margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;backg
 .textarea{flex:1;min-height:90px;border:1px solid var(--border);border-radius:6px;padding:10px;background:#fff}
 .btn{background:var(--accent);color:#fff;border:none;padding:8px 14px;border-radius:6px;font-weight:800;cursor:pointer}
 .back{background:transparent;border:1px solid var(--border);padding:6px 10px;border-radius:6px;color:var(--text);font-weight:800;cursor:pointer}
-.toolbar{display:flex;gap:8px;align-items:center}
-.count-badge{background:#eef6ff;border:1px solid var(--border);padding:6px 10px;border-radius:999px;font-weight:800;color:var(--accent)}
-.filter-btn{padding:6px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;font-weight:800;cursor:pointer}
 .empty{color:var(--muted);padding:18px;text-align:center}
 .footer{padding:14px;text-align:center;color:var(--muted);border-top:1px solid var(--border);background:var(--panel)}
 @media(max-width:900px){
   .hamburger{display:flex}
-  .container{padding:12px;flex-direction:column;align-items:stretch}
-  .right-panel{width:100%}
   .sidebar{position:fixed;left:-320px;top:64px;height:calc(100% - 64px);z-index:1200;transition:left .18s ease}
   .sidebar.open{left:0}
+  .center{padding:12px}
 }
 @media(min-width:901px){
   .hamburger{display:none}
@@ -65,55 +63,49 @@ html,body{height:100%;margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;backg
     <img src="img/logo.png" class="logo" alt="logo">
   </div>
   <div style="margin-left:auto;display:flex;gap:12px;align-items:center">
-    <div style="width:40px;height:40px;border-radius:50%;overflow:hidden;border:1px solid var(--border)"><img id="topAv" src="img/user.png" style="width:40px;height:40px;border-radius:50%" alt="avatar"></div>
+    <div style="width:36px;height:36px;border-radius:50%;overflow:hidden;border:1px solid var(--border)"><img id="topAv" src="img/user.png" style="width:36px;height:36px;border-radius:50%" alt="avatar"></div>
   </div>
 </header>
-<div style="display:flex">
-  <aside id="sidebar" class="sidebar" style="display:flex;flex-direction:column">
-    <a href="home-paid.html" style="font-weight:900;text-decoration:none;color:var(--text)">Home</a>
-    <a href="forums-paid.html" style="font-weight:900;text-decoration:none;color:var(--text)">Forums</a>
+<div class="wrapper">
+  <aside id="sidebar" class="sidebar">
+    <nav class="menu">
+      <a href="home-paid.html" id="mhome2" class="">Home</a>
+      <a href="forums-paid.html" id="mforums2" class="active">Forums</a>
+    </nav>
   </aside>
-  <div class="container">
-    <div class="center">
-      <div class="card" id="topicsCard">
-        <div class="top-row">
-          <div style="font-weight:900;font-size:16px">Forums</div>
-          <div class="count-badge" id="topicCount">0 topics</div>
-        </div>
-        <div id="topicsArea" class="topic-grid"></div>
-        <div id="topicEmpty" class="empty" style="display:none">No topics yet.</div>
+  <main class="center">
+    <div class="card" id="topicsCard">
+      <div class="top-row">
+        <div style="font-weight:900;font-size:16px">Forums</div>
+        <div class="topic-count" id="topicCount">0 topics</div>
       </div>
-      <div class="card right-panel" id="rightPanel">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div class="toolbar">
-            <button id="backBtn" class="back">Back</button>
-            <div style="width:8px"></div>
-            <button class="filter-btn" id="fNew">New</button>
-            <button class="filter-btn" id="fSaved">Saved</button>
-            <button class="filter-btn" id="fRecent">Recent</button>
-          </div>
+      <div id="topicsArea" class="topic-grid"></div>
+      <div id="topicEmpty" class="empty" style="display:none">No topics yet.</div>
+    </div>
+    <div class="card topic-view" id="topicView">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div style="display:flex;gap:12px;align-items:center">
+          <button id="backBtn" class="back">Back</button>
           <div id="topicTitle" style="font-weight:900"></div>
         </div>
-        <div id="postCount" style="color:var(--muted);margin-bottom:6px"></div>
-        <div id="postsWrap" class="posts"></div>
-        <div id="composer" style="display:none">
-          <div style="display:flex;align-items:flex-start;gap:10px">
-            <div style="width:48px;height:48px;border-radius:50%;overflow:hidden;border:1px solid var(--border)"><img id="meAv" src="img/user.png" style="width:48px;height:48px;border-radius:50%" alt="avatar"></div>
-            <div style="flex:1">
-              <div id="meName" style="font-weight:900;margin-bottom:6px"></div>
-              <textarea id="msgInput" class="textarea" placeholder="Write your message..."></textarea>
-              <div style="display:flex;justify-content:flex-end;margin-top:10px">
-                <button id="sendBtn" class="btn">Send</button>
-              </div>
-            </div>
+        <div id="postCount" style="color:var(--muted)"></div>
+      </div>
+      <div id="postsWrap" class="posts"></div>
+      <div id="composer" class="composer" style="display:none">
+        <div style="width:48px;height:48px;border-radius:50%;overflow:hidden;border:1px solid var(--border)"><img id="meAv" src="img/user.png" style="width:48px;height:48px;border-radius:50%" alt="avatar"></div>
+        <div style="flex:1">
+          <div id="meName" style="font-weight:900;margin-bottom:6px"></div>
+          <textarea id="msgInput" class="textarea" placeholder="Write your message..."></textarea>
+          <div style="display:flex;justify-content:flex-end;margin-top:10px">
+            <button id="sendBtn" class="btn">Send</button>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </main>
 </div>
 <div class="footer">&copy; 2026 OLDRBX</div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async function(){
   const SUPA_URL = "https://nkvvnnjukqtfhmegyzek.supabase.co";
@@ -127,7 +119,7 @@ document.addEventListener('DOMContentLoaded', async function(){
   document.getElementById('meName').innerText = auth.username
   document.getElementById('meAv').src = auth.avatarUrl || 'img/user.png'
   document.getElementById('topAv').src = auth.avatarUrl || 'img/user.png'
-  document.getElementById('hamb').addEventListener('click', function(){ const side=document.getElementById('sidebar'); if(side) side.classList.toggle('open') })
+  document.getElementById('hamb').addEventListener('click', function(){ var s=document.getElementById('sidebar'); if(s) s.classList.toggle('open') })
   async function ensureDefaults(){
     const { data } = await sb.from('forum_topics').select('*').order('id',{ascending:true})
     if(!data || !data.length){
@@ -146,7 +138,7 @@ document.addEventListener('DOMContentLoaded', async function(){
     area.innerHTML = ''
     if(!data || !data.length){ document.getElementById('topicEmpty').style.display='block'; document.getElementById('topicCount').innerText='0 topics'; return }
     document.getElementById('topicEmpty').style.display='none'
-    document.getElementById('topicCount').innerText = (data.length) + ' topics'
+    document.getElementById('topicCount').innerText = data.length + ' topics'
     data.forEach(t=>{
       const el = document.createElement('div')
       el.className = 'topic'
@@ -162,10 +154,10 @@ document.addEventListener('DOMContentLoaded', async function(){
     currentTopicId = t.id
     document.getElementById('topicTitle').innerText = t.title
     document.getElementById('topicsCard').style.display = 'none'
-    document.getElementById('rightPanel').style.display = 'flex'
+    document.getElementById('topicView').style.display = 'flex'
     document.getElementById('composer').style.display = 'none'
     await loadPosts(currentTopicId)
-    document.getElementById('composer').style.display = 'block'
+    document.getElementById('composer').style.display = 'flex'
   }
   async function loadPosts(topicId){
     const { data:posts } = await sb.from('forum_posts').select('*').eq('topic_id',topicId).order('created_at',{ascending:true})
@@ -192,7 +184,7 @@ document.addEventListener('DOMContentLoaded', async function(){
     wrap.scrollTop = wrap.scrollHeight
   }
   document.getElementById('backBtn').addEventListener('click', function(){
-    document.getElementById('rightPanel').style.display = 'none'
+    document.getElementById('topicView').style.display = 'none'
     document.getElementById('topicsCard').style.display = 'block'
     document.getElementById('topicTitle').innerText = ''
     document.getElementById('postsWrap').innerHTML = ''
@@ -212,5 +204,6 @@ document.addEventListener('DOMContentLoaded', async function(){
 </script>
 </body>
 </html>
+
 
 
