@@ -198,6 +198,39 @@
     </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const supabase = supabase.createClient("https://nkvvnnjukqtfhmegyzek.supabase.co","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rdnZubmp1a3F0ZmhtZWdyZXoiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc2ODY2NDkxMiwiZXhwIjoyMDg0MjQwOTEyfQ.2jp9X2KQunFargrstYM7oGBYs75Kq7AEHs7iRARxexs");
+const form = document.querySelector("form");
+const card = document.querySelector(".exchcard");
+const result = document.createElement("div");
+card.prepend(result);
+form.addEventListener("submit", async function(e){
+  e.preventDefault();
+  result.innerHTML = "";
+  const id = document.querySelector('[name="applicationId"]').value.trim();
+  if(!id){
+    return;
+  }
+  const { data, error } = await supabase.from("applications").select("status").eq("ticket_id", id).single();
+  if(error || !data){
+    result.innerHTML = '<div class="alert alert-danger text-center">Application not found</div>';
+    return;
+  }
+  if(data.status === "approved"){
+    result.innerHTML = '<div class="alert alert-success text-center"><b>Accepted</b><br>Your application has been approved.</div>';
+    return;
+  }
+  if(data.status === "rejected"){
+    result.innerHTML = '<div class="alert alert-danger text-center"><b>Rejected</b><br>Your application was rejected.</div>';
+    return;
+  }
+  result.innerHTML = '<div class="alert alert-primary text-center"><b>Pending</b><br>Your application is still under review.</div>';
+});
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9bf7796fdcf5f527',t:'MTc2ODY2OTkxMw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
+

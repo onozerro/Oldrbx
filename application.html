@@ -293,6 +293,51 @@
 </div>
 
 <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const supabase = supabase.createClient("https://nkvvnnjukqtfhmegyzek.supabase.co","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rdnZubmp1a3F0ZmhtZWd5emVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2NjQ5MTIsImV4cCI6MjA4NDI0MDkxMn0.2jp9X2KQunFargrstYM7oGBYs75Kq7AEHs7iRARxexs");
+const form = document.querySelector("form");
+const card = document.querySelector(".card.card-body");
+const resultDiv = document.createElement("div");
+card.prepend(resultDiv);
+form.addEventListener("submit", async function(e){
+  e.preventDefault();
+  resultDiv.innerHTML = "";
+  const about = document.querySelector('[name="about"]').value.trim();
+  const social = document.querySelector('[name="socialUrl"]').value.trim();
+  if(!about || !social){
+    resultDiv.innerHTML = '<div class="alert alert-danger text-center">Fill all fields</div>';
+    return;
+  }
+  let device = localStorage.getItem("device_id");
+  if(!device){
+    device = crypto.randomUUID();
+    localStorage.setItem("device_id", device);
+  }
+  const last = parseInt(localStorage.getItem("lastApplicationTS") || "0",10);
+  const week = 7*24*60*60*1000;
+  if(Date.now() - last < week){
+    resultDiv.innerHTML = '<div class="alert alert-danger text-center">You can submit only once per week</div>';
+    return;
+  }
+  const ticket = "APP-" + Math.floor(100000 + Math.random()*900000);
+  const { error } = await supabase.from("applications").insert({
+    ticket_id: ticket,
+    about: about,
+    social_url: social,
+    status: null,
+    device_id: device
+  });
+  if(error){
+    resultDiv.innerHTML = '<div class="alert alert-danger text-center">Error sending application</div>';
+    return;
+  }
+  localStorage.setItem("lastApplicationTS", String(Date.now()));
+  resultDiv.innerHTML = '<div class="alert alert-success text-center">Your Application ID: <b>' + ticket + '</b></div>';
+  form.reset();
+});
+</script>
 </main>
 
 <footer class="footer mt-auto py-3 bg-dark">
@@ -305,3 +350,4 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9bf779667d2bea60',t:'MTc2ODY2OTkxMg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
+
