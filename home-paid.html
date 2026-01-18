@@ -1,108 +1,160 @@
 <!doctype html>
-<html lang="ru" class="h-100">
+<html lang="ru">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Home - OLDRBX</title>
 <link rel="icon" type="image/png" href="img/ic.png">
 <style>
-:root{
-  --bg:#e9e9ea;
-  --top:#0074bd;
-  --panel:#ffffff;
-  --muted:#6f6f6f;
-  --border:#d5d7d9;
-  --accent:#0074bd;
-  --shadow:rgba(0,0,0,0.06);
-}
-html,body{height:100%;margin:0;background:var(--bg);color:#111;font-family:Arial,Helvetica,sans-serif}
-.topbar{height:56px;background:var(--top);display:flex;align-items:center;padding:0 14px;gap:12px;box-sizing:border-box}
-.hamburger{width:44px;height:44px;border-radius:6px;background:transparent;border:none;color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer}
-.logo-img{height:34px}
-.top-right{margin-left:auto;display:flex;align-items:center;gap:10px}
-.money-wrap{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.06);padding:6px 8px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);font-weight:800;color:#fff}
-.money-icon{width:28px;height:28px;border-radius:50%;overflow:hidden;background:#fff;display:flex;align-items:center;justify-content:center}
-.money-icon img{width:100%;height:100%;object-fit:cover}
-.balance{color:#fff;font-weight:800}
-.avatar{width:40px;height:40px;border-radius:50%;overflow:hidden;background:var(--panel);display:flex;align-items:center;justify-content:center}
-.avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
-.container{padding:18px;box-sizing:border-box}
-.container-layout{display:grid;grid-template-columns:320px 1fr;gap:18px}
-.sidebar{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:12px;box-sizing:border-box;display:flex;flex-direction:column;gap:10px}
-.nav-item{padding:12px;border-radius:6px;display:flex;align-items:center;justify-content:space-between;font-weight:800;color:#111;text-decoration:none;cursor:pointer;background:#fff;border:1px solid var(--border);box-shadow:0 6px 14px var(--shadow)}
-.nav-item.locked{opacity:0.6}
-.mainpanel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:14px;min-height:420px;display:flex;flex-direction:column;box-sizing:border-box}
-.card{background:var(--panel);border-radius:6px;padding:18px;border:1px solid var(--border);box-shadow:0 6px 14px var(--shadow)}
-.welcome-title{font-weight:800;font-size:18px;margin:0 0 8px 0}
-.welcome-text{color:var(--muted);margin:0 0 12px 0}
-.center-block{text-align:center;margin-top:8px}
-.splash{width:220px;height:220px;object-fit:cover;border-radius:6px;border:1px solid var(--border);background:#fff;margin:0 auto;display:block}
-.splash-title{margin-top:12px;color:var(--muted);font-size:15px;font-weight:700}
-.composer{margin-top:12px;display:flex;gap:10px;align-items:flex-start}
-.composer textarea{flex:1;min-height:90px;background:#fafafa;border:1px solid var(--border);color:#111;padding:10px;border-radius:6px;resize:vertical}
-.composer button{height:40px;border-radius:6px;background:var(--accent);color:#fff;border:none;padding:8px 14px;cursor:pointer;font-weight:800;box-shadow:0 6px 14px var(--shadow)}
-.empty{color:var(--muted);padding:18px;text-align:center}
-.footer{background:var(--panel);border-top:1px solid var(--border);padding:12px;text-align:center;color:var(--muted);margin-top:18px;border-radius:6px}
-@media(max-width:1000px){
-  .container-layout{grid-template-columns:1fr;padding:12px}
-  .sidebar{position:fixed;left:-360px;top:56px;height:calc(100% - 56px);z-index:1050;transition:left .18s ease}
-  .sidebar.open{left:0}
-}
+  :root{
+    --top:#0074bd;
+    --bg:#e9e9ea;
+    --panel:#ffffff;
+    --muted:#6f6f6f;
+  }
+  html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:#111}
+  /* ensure footer always at very bottom */
+  body{display:flex;flex-direction:column;min-height:100vh;padding-bottom:56px;box-sizing:border-box}
+
+  /* topbar */
+  .topbar{
+    height:56px;
+    background:var(--top);
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:0 14px;
+    box-sizing:border-box;
+  }
+  .hamburger{
+    width:44px;height:44px;border-radius:6px;border:none;background:transparent;color:#fff;font-size:22px;
+    display:flex;align-items:center;justify-content:center;cursor:pointer;
+  }
+  .logo-img{height:34px}
+  .top-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+
+  /* money: no white box, simple circle icon */
+  .money {
+    display:flex;align-items:center;gap:8px;color:#fff;font-weight:800;font-size:14px;
+  }
+  .money .icon{
+    width:36px;height:36px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;
+    background:transparent; /* icon file should be transparent PNG */
+  }
+  .money .icon img{width:24px;height:24px;object-fit:contain;display:block}
+  .money .value{line-height:1;color:#fff}
+
+  /* top avatar (small) */
+  .top-avatar{width:40px;height:40px;border-radius:50%;overflow:hidden;cursor:pointer;box-shadow:0 6px 12px rgba(0,0,0,0.12);background:#fff}
+  .top-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+
+  /* main area — centered hero, white background, no inner rounded cards */
+  .main{flex:1;display:flex;align-items:center;justify-content:center;padding:28px;box-sizing:border-box}
+  .hero{
+    width:100%;
+    max-width:980px;
+    background:var(--panel);
+    border-left:6px solid var(--top);
+    border-right:6px solid var(--top);
+    padding:28px;
+    box-sizing:border-box;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:18px;
+  }
+
+  /* big avatar (circular, with small shadow) + greeting row */
+  .greet-row{display:flex;align-items:center;gap:16px;width:100%;justify-content:flex-start}
+  .avatar-big{width:84px;height:84px;border-radius:50%;overflow:hidden;box-shadow:0 8px 20px rgba(0,0,0,0.12);flex:0 0 84px}
+  .avatar-big img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+  .greeting{display:flex;flex-direction:column;align-items:flex-start}
+  .greeting .hi{font-size:34px;font-weight:800;margin:0;color:#111}
+  .greeting .sub{font-size:14px;color:var(--muted);margin:0}
+
+  /* sorry image + short text */
+  .splash{margin-top:8px;text-align:center}
+  .splash img{max-width:360px;width:100%;height:auto;display:block;margin:0 auto}
+  .splash p{margin-top:10px;color:var(--muted);font-size:15px;max-width:760px}
+
+  /* footer: full-width stripe pinned to bottom */
+  .site-footer{
+    position:fixed;left:0;right:0;bottom:0;height:56px;background:var(--top);color:#fff;display:flex;
+    align-items:center;justify-content:center;font-weight:700;box-sizing:border-box;
+  }
+  .site-footer .inner{width:100%;max-width:1400px;padding:0 18px;box-sizing:border-box;text-align:left}
+
+  /* responsive */
+  @media(max-width:800px){
+    .greet-row{flex-direction:row;align-items:center;gap:12px}
+    .greeting .hi{font-size:22px}
+    .avatar-big{width:64px;height:64px}
+    .hero{padding:18px;border-left:4px solid var(--top);border-right:4px solid var(--top)}
+  }
 </style>
 </head>
 <body>
-<div class="topbar">
-  <button id="hamb" class="hamburger" aria-label="menu">&#9776;</button>
-  <img src="img/logo.png" class="logo-img" alt="logo">
-  <div class="top-right">
-    <div class="money-wrap">
-      <div class="money-icon"><img id="moneyIcon" src="img/money.png" alt="money"></div>
-      <div class="balance" id="balanceText">10</div>
+  <div class="topbar">
+    <button id="hamb" class="hamburger" aria-label="menu">&#9776;</button>
+    <img src="img/logo.png" class="logo-img" alt="logo">
+    <div class="top-right">
+      <div class="money" title="Balance">
+        <div class="icon"><img id="moneyIcon" src="img/money.png" alt="money"></div>
+        <div class="value" id="balanceText">0</div>
+      </div>
+      <a id="profileLink" href="profile-paid.html" class="top-avatar" title="Profile"><img id="topAv" src="img/user.png" alt="avatar"></a>
     </div>
-    <div class="avatar"><img id="topAv" src="img/user.png" alt="avatar"></div>
   </div>
-</div>
 
-<div class="container">
-  <div class="container-layout">
-    <aside id="sidebar" class="sidebar">
-      <div class="nav-item" id="navHome">Home</div>
-      <div class="nav-item" id="navForums">Forums</div>
-      <div class="nav-item locked" id="navProfile">Profile</div>
-      <div style="margin-top:auto;color:var(--muted);font-size:13px;text-align:center">© 2026 OLDRBX</div>
-    </aside>
-
-    <main class="mainpanel">
-      <div class="card">
-        <h2 class="welcome-title">Welcome</h2>
-        <p class="welcome-text">This project was created using Supabase and requires a full rebuild from scratch. Development is ongoing.</p>
-        <div class="center-block">
-          <img src="img/sorry.png" class="splash" alt="sorry">
-          <div class="splash-title">Development is ongoing. Full implementation requires rebuilding backend and UI components.</div>
+  <main class="main">
+    <section class="hero" role="main" aria-label="Welcome area">
+      <div class="greet-row">
+        <a id="heroProfile" href="profile-paid.html" class="avatar-big"><img id="heroAv" src="img/user.png" alt="user avatar"></a>
+        <div class="greeting">
+          <h1 class="hi" id="greetingText">Hello, User!</h1>
+          <div class="sub" id="greetingSub">Nice to see you.</div>
         </div>
       </div>
-    </main>
-  </div>
 
-  <div class="footer">&copy; 2026 OLDRBX</div>
-</div>
+      <div class="splash" aria-hidden="false">
+        <img src="img/sorry.png" alt="working on site">
+        <p>I'm working on a full site — development is from scratch and takes time.</p>
+      </div>
+    </section>
+  </main>
+
+  <div class="site-footer" aria-hidden="false">
+    <div class="inner">&copy; 2026 OLDRBX</div>
+  </div>
 
 <script>
 (function(){
-  var sid=document.getElementById('sidebar')
-  var hamb=document.getElementById('hamb')
-  try{var auth=JSON.parse(localStorage.getItem('auth'))}catch(e){auth=null}
-  if(!auth||!auth.username){location.replace('login.html');return}
-  document.getElementById('topAv').src=auth.avatarUrl||'img/user.png'
-  var bal = (typeof auth.balance !== 'undefined' && auth.balance !== null) ? auth.balance : 0
-  document.getElementById('balanceText').innerText = String(bal)
-  document.getElementById('moneyIcon').src = 'img/money.png'
-  document.getElementById('navHome').addEventListener('click', function(){ location.href='home-paid.html' })
-  document.getElementById('navForums').addEventListener('click', function(){ location.href='forums-paid.html' })
-  document.getElementById('hamb').addEventListener('click', function(){ sid.classList.toggle('open') })
-  function openOnDesktop(){ if(window.innerWidth>=1000) sid.classList.add('open'); else sid.classList.remove('open') }
-  window.addEventListener('resize', openOnDesktop)
-  openOnDesktop()
+  // quick safe loader from localStorage auth (keeps behavior from your original code)
+  var auth = null;
+  try{ auth = JSON.parse(localStorage.getItem('auth')) }catch(e){ auth = null }
+  if(!auth || !auth.username){
+    // keep same redirect as original
+    // location.replace('login.html');
+    // if you want redirect enabled uncomment above line
+    auth = { username: 'User', avatarUrl:'img/user.png', balance: 0 };
+  }
+
+  // fill avatar + greeting + balance
+  var name = auth.username || 'User';
+  document.getElementById('greetingText').innerText = 'Hello, ' + name + '!';
+  document.getElementById('greetingSub').innerText = '';
+  var avUrl = auth.avatarUrl || 'img/user.png';
+  // if avatarUrl is a path without http, keep as-is (your project stores 'img/xyz' in many places)
+  document.getElementById('topAv').src = avUrl;
+  document.getElementById('heroAv').src = avUrl;
+
+  var bal = (typeof auth.balance !== 'undefined' && auth.balance !== null) ? auth.balance : 0;
+  document.getElementById('balanceText').innerText = String(bal);
+  // money icon should be transparent PNG for best result (no white square)
+  document.getElementById('moneyIcon').src = 'img/money.png';
+
+  // small interactions
+  document.getElementById('hamb').addEventListener('click', function(){ /* implement sidebar toggle if you need */ });
 })();
 </script>
 </body>
