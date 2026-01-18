@@ -1,12 +1,11 @@
 <!doctype html>
-<html lang="ru">
+<html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Home - OLDRBX</title>
 <link rel="icon" href="img/ic.png">
 <style>
-  /* --- Reset / base --- */
   :root{
     --blue:#0074bd;
     --bg:#e9e9ea;
@@ -17,10 +16,7 @@
   html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:#111}
   a{color:inherit;text-decoration:none}
 
-  /* wrapper to center page */
-  .page{max-width:980px;margin:30px auto;padding:0 16px;box-sizing:border-box}
-
-  /* --- Topbar with menu --- */
+  /* TOPBAR like forums */
   .topbar{
     height:56px;
     background:var(--blue);
@@ -28,160 +24,148 @@
     align-items:center;
     gap:12px;
     padding:0 12px;
-    color:#fff;
-    border-radius:6px;
-  }
-  .topbar .logo{height:30px}
-  .topbar .nav{
-    margin-left:18px;
-    display:flex;
-    gap:12px;
-    align-items:center;
-    font-weight:700;
-    font-size:14px;
-  }
-  .topbar .spacer{margin-left:auto;display:flex;align-items:center;gap:12px}
-
-  .nav a{padding:8px 10px;border-radius:6px;background:transparent;color:#fff}
-  .nav a.active{background:rgba(255,255,255,0.08)}
-
-  /* money (icon must be transparent PNG) */
-  .money{display:flex;align-items:center;gap:8px;font-weight:800;color:#fff}
-  .money img{width:22px;height:22px;display:block}
-
-  /* small top avatar */
-  .top-avatar{width:36px;height:36px;border-radius:50%;overflow:hidden;background:#fff}
-  .top-avatar img{width:100%;height:100%;object-fit:cover;display:block}
-
-  /* --- Main white panel --- */
-  .panel{
-    background:var(--panel);
-    margin-top:18px;
-    padding:22px;
     box-sizing:border-box;
-    border:1px solid var(--border);
   }
+  .hamburger{
+    width:44px;height:44px;border-radius:6px;border:none;background:transparent;color:#fff;font-size:22px;
+    display:flex;align-items:center;justify-content:center;cursor:pointer;
+  }
+  .logo-img{height:34px}
+  .top-right{margin-left:auto;display:flex;align-items:center;gap:12px;padding-right:6px}
 
-  /* greeting row: avatar + large hello */
-  .greet{
-    display:flex;
-    align-items:center;
-    gap:18px;
-  }
-  .greet .avatar{
-    width:72px;height:72px;border-radius:50%;overflow:hidden;flex:0 0 72px;
-    box-shadow:0 6px 14px rgba(0,0,0,0.08);
-  }
-  .greet .avatar img{width:100%;height:100%;object-fit:cover}
-  .greet .text{
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-  }
-  .greet h1{
-    margin:0;font-size:36px;line-height:1;font-weight:900;color:#111;letter-spacing:-0.02em;
-  }
-  .greet p.sub{margin:0;color:var(--muted);font-size:14px}
+  /* money: no white box */
+  .money-wrap{display:flex;align-items:center;gap:8px;color:#fff;font-weight:800}
+  .money-wrap img{width:22px;height:22px;display:block}
+  .balance{font-weight:800;color:#fff}
 
-  /* divider between greeting and content */
-  .divider{
-    height:1px;background:var(--border);margin:18px 0;border-radius:1px;
-  }
+  /* top small avatar */
+  .avatar{width:36px;height:36px;border-radius:50%;overflow:hidden;background:#fff;display:inline-block}
+  .avatar img{width:100%;height:100%;object-fit:cover;display:block}
 
-  /* splash area: image + small text */
-  .splash{display:flex;flex-direction:column;align-items:center;gap:12px;padding:8px 6px}
-  .splash img{max-width:320px;width:100%;height:auto;display:block}
-  .splash p{margin:0;color:var(--muted);font-size:15px;text-align:center;max-width:760px}
-
-  /* footer strip like forums (not fixed) */
-  .footer{
-    margin-top:18px;
+  /* layout */
+  .page{max-width:980px;margin:28px auto;padding:0 16px;box-sizing:border-box}
+  .container{display:grid;grid-template-columns:280px 1fr;gap:18px;align-items:start}
+  /* sidebar (same as forums) */
+  .sidebar{
     background:var(--panel);
-    border-top:1px solid var(--border);
-    padding:12px 16px;
-    color:var(--muted);
-    font-weight:700;
-    text-align:left;
+    border:1px solid var(--border);
+    padding:12px;
+    box-sizing:border-box;
+  }
+  .nav-item{
+    padding:12px;border-radius:6px;display:flex;align-items:center;justify-content:space-between;font-weight:800;color:#111;
+    cursor:pointer;background:#fff;border:1px solid var(--border);margin-bottom:10px;
   }
 
-  /* responsive */
-  @media(max-width:680px){
-    .greet h1{font-size:22px}
-    .greet .avatar{width:56px;height:56px;flex:0 0 56px}
-    .topbar{padding:8px}
-    .nav{display:none}
+  /* main panel minimal */
+  .main{
+    background:var(--panel);
+    border:1px solid var(--border);
+    padding:20px;
+    box-sizing:border-box;
   }
+
+  .greet{display:flex;align-items:center;gap:14px}
+  .greet .big-av{width:72px;height:72px;border-radius:50%;overflow:hidden;box-shadow:0 6px 14px rgba(0,0,0,0.08)}
+  .greet .big-av img{width:100%;height:100%;object-fit:cover}
+  .greet h1{margin:0;font-size:44px;line-height:1;font-weight:900;color:#111}
+  .greet .sub{margin:0;color:var(--muted);font-size:14px}
+
+  .divider{height:1px;background:var(--border);margin:18px 0;border-radius:1px}
+
+  .splash{text-align:center;padding:8px}
+  .splash img{max-width:300px;width:100%;height:auto;display:block;margin:0 auto}
+  .splash p{margin-top:12px;color:var(--muted);font-size:15px}
+
+  /* footer like forums (not fixed) */
+  .footer{margin-top:18px;background:var(--panel);border-top:1px solid var(--border);padding:12px 16px;color:var(--muted);font-weight:700}
+
+  /* responsive: collapse sidebar on small screens */
+  @media(max-width:960px){
+    .container{grid-template-columns:1fr;gap:12px}
+    .sidebar{display:none} /* opened via hamburger */
+  }
+  /* mobile open sidebar */
+  .sidebar.open{display:block;position:fixed;left:0;top:56px;bottom:0;width:260px;z-index:1200;overflow:auto}
 </style>
 </head>
 <body>
-  <div class="page">
-    <!-- TOP BAR -->
-    <div class="topbar" role="navigation" aria-label="Top navigation">
-      <img src="img/logo.png" alt="logo" class="logo">
-      <nav class="nav" aria-label="main">
-        <a href="home-paid.html" id="lnHome" class="active">Home</a>
-        <a href="forums-paid.html" id="lnForums">Forums</a>
-        <a href="profile-paid.html" id="lnProfile">Profile</a>
-      </nav>
+  <!-- TOPBAR (same structure as forums) -->
+  <div class="topbar">
+    <button id="hamb" class="hamburger" aria-label="menu">&#9776;</button>
+    <img src="img/logo.png" class="logo-img" alt="logo">
+    <div class="top-right">
+      <div class="money-wrap" title="Balance">
+        <img id="moneyIcon" src="img/money.png" alt="money">
+        <div class="balance" id="balanceText">0</div>
+      </div>
+      <a id="profileLinkTop" href="profile-paid.html" class="avatar" title="Profile">
+        <img id="topAv" src="img/user.png" alt="avatar">
+      </a>
+    </div>
+  </div>
 
-      <div class="spacer">
-        <div class="money" title="Balance">
-          <img id="moneyIcon" src="img/money.png" alt="money">
-          <span id="balance">0</span>
+  <div class="page">
+    <div class="container">
+      <!-- SIDEBAR (like forums) -->
+      <aside id="sidebar" class="sidebar" aria-label="Main navigation">
+        <div class="nav-item" onclick="location.href='home-paid.html'">Home</div>
+        <div class="nav-item" onclick="location.href='forums-paid.html'">Forums</div>
+        <div class="nav-item" onclick="location.href='profile-paid.html'">Profile</div>
+      </aside>
+
+      <!-- MAIN -->
+      <main class="main" role="main" aria-labelledby="helloHeading">
+        <div class="greet">
+          <a id="profileLink" href="profile-paid.html" class="big-av">
+            <img id="heroAv" src="img/user.png" alt="user avatar">
+          </a>
+          <div>
+            <h1 id="helloHeading">Hello, User!</h1>
+            <p class="sub" id="greetSub"></p>
+          </div>
         </div>
 
-        <a href="profile-paid.html" class="top-avatar" title="Profile">
-          <img id="topAvatar" src="img/user.png" alt="avatar">
-        </a>
-      </div>
+        <div class="divider" aria-hidden="true"></div>
+
+        <div class="splash" role="note" aria-live="polite">
+          <img src="img/sorry.png" alt="working on site">
+          <p>I'm working on a full site — development is from scratch and takes time.</p>
+        </div>
+      </main>
     </div>
 
-    <!-- MAIN PANEL -->
-    <section class="panel" aria-labelledby="helloHeading">
-      <div class="greet">
-        <a href="profile-paid.html" class="avatar" title="Profile">
-          <img id="mainAvatar" src="img/user.png" alt="user avatar">
-        </a>
-
-        <div class="text">
-          <h1 id="helloHeading">Hello, User!</h1>
-          <p class="sub" id="greetSub">Welcome back.</p>
-        </div>
-      </div>
-
-      <div class="divider" aria-hidden="true"></div>
-
-      <div class="splash" role="note" aria-live="polite">
-        <img src="img/sorry.png" alt="working on site">
-        <p>I'm working on a full site — development is from scratch and takes time.</p>
-      </div>
-    </section>
-
-    <!-- FOOTER (plain stripe) -->
-    <footer class="footer" role="contentinfo">
-      © 2026 OLDRBX
-    </footer>
+    <!-- footer stripe like forums -->
+    <footer class="footer">© 2026 OLDRBX</footer>
   </div>
 
 <script>
 (function(){
-  // read auth from localStorage like your project does
+  // sidebar toggle (same behavior as forums)
+  var hamb = document.getElementById('hamb');
+  var sidebar = document.getElementById('sidebar');
+  hamb.addEventListener('click', function(){
+    // on small screens show/hide sidebar
+    if(window.innerWidth < 960){
+      sidebar.classList.toggle('open');
+    }
+  });
+
+  // populate user data from localStorage.auth
   var auth = null;
   try{ auth = JSON.parse(localStorage.getItem('auth')) }catch(e){ auth = null }
-  if(!auth) auth = {}; // fallback to defaults but don't redirect here
+  if(!auth) auth = {}; // don't redirect here, just show defaults
 
   var name = auth.username || 'User';
   var avatar = auth.avatarUrl || 'img/user.png';
   var balance = (typeof auth.balance !== 'undefined' && auth.balance !== null) ? auth.balance : 0;
 
-  // set big greeting: Hello, Name!
   document.getElementById('helloHeading').innerText = 'Hello, ' + name + '!';
-  document.getElementById('greetSub').innerText = ''; // empty subtitle if you want minimal look
-  document.getElementById('mainAvatar').src = avatar;
-  document.getElementById('topAvatar').src = avatar;
-  document.getElementById('balance').innerText = String(balance);
+  document.getElementById('heroAv').src = avatar;
+  document.getElementById('topAv').src = avatar;
+  document.getElementById('balanceText').innerText = String(balance);
 
-  // money icon must be transparent PNG in img/money.png to avoid white square
+  // ensure money icon is transparent PNG in img/money.png
   document.getElementById('moneyIcon').src = 'img/money.png';
 })();
 </script>
