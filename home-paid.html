@@ -19,6 +19,12 @@ html,body{height:100%;margin:0;background:var(--bg);color:#111;font-family:Arial
 .topbar{height:56px;background:var(--top);display:flex;align-items:center;padding:0 14px;gap:12px;box-sizing:border-box}
 .hamburger{width:44px;height:44px;border-radius:6px;background:transparent;border:none;color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer}
 .logo-img{height:34px}
+.kebab{width:44px;height:44px;border-radius:6px;background:transparent;border:none;color:#fff;font-size:24px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.kebab-wrap{position:relative}
+.kebab-menu{position:absolute;right:0;top:52px;background:var(--panel);border:1px solid var(--border);border-radius:6px;box-shadow:0 6px 18px var(--shadow);min-width:160px;overflow:hidden;display:none;z-index:1200}
+.kebab-menu .item{padding:10px 12px;font-weight:800;cursor:pointer;border-bottom:1px solid var(--border)}
+.kebab-menu .item:last-child{border-bottom:none}
+.kebab-menu .item:hover{background:#f4f6f7}
 .top-right{margin-left:auto;display:flex;align-items:center;gap:10px}
 .money-wrap{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.06);padding:6px 8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);font-weight:800;color:#fff}
 .money-icon{width:28px;height:28px;border-radius:50%;overflow:hidden;background:#fff;display:flex;align-items:center;justify-content:center}
@@ -27,10 +33,9 @@ html,body{height:100%;margin:0;background:var(--bg);color:#111;font-family:Arial
 .avatar{width:40px;height:40px;border-radius:50%;overflow:hidden;background:var(--panel);display:flex;align-items:center;justify-content:center}
 .avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
 .container{padding:18px;box-sizing:border-box}
-.header-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
-.header-title{font-weight:800;font-size:18px}
 .container-layout{display:grid;grid-template-columns:320px 1fr;gap:18px}
 .sidebar{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:12px;box-sizing:border-box}
+.topics-panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:12px;box-sizing:border-box}
 .topics-grid{display:flex;flex-direction:column;gap:10px}
 .topic-btn{display:flex;align-items:center;justify-content:space-between;padding:12px;background:#fff;border:1px solid var(--border);border-radius:6px;cursor:pointer;font-weight:800;box-shadow:0 6px 14px var(--shadow);gap:12px}
 .topic-btn .left{display:flex;flex-direction:column;gap:4px;align-items:flex-start}
@@ -52,6 +57,7 @@ html,body{height:100%;margin:0;background:var(--bg);color:#111;font-family:Arial
   .container-layout{grid-template-columns:1fr;padding:12px}
   .sidebar{position:fixed;left:-360px;top:56px;height:calc(100% - 56px);z-index:1050;transition:left .18s ease}
   .sidebar.open{left:0}
+  .kebab-menu{right:12px}
 }
 </style>
 </head>
@@ -60,6 +66,15 @@ html,body{height:100%;margin:0;background:var(--bg);color:#111;font-family:Arial
   <button id="hamb" class="hamburger" aria-label="menu">&#9776;</button>
   <img src="img/logo.png" class="logo-img" alt="logo">
   <div class="top-right">
+    <div class="kebab-wrap">
+      <button id="kebab" class="kebab" aria-label="menu">⋯</button>
+      <div id="kebabMenu" class="kebab-menu">
+        <div class="item" data-href="home-paid.html">Home</div>
+        <div class="item" data-href="forums-paid.html">Forums</div>
+        <div class="item" data-href="messages.html">Messages</div>
+        <div class="item" data-href="profile.html">Profile</div>
+      </div>
+    </div>
     <div class="money-wrap">
       <div class="money-icon"><img id="moneyIcon" src="img/money.png" alt="money"></div>
       <div class="balance" id="balanceText">0</div>
@@ -69,15 +84,11 @@ html,body{height:100%;margin:0;background:var(--bg);color:#111;font-family:Arial
 </div>
 
 <div class="container">
-  <div class="header-row">
-    <div class="header-title">Home</div>
-  </div>
-
   <div class="container-layout">
     <aside class="sidebar" id="leftSidebar">
-      <div class="topics-grid" id="navList">
+      <div style="display:flex;flex-direction:column;gap:10px">
         <div class="topic-btn" data-href="home-paid.html"><div class="left"><div class="title">Home</div></div></div>
-        <div class="topic-btn" data-href="forums-paid.html"><div class="left"><div class="title">Forums</div></div></div>
+        <div class="topic-btn" data-href="forums-paid.html"><div class="left"><div class="title">Forums</div></div><div class="right"><div class="count-pill">→</div></div></div>
         <div class="topic-btn" data-href="messages.html"><div class="left"><div class="title">Messages</div></div></div>
         <div class="topic-btn locked"><div class="left"><div class="title">Profile</div></div></div>
       </div>
@@ -85,20 +96,17 @@ html,body{height:100%;margin:0;background:var(--bg);color:#111;font-family:Arial
 
     <main class="mainpanel">
       <div class="card">
-        <h3 id="hello">Hello</h3>
-        <p style="color:var(--muted);margin-top:8px">Добро пожаловать на домашнюю страницу.</p>
+        <p style="color:var(--muted);margin-top:0;font-weight:700">This project was created using Supabase and requires a full rebuild from scratch.</p>
         <div class="center-block">
           <img src="img/sorry.png" class="splash" alt="sorry">
-          <div class="splash-title">Temporary limitations during development</div>
+          <div class="splash-title">Development is ongoing. Full implementation requires rebuilding backend and UI components.</div>
         </div>
-
         <div id="topicsPreview" style="margin-top:18px">
           <div style="font-weight:800;margin-bottom:8px">Quick actions</div>
           <div style="display:flex;flex-direction:column;gap:10px" id="previewList"></div>
         </div>
-
         <div style="display:flex;justify-content:flex-end;margin-top:12px">
-          <button id="logout" class="composer-button composer-btn composer-send" onclick="">Logout</button>
+          <button id="logout" class="composer button composer-send">Logout</button>
         </div>
       </div>
       <div class="footer">&copy; 2026 OLDRBX</div>
@@ -106,60 +114,65 @@ html,body{height:100%;margin:0;background:var(--bg);color:#111;font-family:Arial
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-(function(){
-  var sid=document.getElementById('leftSidebar')
-  var hamb=document.getElementById('hamb')
-  try{var auth=JSON.parse(localStorage.getItem('auth'))}catch(e){auth=null}
-  if(!auth||!auth.username){location.replace('login.html');return}
-  document.getElementById('hello').innerText='Hello, '+String(auth.username)
-  document.getElementById('topAv').src=auth.avatarUrl||'img/user.png'
-  var bal = (typeof auth.balance !== 'undefined' && auth.balance !== null) ? auth.balance : 0
-  document.getElementById('balanceText').innerText = String(bal)
-  document.getElementById('moneyIcon').src = 'img/money.png'
-  document.getElementById('logout').onclick=function(){try{localStorage.removeItem('auth')}catch(e){}location.replace('login.html')}
-
-  hamb.addEventListener('click',function(){sid.classList.toggle('open')})
-  function openOnDesktop(){if(window.innerWidth>=1000)sid.classList.add('open');else sid.classList.remove('open')}
-  window.addEventListener('resize',openOnDesktop)
-  openOnDesktop()
-
-  document.querySelectorAll('.topic-btn[data-href]').forEach(function(el){
-    el.addEventListener('click', function(){ location.href = el.dataset.href })
-  })
-
-  (async function loadPreview(){
-    try{
-      const SUPA_URL = "https://nkvvnnjukqtfhmegyzek.supabase.co";
-      const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rdnZubmp1a3F0ZmhtZWd5emVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2NjQ5MTIsImV4cCI6MjA4NDI0MDkxMn0.2jp9X2KQunFargrstYM7oGBYs75Kq7AEHs7iRARxexs";
-      const sb = window.supabase ? window.supabase : null;
-      if(!sb && window.fetch){
-        // try lightweight fetch to get topics count for preview (no library)
-        const resp = await fetch(SUPA_URL + '/rest/v1/forum_topics?select=*,forum_posts(id)&order=id', { method: 'GET', headers: { apikey: SUPA_KEY, Authorization: 'Bearer ' + SUPA_KEY } }).catch(()=>null)
-        if(resp && resp.ok){
-          const data = await resp.json()
-          const container = document.getElementById('previewList')
-          container.innerHTML = ''
-          data.forEach(function(t){
-            var count = (t.forum_posts && t.forum_posts.length) ? t.forum_posts.length : 0
-            var el = document.createElement('div'); el.className='topic-btn'; el.innerHTML = '<div class="left"><div class="title">'+(t.title||'Untitled')+'</div><div class="meta">Topics • '+count+' messages</div></div><div class="right"><div class="count-pill">'+count+'</div></div>';
-            el.addEventListener('click',function(){ location.href='forums-paid.html' })
-            container.appendChild(el)
-          })
-          return
-        }
+document.addEventListener('DOMContentLoaded', async function(){
+  const SUPA_URL = "https://nkvvnnjukqtfhmegyzek.supabase.co";
+  const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rdnZubmp1a3F0ZmhtZWd5emVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2NjQ5MTIsImV4cCI6MjA4NDI0MDkxMn0.2jp9X2KQunFargrstYM7oGBYs75Kq7AEHs7iRARxexs";
+  const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
+  let auth = null;
+  try{ auth = JSON.parse(localStorage.getItem('auth')) }catch(e){ auth = null }
+  if(!auth || !auth.username){ location.replace('login.html'); return }
+  document.getElementById('topAv').src = auth.avatarUrl || 'img/user.png';
+  var bal = (typeof auth.balance !== 'undefined' && auth.balance !== null) ? auth.balance : 0;
+  document.getElementById('balanceText').innerText = String(bal);
+  document.getElementById('moneyIcon').src = 'img/money.png';
+  document.getElementById('logout').addEventListener('click', function(){ try{ localStorage.removeItem('auth') }catch(e){} location.replace('login.html') });
+  document.getElementById('hamb').addEventListener('click', function(){ document.getElementById('leftSidebar').classList.toggle('open') });
+  const keb = document.getElementById('kebab');
+  const km = document.getElementById('kebabMenu');
+  keb.addEventListener('click', function(e){ km.style.display = (km.style.display==='block') ? 'none' : 'block' });
+  document.addEventListener('click', function(e){ if(!km.contains(e.target) && e.target !== keb) km.style.display='none' });
+  document.querySelectorAll('.topic-btn[data-href]').forEach(function(el){ el.addEventListener('click', function(){ location.href = el.dataset.href }) });
+  const previewContainer = document.getElementById('previewList');
+  try{
+    const { data: topics } = await sb.from('forum_topics').select('*').order('id',{ascending:true});
+    previewContainer.innerHTML = '';
+    if(topics && topics.length){
+      for(const t of topics){
+        const { data: last } = await sb.from('forum_posts').select('created_at,username').eq('topic_id', t.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
+        const cnt = await sb.from('forum_posts').select('id', { count: 'exact', head: true }).eq('topic_id', t.id);
+        const count = cnt.count || 0;
+        const lastAt = last && last.created_at ? new Date(last.created_at) : null;
+        const lastText = lastAt ? timeAgo(lastAt) : '—';
+        const el = document.createElement('div');
+        el.className = 'topic-btn';
+        el.dataset.id = t.id;
+        el.innerHTML = '<div class="left"><div class="title">'+escapeHtml(t.title)+'</div><div class="meta">'+(last && last.username ? escapeHtml(last.username) + ' • ' + lastText : 'No messages yet')+'</div></div><div class="right"><div class="count-pill">'+count+'</div><div style="font-size:12px;color:var(--muted)">'+lastText+'</div></div>';
+        el.addEventListener('click', function(){ location.href = 'forums-paid.html' });
+        previewContainer.appendChild(el);
       }
-      // fallback: show static placeholders
-      var container = document.getElementById('previewList')
-      container.innerHTML = ''
-      ['News','Updates','General'].forEach(function(t,i){
-        var el = document.createElement('div'); el.className='topic-btn'; el.innerHTML = '<div class="left"><div class="title">'+t+'</div><div class="meta">—</div></div><div class="right"><div class="count-pill">0</div></div>';
-        el.addEventListener('click',function(){ location.href='forums-paid.html' })
-        container.appendChild(el)
-      })
-    }catch(e){}
-  })();
-})();
+    } else {
+      ['News','Updates','General'].forEach(function(t){ var el = document.createElement('div'); el.className='topic-btn'; el.innerHTML = '<div class="left"><div class="title">'+t+'</div><div class="meta">—</div></div><div class="right"><div class="count-pill">0</div></div>'; el.addEventListener('click',function(){ location.href='forums-paid.html' }); previewContainer.appendChild(el) });
+    }
+  }catch(e){
+    previewContainer.innerHTML = '';
+    ['News','Updates','General'].forEach(function(t){ var el = document.createElement('div'); el.className='topic-btn'; el.innerHTML = '<div class="left"><div class="title">'+t+'</div><div class="meta">—</div></div><div class="right"><div class="count-pill">0</div></div>'; el.addEventListener('click',function(){ location.href='forums-paid.html' }); previewContainer.appendChild(el) });
+  }
+
+  function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g,function(m){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]}) }
+  function timeAgo(d){
+    const s = Math.floor((Date.now() - d.getTime())/1000);
+    if(s < 60) return s + 's';
+    const m = Math.floor(s/60);
+    if(m < 60) return m + 'm';
+    const h = Math.floor(m/60);
+    if(h < 24) return h + 'h';
+    const day = Math.floor(h/24);
+    if(day < 7) return day + 'd';
+    return d.toLocaleDateString();
+  }
+});
 </script>
 </body>
 </html>
