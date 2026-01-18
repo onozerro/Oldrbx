@@ -20,69 +20,105 @@ html,body{height:100%;margin:0;background:var(--bg);color:#111;font-family:Arial
 .hamburger{width:44px;height:44px;border-radius:6px;background:transparent;border:none;color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer}
 .logo-img{height:34px}
 .top-right{margin-left:auto;display:flex;align-items:center;gap:10px}
-.money-wrap{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.06);padding:6px 8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);font-weight:800;color:#fff}
-.money-icon{width:28px;height:28px;border-radius:50%;overflow:hidden;background:#fff;display:flex;align-items:center;justify-content:center}
-.money-icon img{width:100%;height:100%;object-fit:cover}
-.balance{color:#fff;font-weight:800}
-.avatar{width:40px;height:40px;border-radius:50%;overflow:hidden;background:var(--panel);display:flex;align-items:center;justify-content:center}
+
+/* MONEY: simplified — only icon + number, no rounded translucent box */
+.money-wrap{display:flex;align-items:center;gap:8px;padding:0;border:0;color:#fff;font-weight:800}
+.money-icon{width:32px;height:32px;border-radius:50%;overflow:hidden;background:transparent;display:flex;align-items:center;justify-content:center}
+.money-icon img{width:28px;height:28px;object-fit:contain;display:block}
+.balance{color:#fff;font-weight:800;line-height:1}
+
+/* top avatar clickable */
+.avatar{width:40px;height:40px;border-radius:50%;overflow:hidden;background:var(--panel);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:none}
 .avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
-.layout{display:flex;min-height:calc(100vh - 56px)}
-.sidebar{width:260px;background:var(--panel);border-right:1px solid var(--border);padding:14px;box-sizing:border-box;display:flex;flex-direction:column;gap:10px}
+
+/* page layout */
+.container{padding:18px;box-sizing:border-box}
+.container-layout{display:grid;grid-template-columns:320px 1fr;gap:18px}
+.sidebar{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:12px;box-sizing:border-box;display:flex;flex-direction:column;gap:10px}
 .nav-item{padding:12px;border-radius:6px;display:flex;align-items:center;justify-content:space-between;font-weight:800;color:#111;text-decoration:none;cursor:pointer;background:#fff;border:1px solid var(--border);box-shadow:0 6px 14px var(--shadow)}
-.nav-item:hover{transform:translateY(-1px)}
 .nav-item.locked{opacity:0.6}
-.content{flex:1;padding:22px;box-sizing:border-box;display:flex;flex-direction:column;gap:18px}
-.card{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:16px;box-sizing:border-box;box-shadow:0 6px 14px var(--shadow)}
-.center-block{text-align:center;margin-top:8px}
-.splash{width:220px;height:220px;object-fit:cover;border-radius:6px;border:1px solid var(--border);background:#fff;margin:0 auto;display:block}
-.splash-title{margin-top:12px;color:var(--muted);font-size:15px;font-weight:700}
-.btn{background:var(--accent);color:#fff;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;font-weight:800;box-shadow:0 6px 14px var(--shadow)}
-.footer{background:var(--panel);border-top:1px solid var(--border);padding:10px 18px;color:var(--muted);text-align:center;font-size:13px;margin-top:18px;border-radius:6px}
+
+/* MAIN — simplified hero, no extra inner rounded "cards" */
+.mainpanel{min-height:420px;display:flex;flex-direction:column;box-sizing:border-box}
+.hero{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:0; /* square edges per request */
+  padding:22px;
+  display:flex;
+  align-items:center;
+  gap:18px;
+  box-shadow:none;
+}
+
+/* avatar big + shadow */
+.avatar-big{width:84px;height:84px;border-radius:50%;overflow:hidden;flex:0 0 84px;box-shadow:0 6px 16px rgba(0,0,0,0.12)}
+.avatar-big img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+
+/* greeting */
+.greeting{display:flex;flex-direction:column;gap:6px}
+.greeting h1{margin:0;font-size:26px;font-weight:800;color:#111}
+.greeting p{margin:0;color:var(--muted);font-size:14px}
+
+/* centered "sorry" image and short text below hero */
+.sorry-wrap{margin-top:18px;text-align:center}
+.sorry-wrap img{width:200px;max-width:60%;height:auto;display:inline-block}
+.sorry-text{margin-top:10px;color:var(--muted);font-size:14px;max-width:820px;margin-left:auto;margin-right:auto}
+
+/* footer as full-width stripe */
+.site-footer{width:100%;background:var(--panel);border-top:1px solid var(--border);padding:12px 18px;color:var(--muted);box-sizing:border-box;margin-top:22px;border-radius:0}
+
+/* responsive */
 @media(max-width:1000px){
-  .sidebar{position:fixed;left:-320px;top:56px;height:calc(100% - 56px);z-index:1050;transition:left .18s ease}
+  .container-layout{grid-template-columns:1fr;padding:12px}
+  .sidebar{position:fixed;left:-360px;top:56px;height:calc(100% - 56px);z-index:1050;transition:left .18s ease}
   .sidebar.open{left:0}
-  .layout{padding-top:56px}
+  .hero{flex-direction:column;align-items:center;text-align:center}
+  .greeting h1{font-size:22px}
+  .avatar-big{width:72px;height:72px}
 }
 </style>
 </head>
-<body class="d-flex flex-column h-100">
-<nav class="topbar">
+<body>
+<div class="topbar">
   <button id="hamb" class="hamburger" aria-label="menu">&#9776;</button>
   <img src="img/logo.png" class="logo-img" alt="logo">
   <div class="top-right">
-    <div class="money-wrap" id="moneyWrap">
+    <div class="money-wrap" title="Balance">
       <div class="money-icon"><img id="moneyIcon" src="img/money.png" alt="money"></div>
       <div class="balance" id="balanceText">0</div>
     </div>
-    <div class="avatar"><img id="topAvatar" src="img/user.png" alt="avatar"></div>
+    <a id="profileLink" href="profile-paid.html" title="Profile" class="avatar"><img id="topAv" src="img/user.png" alt="avatar"></a>
   </div>
-</nav>
-
-<div class="layout">
-  <aside id="sidebar" class="sidebar">
-    <div class="nav-item" onclick="location.href='home-paid.html'">Home</div>
-    <div class="nav-item" onclick="location.href='forums-paid.html'">Forums</div>
-    <div class="nav-item locked">Profile</div>
-    <div class="nav-item locked">Messages</div>
-    <div class="nav-item locked">Friends</div>
-    <div style="margin-top:auto;color:var(--muted);font-size:13px;text-align:center">© 2026 OLDRBX</div>
-  </aside>
-
-  <main class="content">
-    <div class="card">
-      <h3 id="hello">Hello</h3>
-      <p style="color:var(--muted);margin-top:8px">This area is under development.</p>
-      <div class="center-block">
-        <img src="img/sorry.png" class="splash" alt="sorry">
-        <div class="splash-title">Temporary limitations during development</div>
-      </div>
-      <div style="display:flex;justify-content:flex-end;margin-top:12px">
-        <button id="logout" class="btn">Logout</button>
-      </div>
-    </div>
-    <div class="footer">&copy; 2026 OLDRBX</div>
-  </main>
 </div>
+
+<div class="container">
+  <div class="container-layout">
+    <aside id="sidebar" class="sidebar">
+      <div class="nav-item" id="navHome">Home</div>
+      <div class="nav-item" id="navForums">Forums</div>
+      <div class="nav-item locked" id="navProfile">Profile</div>
+      <div style="margin-top:auto;color:var(--muted);font-size:13px;text-align:center">© 2026 OLDRBX</div>
+    </aside>
+
+    <main class="mainpanel">
+      <div class="hero" role="region" aria-label="Welcome area">
+        <div class="avatar-big"><img id="heroAv" src="img/user.png" alt="user avatar"></div>
+        <div class="greeting">
+          <h1 id="greetingText">Hello, User!</h1>
+          <p id="greetingSub">Welcome back.</p>
+        </div>
+      </div>
+
+      <div class="sorry-wrap">
+        <img src="img/sorry.png" alt="sorry">
+        <div class="sorry-text">Working on a full site — development is from scratch and takes time.</div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="site-footer">&copy; 2026 OLDRBX</div>
 
 <script>
 (function(){
@@ -90,15 +126,27 @@ html,body{height:100%;margin:0;background:var(--bg);color:#111;font-family:Arial
   var hamb=document.getElementById('hamb')
   try{var auth=JSON.parse(localStorage.getItem('auth'))}catch(e){auth=null}
   if(!auth||!auth.username){location.replace('login.html');return}
-  document.getElementById('hello').innerText='Hello, '+String(auth.username)
-  document.getElementById('topAvatar').src=auth.avatarUrl||'img/user.png'
+
+  // Top avatar + hero avatar
+  document.getElementById('topAv').src = auth.avatarUrl || 'img/user.png'
+  document.getElementById('heroAv').src = auth.avatarUrl || 'img/user.png'
+
+  // Greeting
+  var name = auth.username || 'User'
+  document.getElementById('greetingText').innerText = 'Hello, ' + name + '!'
+  document.getElementById('greetingSub').innerText = 'Nice to see you. Working on a full site — development is from scratch and takes time.'
+
+  // Balance (no extra white box around icon)
   var bal = (typeof auth.balance !== 'undefined' && auth.balance !== null) ? auth.balance : 0
   document.getElementById('balanceText').innerText = String(bal)
   document.getElementById('moneyIcon').src = 'img/money.png'
-  document.getElementById('logout').onclick=function(){try{localStorage.removeItem('auth')}catch(e){}location.replace('login.html')}
-  hamb.addEventListener('click',function(){sid.classList.toggle('open')})
-  function openOnDesktop(){if(window.innerWidth>=1000)sid.classList.add('open');else sid.classList.remove('open')}
-  window.addEventListener('resize',openOnDesktop)
+
+  // Navigation
+  document.getElementById('navHome').addEventListener('click', function(){ location.href='home-paid.html' })
+  document.getElementById('navForums').addEventListener('click', function(){ location.href='forums-paid.html' })
+  document.getElementById('hamb').addEventListener('click', function(){ sid.classList.toggle('open') })
+  function openOnDesktop(){ if(window.innerWidth>=1000) sid.classList.add('open'); else sid.classList.remove('open') }
+  window.addEventListener('resize', openOnDesktop)
   openOnDesktop()
 })();
 </script>
