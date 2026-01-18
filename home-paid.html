@@ -1,161 +1,179 @@
 <!doctype html>
-<html lang="ru">
+<html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Home - OLDRBX</title>
-<link rel="icon" type="image/png" href="img/ic.png">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home</title>
+<link rel="icon" href="img/ic.png">
 <style>
-  :root{
-    --top:#0074bd;
-    --bg:#e9e9ea;
-    --panel:#ffffff;
-    --muted:#6f6f6f;
-  }
-  html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:#111}
-  /* ensure footer always at very bottom */
-  body{display:flex;flex-direction:column;min-height:100vh;padding-bottom:56px;box-sizing:border-box}
+html,body{
+  margin:0;
+  padding:0;
+  background:#e9e9ea;
+  font-family:Arial, Helvetica, sans-serif;
+  color:#111;
+}
 
-  /* topbar */
-  .topbar{
-    height:56px;
-    background:var(--top);
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding:0 14px;
-    box-sizing:border-box;
-  }
-  .hamburger{
-    width:44px;height:44px;border-radius:6px;border:none;background:transparent;color:#fff;font-size:22px;
-    display:flex;align-items:center;justify-content:center;cursor:pointer;
-  }
-  .logo-img{height:34px}
-  .top-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+/* top bar */
+.topbar{
+  height:56px;
+  background:#0074bd;
+  display:flex;
+  align-items:center;
+  padding:0 16px;
+  box-sizing:border-box;
+}
+.logo{
+  height:32px;
+}
+.top-right{
+  margin-left:auto;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
 
-  /* money: no white box, simple circle icon */
-  .money {
-    display:flex;align-items:center;gap:8px;color:#fff;font-weight:800;font-size:14px;
-  }
-  .money .icon{
-    width:36px;height:36px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;
-    background:transparent; /* icon file should be transparent PNG */
-  }
-  .money .icon img{width:24px;height:24px;object-fit:contain;display:block}
-  .money .value{line-height:1;color:#fff}
+/* money */
+.money{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  color:#fff;
+  font-weight:700;
+  font-size:14px;
+}
+.money img{
+  width:22px;
+  height:22px;
+  object-fit:contain;
+}
 
-  /* top avatar (small) */
-  .top-avatar{width:40px;height:40px;border-radius:50%;overflow:hidden;cursor:pointer;box-shadow:0 6px 12px rgba(0,0,0,0.12);background:#fff}
-  .top-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+/* avatar top */
+.top-avatar{
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  overflow:hidden;
+  background:#fff;
+}
+.top-avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
 
-  /* main area — centered hero, white background, no inner rounded cards */
-  .main{flex:1;display:flex;align-items:center;justify-content:center;padding:28px;box-sizing:border-box}
-  .hero{
-    width:100%;
-    max-width:980px;
-    background:var(--panel);
-    border-left:6px solid var(--top);
-    border-right:6px solid var(--top);
-    padding:28px;
-    box-sizing:border-box;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:18px;
-  }
+/* main */
+.main{
+  max-width:900px;
+  margin:40px auto 0;
+  background:#fff;
+  padding:32px 24px 40px;
+  box-sizing:border-box;
+}
 
-  /* big avatar (circular, with small shadow) + greeting row */
-  .greet-row{display:flex;align-items:center;gap:16px;width:100%;justify-content:flex-start}
-  .avatar-big{width:84px;height:84px;border-radius:50%;overflow:hidden;box-shadow:0 8px 20px rgba(0,0,0,0.12);flex:0 0 84px}
-  .avatar-big img{width:100%;height:100%;object-fit:cover;border-radius:50%}
-  .greeting{display:flex;flex-direction:column;align-items:flex-start}
-  .greeting .hi{font-size:34px;font-weight:800;margin:0;color:#111}
-  .greeting .sub{font-size:14px;color:var(--muted);margin:0}
+/* greeting */
+.greeting{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+.greeting-avatar{
+  width:64px;
+  height:64px;
+  border-radius:50%;
+  overflow:hidden;
+  box-shadow:0 4px 10px rgba(0,0,0,.15);
+}
+.greeting-avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.greeting-text{
+  font-size:24px;
+  font-weight:700;
+}
 
-  /* sorry image + short text */
-  .splash{margin-top:8px;text-align:center}
-  .splash img{max-width:360px;width:100%;height:auto;display:block;margin:0 auto}
-  .splash p{margin-top:10px;color:var(--muted);font-size:15px;max-width:760px}
+/* info */
+.info{
+  margin-top:32px;
+  text-align:center;
+}
+.info img{
+  max-width:220px;
+  width:100%;
+}
+.info p{
+  margin-top:12px;
+  color:#666;
+  font-size:14px;
+}
 
-  /* footer: full-width stripe pinned to bottom */
-  .site-footer{
-    position:fixed;left:0;right:0;bottom:0;height:56px;background:var(--top);color:#fff;display:flex;
-    align-items:center;justify-content:center;font-weight:700;box-sizing:border-box;
-  }
-  .site-footer .inner{width:100%;max-width:1400px;padding:0 18px;box-sizing:border-box;text-align:left}
-
-  /* responsive */
-  @media(max-width:800px){
-    .greet-row{flex-direction:row;align-items:center;gap:12px}
-    .greeting .hi{font-size:22px}
-    .avatar-big{width:64px;height:64px}
-    .hero{padding:18px;border-left:4px solid var(--top);border-right:4px solid var(--top)}
-  }
+/* footer — like forums */
+.footer{
+  margin-top:40px;
+  background:#fff;
+  border-top:1px solid #d5d7d9;
+  padding:10px 16px;
+  color:#777;
+  font-size:13px;
+}
 </style>
 </head>
 <body>
-  <div class="topbar">
-    <button id="hamb" class="hamburger" aria-label="menu">&#9776;</button>
-    <img src="img/logo.png" class="logo-img" alt="logo">
-    <div class="top-right">
-      <div class="money" title="Balance">
-        <div class="icon"><img id="moneyIcon" src="img/money.png" alt="money"></div>
-        <div class="value" id="balanceText">0</div>
-      </div>
-      <a id="profileLink" href="profile-paid.html" class="top-avatar" title="Profile"><img id="topAv" src="img/user.png" alt="avatar"></a>
+
+<div class="topbar">
+  <img src="img/logo.png" class="logo" alt="logo">
+
+  <div class="top-right">
+    <div class="money">
+      <img src="img/money.png" alt="money">
+      <span id="balance">0</span>
+    </div>
+    <a href="profile-paid.html" class="top-avatar">
+      <img id="topAvatar" src="img/user.png" alt="avatar">
+    </a>
+  </div>
+</div>
+
+<div class="main">
+  <div class="greeting">
+    <div class="greeting-avatar">
+      <img id="mainAvatar" src="img/user.png" alt="avatar">
+    </div>
+    <div class="greeting-text" id="helloText">
+      Hello!
     </div>
   </div>
 
-  <main class="main">
-    <section class="hero" role="main" aria-label="Welcome area">
-      <div class="greet-row">
-        <a id="heroProfile" href="profile-paid.html" class="avatar-big"><img id="heroAv" src="img/user.png" alt="user avatar"></a>
-        <div class="greeting">
-          <h1 class="hi" id="greetingText">Hello, User!</h1>
-          <div class="sub" id="greetingSub">Nice to see you.</div>
-        </div>
-      </div>
-
-      <div class="splash" aria-hidden="false">
-        <img src="img/sorry.png" alt="working on site">
-        <p>I'm working on a full site — development is from scratch and takes time.</p>
-      </div>
-    </section>
-  </main>
-
-  <div class="site-footer" aria-hidden="false">
-    <div class="inner">&copy; 2026 OLDRBX</div>
+  <div class="info">
+    <img src="img/sorry.png" alt="sorry">
+    <p>
+      I'm working on a full website. Development is done from scratch and takes time.
+    </p>
   </div>
+</div>
+
+<div class="footer">
+  © 2026 OLDRBX
+</div>
 
 <script>
 (function(){
-  // quick safe loader from localStorage auth (keeps behavior from your original code)
-  var auth = null;
-  try{ auth = JSON.parse(localStorage.getItem('auth')) }catch(e){ auth = null }
-  if(!auth || !auth.username){
-    // keep same redirect as original
-    // location.replace('login.html');
-    // if you want redirect enabled uncomment above line
-    auth = { username: 'User', avatarUrl:'img/user.png', balance: 0 };
-  }
+  let auth=null;
+  try{ auth=JSON.parse(localStorage.getItem('auth')); }catch(e){}
+  if(!auth) auth={};
 
-  // fill avatar + greeting + balance
-  var name = auth.username || 'User';
-  document.getElementById('greetingText').innerText = 'Hello, ' + name + '!';
-  document.getElementById('greetingSub').innerText = '';
-  var avUrl = auth.avatarUrl || 'img/user.png';
-  // if avatarUrl is a path without http, keep as-is (your project stores 'img/xyz' in many places)
-  document.getElementById('topAv').src = avUrl;
-  document.getElementById('heroAv').src = avUrl;
+  const name = auth.username || 'User';
+  const avatar = auth.avatarUrl || 'img/user.png';
+  const balance = auth.balance ?? 0;
 
-  var bal = (typeof auth.balance !== 'undefined' && auth.balance !== null) ? auth.balance : 0;
-  document.getElementById('balanceText').innerText = String(bal);
-  // money icon should be transparent PNG for best result (no white square)
-  document.getElementById('moneyIcon').src = 'img/money.png';
-
-  // small interactions
-  document.getElementById('hamb').addEventListener('click', function(){ /* implement sidebar toggle if you need */ });
+  document.getElementById('helloText').innerText = 'Hello, ' + name + '!';
+  document.getElementById('topAvatar').src = avatar;
+  document.getElementById('mainAvatar').src = avatar;
+  document.getElementById('balance').innerText = balance;
 })();
 </script>
+
 </body>
 </html>
