@@ -7,17 +7,12 @@
 <link rel="icon" type="image/png" href="img/ic.png">
 <style>
 :root{
-  --bg:#eef3f8;
-  --panel:#ffffff;
-  --border:#d7dbe0;
-  --muted:#6b7280;
-  --accent:#3b6ea5;
-  --text:#0f1724;
-  --radius:4px;
+  --bg:#eef3f8;--panel:#ffffff;--border:#d7dbe0;--muted:#6b7280;
+  --accent:#3b6ea5;--text:#0f1724;--radius:4px;
 }
 *{box-sizing:border-box}
 html,body{height:100%;margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
-.header{height:64px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 12px;gap:6px}
+.header{height:64px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 10px;gap:6px}
 .brand{display:flex;align-items:center;gap:6px}
 .hamburger{width:44px;height:44px;border-radius:4px;border:none;background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
 .hamburger .bar{display:block;width:20px;height:2px;background:var(--text);box-shadow:0 7px 0 0 var(--text),0 -7px 0 0 var(--text);border-radius:1px}
@@ -64,7 +59,7 @@ html,body{height:100%;margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;backg
 <header class="header">
   <div class="brand">
     <button id="hamb" class="hamburger" aria-label="menu"><span class="bar"></span></button>
-    <img src="img/logo.png" class="logo" alt="logo">
+    <img src="img/logo.png" class="logo" alt="logo" id="logo">
   </div>
   <div style="margin-left:auto;display:flex;gap:12px;align-items:center">
     <div class="avatar-sm"><img id="topAv" src="img/user.png" alt="avatar"></div>
@@ -73,7 +68,7 @@ html,body{height:100%;margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;backg
 <div class="wrapper">
   <aside id="sidebar" class="sidebar">
     <nav class="menu">
-      <a href="home-paid.html" id="mhome" class="">Home</a>
+      <a href="home-paid-1.html" id="mhome" class="">Home</a>
       <a href="forums-paid.html" id="mforums" class="active">Forums</a>
     </nav>
   </aside>
@@ -139,6 +134,7 @@ document.addEventListener('DOMContentLoaded', async function(){
     const { data, error } = await sb.from('forum_topics').select('*').order('id',{ascending:true})
     const area = document.getElementById('topicsArea')
     area.innerHTML = ''
+    if(error){ console.error(error); document.getElementById('topicEmpty').style.display='block'; document.getElementById('topicCount').innerText='0 topics'; return }
     if(!data || !data.length){ document.getElementById('topicEmpty').style.display='block'; document.getElementById('topicCount').innerText='0 topics'; return }
     document.getElementById('topicEmpty').style.display='none'
     document.getElementById('topicCount').innerText = data.length + ' topics'
@@ -162,7 +158,8 @@ document.addEventListener('DOMContentLoaded', async function(){
     document.getElementById('composer').style.display = 'flex'
   }
   async function loadPosts(topicId){
-    const { data:posts } = await sb.from('forum_posts').select('*').eq('topic_id',topicId).order('created_at',{ascending:true})
+    const { data:posts, error } = await sb.from('forum_posts').select('*').eq('topic_id',topicId).order('created_at',{ascending:true})
+    if(error){ console.error(error); document.getElementById('postsWrap').innerHTML = '<div class="empty">Unable to load posts</div>'; return }
     const wrap = document.getElementById('postsWrap')
     wrap.innerHTML = ''
     const count = (posts && posts.length) ? posts.length : 0
@@ -197,7 +194,7 @@ document.addEventListener('DOMContentLoaded', async function(){
     if(!txt || !currentTopicId) return
     const payload = { topic_id: currentTopicId, username: auth.username, content: txt, avatar_url: auth.avatarUrl || 'user.png' }
     const { error } = await sb.from('forum_posts').insert(payload)
-    if(error) return
+    if(error){ console.error(error); return }
     document.getElementById('msgInput').value = ''
     await loadPosts(currentTopicId)
   })
@@ -206,4 +203,5 @@ document.addEventListener('DOMContentLoaded', async function(){
 </script>
 </body>
 </html>
+
 
