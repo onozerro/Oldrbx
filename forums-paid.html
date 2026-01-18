@@ -23,11 +23,13 @@ html,body{height:100%;margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;backg
 .hamburger .bar{display:block;width:22px;height:2px;background:var(--text);box-shadow:0 7px 0 0 var(--text),0 -7px 0 0 var(--text);border-radius:1px}
 .logo{height:36px}
 .wrapper{display:flex;min-height:calc(100vh - 64px)}
-.sidebar{width:220px;background:var(--panel);border-right:1px solid var(--border);padding:14px;display:flex;flex-direction:column;gap:8px}
+.sidebar{width:220px;background:var(--panel);border-right:1px solid var(--border);padding:14px;display:flex;flex-direction:column;gap:8px;transition: left .18s ease}
+.sidebar.open{left:0}
+.menu{display:flex;flex-direction:column;gap:8px}
 .menu a{display:block;padding:10px 12px;border-radius:6px;text-decoration:none;color:var(--text);font-weight:800;border:1px solid transparent;background:transparent}
 .menu a.active{border-left:4px solid var(--accent);background:linear-gradient(180deg,rgba(59,110,165,0.06),transparent)}
-.center{flex:1;padding:22px}
-.card{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:16px}
+.center{flex:1;padding:22px;display:flex;justify-content:center}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:16px;max-width:980px;width:100%}
 .top-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .topic-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
 .topic{padding:16px;border-radius:6px;border:1px solid var(--border);cursor:pointer;font-weight:900;display:flex;align-items:center;justify-content:center;min-height:88px;background:linear-gradient(180deg,#fff,#f7fbff)}
@@ -47,12 +49,13 @@ html,body{height:100%;margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;backg
 .footer{padding:14px;text-align:center;color:var(--muted);border-top:1px solid var(--border);background:var(--panel)}
 @media(max-width:900px){
   .hamburger{display:flex}
-  .sidebar{position:fixed;left:-320px;top:64px;height:calc(100% - 64px);z-index:1200;transition:left .18s ease}
+  .sidebar{position:fixed;left:-320px;top:64px;height:calc(100% - 64px);z-index:1200}
   .sidebar.open{left:0}
   .center{padding:12px}
 }
 @media(min-width:901px){
   .hamburger{display:none}
+  .sidebar{position:relative;left:0}
 }
 </style>
 </head>
@@ -69,8 +72,8 @@ html,body{height:100%;margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;backg
 <div class="wrapper">
   <aside id="sidebar" class="sidebar">
     <nav class="menu">
-      <a href="home-paid.html" id="mhome2" class="">Home</a>
-      <a href="forums-paid.html" id="mforums2" class="active">Forums</a>
+      <a href="home-paid.html" id="mhome" class="">Home</a>
+      <a href="forums-paid.html" id="mforums" class="active">Forums</a>
     </nav>
   </aside>
   <main class="center">
@@ -204,6 +207,3 @@ document.addEventListener('DOMContentLoaded', async function(){
 </script>
 </body>
 </html>
-
-
-
