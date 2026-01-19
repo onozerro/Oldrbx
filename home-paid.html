@@ -1,104 +1,173 @@
 <!doctype html>
-<html lang="en" class="h-100">
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Home Paid - OLDRBX</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="icon" type="image/png" href="img/ic.png">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Home - OLDRBX</title>
+<link rel="icon" href="img/ic.png">
 <style>
-:root{--bg:#121316;--panel:#1e2022;--border:#2b2d30;--muted:#b8b8b8;--accent:#98a3ad}
-html,body{height:100%;margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:#fff}
-.navbar{height:56px;background:var(--panel);border-bottom:2px solid var(--border);display:flex;align-items:center;padding:0 12px}
-.brand{display:flex;align-items:center;gap:10px}
-.hamburger{width:40px;height:40px;border-radius:6px;border:none;background:transparent;color:var(--muted);font-size:20px;display:none}
-.logo-img{height:28px}
-.layout{display:flex;min-height:calc(100vh - 56px)}
-.sidebar{width:280px;background:var(--panel);border-right:2px solid var(--border);padding:18px;box-sizing:border-box}
-.sidebar .menu{display:flex;flex-direction:column;gap:8px}
-.menu-item{padding:12px;border-radius:6px;display:flex;align-items:center;justify-content:space-between;font-weight:700;user-select:none}
-.menu-item a{color:#fff;text-decoration:none;display:block;width:100%}
-.menu-item.locked{opacity:0.5;text-decoration:line-through;pointer-events:none}
-.menu-item.active{background:transparent;border-left:3px solid var(--accent)}
-.content{flex:1;padding:28px}
-.card{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:20px}
-.center-block{text-align:center;margin-top:18px}
-.sorry-img{width:220px;height:220px;object-fit:cover;border-radius:6px;border:1px solid var(--border);background:#fff}
-.sorry-text{margin-top:12px;color:var(--muted);font-size:16px;font-weight:700}
-.btn-logout{margin-top:18px;border-radius:6px}
-.avatar{width:36px;height:36px;border-radius:6px;overflow:hidden;background:var(--border);display:flex;align-items:center;justify-content:center}
-.avatar img{width:100%;height:100%;object-fit:cover}
-.menu-label{font-size:12px;color:var(--muted);margin-bottom:8px;padding-left:6px}
-@media(max-width:991px){
-  .hamburger{display:inline-flex;order:0}
-  .brand img{order:1}
-  .sidebar{position:fixed;left:-320px;top:56px;height:calc(100% - 56px);z-index:1050;transition:left .18s ease}
-  .sidebar.open{left:0}
-  .layout{padding-top:56px}
-}
-@media(min-width:992px){
-  .hamburger{display:none}
-  .sidebar{left:0}
-}
-.footer{background:var(--panel);border-top:2px solid var(--border);padding:10px 20px;color:var(--muted);text-align:center}
+  :root{
+    --blue:#0074bd;
+    --bg:#e9e9ea;
+    --panel:#ffffff;
+    --muted:#6d6d6d;
+    --border:#d5d7d9;
+  }
+  html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:#111}
+  a{color:inherit;text-decoration:none}
+
+  /* TOPBAR like forums */
+  .topbar{
+    height:56px;
+    background:var(--blue);
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:0 12px;
+    box-sizing:border-box;
+  }
+  .hamburger{
+    width:44px;height:44px;border-radius:6px;border:none;background:transparent;color:#fff;font-size:22px;
+    display:flex;align-items:center;justify-content:center;cursor:pointer;
+  }
+  .logo-img{height:34px}
+  .top-right{margin-left:auto;display:flex;align-items:center;gap:12px;padding-right:6px}
+
+  /* money: no white box */
+  .money-wrap{display:flex;align-items:center;gap:8px;color:#fff;font-weight:800}
+  .money-wrap img{width:22px;height:22px;display:block}
+  .balance{font-weight:800;color:#fff}
+
+  /* top small avatar */
+  .avatar{width:36px;height:36px;border-radius:50%;overflow:hidden;background:#fff;display:inline-block}
+  .avatar img{width:100%;height:100%;object-fit:cover;display:block}
+
+  /* layout */
+  .page{max-width:980px;margin:28px auto;padding:0 16px;box-sizing:border-box}
+  .container{display:grid;grid-template-columns:280px 1fr;gap:18px;align-items:start}
+  /* sidebar (same as forums) */
+  .sidebar{
+    background:var(--panel);
+    border:1px solid var(--border);
+    padding:12px;
+    box-sizing:border-box;
+  }
+  .nav-item{
+    padding:12px;border-radius:6px;display:flex;align-items:center;justify-content:space-between;font-weight:800;color:#111;
+    cursor:pointer;background:#fff;border:1px solid var(--border);margin-bottom:10px;
+  }
+
+  /* main panel minimal */
+  .main{
+    background:var(--panel);
+    border:1px solid var(--border);
+    padding:20px;
+    box-sizing:border-box;
+  }
+
+  .greet{display:flex;align-items:center;gap:14px}
+  .greet .big-av{width:72px;height:72px;border-radius:50%;overflow:hidden;box-shadow:0 6px 14px rgba(0,0,0,0.08)}
+  .greet .big-av img{width:100%;height:100%;object-fit:cover}
+  .greet h1{margin:0;font-size:44px;line-height:1;font-weight:900;color:#111}
+  .greet .sub{margin:0;color:var(--muted);font-size:14px}
+
+  .divider{height:1px;background:var(--border);margin:18px 0;border-radius:1px}
+
+  .splash{text-align:center;padding:8px}
+  .splash img{max-width:300px;width:100%;height:auto;display:block;margin:0 auto}
+  .splash p{margin-top:12px;color:var(--muted);font-size:15px}
+
+  /* footer like forums (not fixed) */
+  .footer{margin-top:18px;background:var(--panel);border-top:1px solid var(--border);padding:12px 16px;color:var(--muted);font-weight:700}
+
+  /* responsive: collapse sidebar on small screens */
+  @media(max-width:960px){
+    .container{grid-template-columns:1fr;gap:12px}
+    .sidebar{display:none} /* opened via hamburger */
+  }
+  /* mobile open sidebar */
+  .sidebar.open{display:block;position:fixed;left:0;top:56px;bottom:0;width:260px;z-index:1200;overflow:auto}
 </style>
 </head>
-<body class="d-flex flex-column h-100">
-<nav class="navbar">
-  <div class="brand" style="display:flex;align-items:center;gap:8px">
+<body>
+  <!-- TOPBAR (same structure as forums) -->
+  <div class="topbar">
     <button id="hamb" class="hamburger" aria-label="menu">&#9776;</button>
     <img src="img/logo.png" class="logo-img" alt="logo">
-  </div>
-  <div style="margin-left:auto;display:flex;gap:12px;align-items:center">
-    <div class="avatar"><img id="topAvatar" src="img/user.png" alt="avatar"></div>
-  </div>
-</nav>
-<div class="layout">
-  <aside id="sidebar" class="sidebar">
-    <div class="menu-label">MAIN</div>
-    <div class="menu">
-      <div class="menu-item locked"><span>Home</span></div>
-      <div class="menu-item locked"><span>Profile</span></div>
-      <div class="menu-item locked"><span>Messages</span></div>
-      <div class="menu-item locked"><span>Friends</span></div>
-      <div class="menu-item locked"><span>Avatar</span></div>
-      <div class="menu-item locked"><span>Inventory</span></div>
-      <div class="menu-item locked"><span>Trade</span></div>
-      <div class="menu-item locked"><span>Groups</span></div>
-      <a href="forums-paid.html" class="menu-item active"><span>Forums</span></a>
-      <div class="menu-item locked"><span>Download</span></div>
-    </div>
-  </aside>
-  <main class="content">
-    <div class="card">
-      <h4 id="hello">Hello</h4>
-      <p style="color:var(--muted);margin-top:8px">This page is under development.</p>
-      <p style="color:var(--muted)">Authentication uses Supabase and your client session is kept in localStorage.</p>
-      <div class="center-block">
-        <img src="img/sorry.png" class="sorry-img" alt="sorry">
-        <div class="sorry-text">Temporary limitations during development</div>
+    <div class="top-right">
+      <div class="money-wrap" title="Balance">
+        <img id="moneyIcon" src="img/money.png" alt="money">
+        <div class="balance" id="balanceText">0</div>
       </div>
-      <button id="logout" class="btn btn-outline-light btn-logout">Logout</button>
+      <a id="profileLinkTop" href="profile-paid.html" class="avatar" title="Profile">
+        <img id="topAv" src="img/user.png" alt="avatar">
+      </a>
     </div>
-  </main>
-</div>
-<footer class="footer">&copy; 2026 OLDRBX</footer>
+  </div>
+
+  <div class="page">
+    <div class="container">
+      <!-- SIDEBAR (like forums) -->
+      <aside id="sidebar" class="sidebar" aria-label="Main navigation">
+        <div class="nav-item" onclick="location.href='home-paid.html'">Home</div>
+        <div class="nav-item" onclick="location.href='forums-paid.html'">Forums</div>
+        <div class="nav-item" onclick="location.href='profile-paid.html'">Profile</div>
+      </aside>
+
+      <!-- MAIN -->
+      <main class="main" role="main" aria-labelledby="helloHeading">
+        <div class="greet">
+          <a id="profileLink" href="profile-paid.html" class="big-av">
+            <img id="heroAv" src="img/user.png" alt="user avatar">
+          </a>
+          <div>
+            <h1 id="helloHeading">Hello, User!</h1>
+            <p class="sub" id="greetSub"></p>
+          </div>
+        </div>
+
+        <div class="divider" aria-hidden="true"></div>
+
+        <div class="splash" role="note" aria-live="polite">
+          <img src="img/sorry.png" alt="working on site">
+          <p>I'm working on a full site — development is from scratch and takes time.</p>
+        </div>
+      </main>
+    </div>
+
+    <!-- footer stripe like forums -->
+    <footer class="footer">© 2026 OLDRBX</footer>
+  </div>
+
 <script>
 (function(){
-  var sid=document.getElementById('sidebar')
-  var hamb=document.getElementById('hamb')
-  try{var auth=JSON.parse(localStorage.getItem('auth'))}catch(e){auth=null}
-  if(!auth||!auth.username){location.replace('login.html');return}
-  document.getElementById('hello').innerText='Hello, '+String(auth.username)
-  document.getElementById('topAvatar').src=auth.avatarUrl||'img/user.png'
-  document.getElementById('logout').onclick=function(){try{localStorage.removeItem('auth')}catch(e){}location.replace('login.html')}
-  hamb.addEventListener('click',function(){sid.classList.toggle('open')})
-  function openOnDesktop(){if(window.innerWidth>=992)sid.classList.add('open');else sid.classList.remove('open')}
-  window.addEventListener('resize',openOnDesktop)
-  openOnDesktop()
-})()
+  // sidebar toggle (same behavior as forums)
+  var hamb = document.getElementById('hamb');
+  var sidebar = document.getElementById('sidebar');
+  hamb.addEventListener('click', function(){
+    // on small screens show/hide sidebar
+    if(window.innerWidth < 960){
+      sidebar.classList.toggle('open');
+    }
+  });
+
+  // populate user data from localStorage.auth
+  var auth = null;
+  try{ auth = JSON.parse(localStorage.getItem('auth')) }catch(e){ auth = null }
+  if(!auth) auth = {}; // don't redirect here, just show defaults
+
+  var name = auth.username || 'User';
+  var avatar = auth.avatarUrl || 'img/user.png';
+  var balance = (typeof auth.balance !== 'undefined' && auth.balance !== null) ? auth.balance : 0;
+
+  document.getElementById('helloHeading').innerText = 'Hello, ' + name + '!';
+  document.getElementById('heroAv').src = avatar;
+  document.getElementById('topAv').src = avatar;
+  document.getElementById('balanceText').innerText = String(balance);
+
+  // ensure money icon is transparent PNG in img/money.png
+  document.getElementById('moneyIcon').src = 'img/money.png';
+})();
 </script>
 </body>
 </html>
-
-
