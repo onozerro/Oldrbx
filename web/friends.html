@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Friends - OLDRBX</title>
+<link rel="icon" href="/img/ic.png">
+<style>
+:root{--bg:#efefef;--panel:#ffffff;--muted:#666;--border:#d7d7d7;--accent:#111}
+html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:#111}
+.topbar{height:56px;background:var(--accent);display:flex;align-items:center;padding:0 12px;gap:12px}
+.hamburger{width:44px;height:44px;border-radius:4px;border:none;background:transparent;color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.logo-img{height:32px}
+.container-wrap{max-width:1100px;margin:20px auto;padding:0 16px}
+.layout{display:grid;grid-template-columns:300px 1fr;gap:18px}
+.sidebar{background:var(--panel);border:1px solid var(--border);padding:12px;border-radius:6px}
+.nav-item{padding:12px;border-radius:6px;background:#fff;border:1px solid var(--border);font-weight:800;margin-bottom:10px;cursor:pointer}
+.main{background:var(--panel);border:1px solid var(--border);padding:18px;border-radius:6px}
+.section-title{font-weight:900;margin-bottom:8px}
+.request-row{display:flex;justify-content:space-between;align-items:center;padding:8px;border:1px solid var(--border);border-radius:6px;margin-bottom:8px;background:#fff}
+.request-left{display:flex;align-items:center;gap:10px}
+.request-left img{width:48px;height:48px;border-radius:6px;object-fit:cover}
+.btn{padding:8px 12px;border-radius:6px;border:none;font-weight:800;cursor:pointer}
+.btn-accept{background:var(--accent);color:#fff}
+.btn-decline{background:#fff;border:1px solid var(--border)}
+.friend-row{display:flex;align-items:center;gap:12px;padding:8px;border:1px solid var(--border);border-radius:6px;margin-bottom:8px;background:#fff}
+.friend-row img{width:48px;height:48px;border-radius:6px;object-fit:cover}
+.empty{color:var(--muted);padding:12px;text-align:center}
+.footer{margin-top:18px;background:var(--panel);border-top:1px solid var(--border);padding:10px 16px;color:var(--muted);font-weight:700;border-radius:0;text-align:center}
+@media(max-width:1000px){.layout{grid-template-columns:1fr}.sidebar{position:fixed;left:-360px;top:56px;height:calc(100% - 56px);width:280px;z-index:1200;transition:left .18s ease}.sidebar.open{left:0}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <button id="hamb" class="hamburger" aria-label="menu">&#9776;</button>
+  <img src="/img/logo.png" class="logo-img" alt="logo">
+</div>
+<div class="container-wrap">
+  <div class="layout">
+    <aside id="sidebar" class="sidebar">
+      <div id="navHome" class="nav-item">Home</div>
+      <div id="navFriends" class="nav-item">Friends</div>
+      <div id="navGroups" class="nav-item">Groups</div>
+      <div id="navForums" class="nav-item">Forums</div>
+    </aside>
+    <main class="main">
+      <div>
+        <div class="section-title">Friend Requests</div>
+        <div id="requestsList"></div>
+      </div>
+      <div style="margin-top:14px">
+        <div class="section-title">Your Friends</div>
+        <div id="friendsList"></div>
+      </div>
+    </main>
+  </div>
+  <div class="footer">© 2026 OLDRBX</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+document.addEventListener('DOMContentLoaded',async function(){
+  const SUPA_URL="https://nkvvnnjukqtfhmegyzek.supabase.co";
+  const SUPA_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rdnZubmp1a3R0ZmhtZWd5emVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2NjQ5MTIsImV4cCI6MjA4NDI0MDkxMn0.2jp9X2KQunFargrstYM7oGBYs75Kq7AEHs7iRARxexs";
+  const sb=supabase.createClient(SUPA_URL,SUPA_KEY);
+  var hamb=document.getElementById('hamb'),sidebar=document.getElementById('sidebar');
+  hamb.addEventListener('click',function(){if(window.innerWidth<1000)sidebar.classList.toggle('open')});
+  var auth=null;try{auth=JSON.parse(localStorage.getItem('auth'))}catch(e){auth=null}
+  if(!auth||!auth.username){location.replace('/web/login.html');return}
+  document.getElementById('navHome').addEventListener('click',function(){location.href='/web/home.html'});
+  document.getElementById('navGroups').addEventListener('click',function(){location.href='/web/groups.html'});
+  document.getElementById('navForums').addEventListener('click',function(){location.href='/web/forums.html'});
+  async function getUser(){var r=await sb.from('users').select('*').eq('username',auth.username).maybeSingle();if(r.error) return null;return r.data||null}
+  var userRow=await getUser();
+  async function loadRequests(){
+    var wrap=document.getElementById('requestsList');wrap.innerHTML='';
+    if(!userRow){wrap.innerHTML='<div class="empty">Unavailable</div>';return}
+    var inc=await sb.from('friend_requests').select('id,from_user,from_user(username,avatar_url),created_at').eq('to_user',userRow.id).eq('status','pending').order('created_at',{ascending:false});
+    if(inc.data&&inc.data.length){
+      for(var r of inc.data){
+        var row=document.createElement('div');row.className='request-row';
+        var left=document.createElement('div');left.className='request-left';
+        var av=document.createElement('img');av.src=(r.from_user&&r.from_user.avatar_url)?r.from_user.avatar_url:'/img/user.png';
+        var txt=document.createElement('div');txt.innerHTML='<div style="font-weight:800">'+(r.from_user? r.from_user.username:'Unknown')+'</div><div style="font-size:12px;color:var(--muted)">sent a friend request</div>';
+        left.appendChild(av);left.appendChild(txt);
+        var actions=document.createElement('div');
+        var btnA=document.createElement('button');btnA.className='btn btn-accept';btnA.innerText='Accept';btnA.addEventListener('click',async function(id,fromId,toId){return async function(){await sb.from('friend_requests').update({status:'accepted'}).eq('id',id);await sb.from('friends').insert([{user_id:fromId,friend_id:toId},{user_id:toId,friend_id:fromId}]).select();await loadRequests();await loadFriends()} }(r.id,r.from_user? r.from_user.id:null,userRow.id));
+        var btnD=document.createElement('button');btnD.className='btn btn-decline';btnD.innerText='Decline';btnD.addEventListener('click',async function(id){return async function(){await sb.from('friend_requests').update({status:'declined'}).eq('id',id);await loadRequests()} }(r.id));
+        actions.appendChild(btnA);actions.appendChild(btnD);
+        row.appendChild(left);row.appendChild(actions);
+        wrap.appendChild(row);
+      }
+    } else {wrap.innerHTML='<div class="empty">No friend requests</div>'}
+  }
+  async function loadFriends(){
+    var wrap=document.getElementById('friendsList');wrap.innerHTML='';
+    if(!userRow){wrap.innerHTML='<div class="empty">Unavailable</div>';return}
+    var r1=await sb.from('friends').select('friend_id').eq('user_id',userRow.id);
+    var r2=await sb.from('friends').select('user_id').eq('friend_id',userRow.id);
+    var ids=[];
+    if(r1.data)for(var x of r1.data)ids.push(x.friend_id);
+    if(r2.data)for(var x of r2.data)ids.push(x.user_id);
+    ids=[...new Set(ids)].filter(Boolean);
+    if(!ids.length){wrap.innerHTML='<div class="empty">You have no friends yet</div>';return}
+    var users=await sb.from('users').select('id,username,avatar_url').in('id',ids);
+    for(var u of users.data){
+      var r=document.createElement('div');r.className='friend-row';
+      var left=document.createElement('div');left.style.display='flex';left.style.alignItems='center';left.style.gap='10px';
+      var av=document.createElement('img');av.src=u.avatar_url?u.avatar_url:'/img/user.png';
+      var nm=document.createElement('div');nm.innerHTML='<div style="font-weight:800">'+u.username+'</div>';
+      left.appendChild(av);left.appendChild(nm);
+      r.appendChild(left);
+      var visit=document.createElement('div');visit.innerHTML='<button class="btn button-muted" style="background:#fff;border:1px solid var(--border);padding:8px 10px;border-radius:6px;cursor:pointer" onclick="location.href=\'/web/profile.html?u='+u.id+'\'">View</button>';
+      r.appendChild(visit);
+      wrap.appendChild(r);
+    }
+  }
+  await loadRequests();
+  await loadFriends();
+  window.addEventListener('resize',function(){if(window.innerWidth>=1000)sidebar.classList.remove('open')});
+});
+</script>
+</body>
+</html>
