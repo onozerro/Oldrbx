@@ -9,7 +9,7 @@
 :root{--bg:#efefef;--panel:#ffffff;--muted:#666;--border:#d7d7d7;--accent:#111;--shadow:rgba(0,0,0,0.06)}
 html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:#111}
 .topbar{height:56px;background:var(--accent);display:flex;align-items:center;padding:0 12px;gap:12px;box-sizing:border-box}
-.hamburger{width:44px;height:44px;border-radius:4px;border:none;background:transparent;color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.hamburger{width:44px;height:44px;border-radius:6px;border:none;background:transparent;color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer}
 .logo-img{height:32px}
 .top-right{margin-left:auto;display:flex;align-items:center;gap:12px}
 .money-wrap{display:flex;align-items:center;gap:8px;color:#fff;font-weight:800}
@@ -24,7 +24,7 @@ html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,
 .user-header .mini{width:44px;height:44px;border-radius:6px;overflow:hidden}
 .user-header .mini img{width:100%;height:100%;object-fit:cover}
 .username{font-weight:900}
-.nav-item{padding:12px;border-radius:6px;background:#fff;border:1px solid var(--border);font-weight:800;margin-bottom:10px;cursor:pointer}
+.nav-item{padding:12px;border-radius:6px;background:#fff;border:1px solid var(--border);font-weight:800;margin-bottom:10px;cursor:pointer;display:flex;align-items:center;justify-content:space-between}
 .main{background:var(--panel);border:1px solid var(--border);padding:18px;border-radius:6px;display:flex;flex-direction:column;gap:16px;min-height:420px}
 .profile-row{display:flex;gap:16px;align-items:center}
 .hero-av{width:88px;height:88px;border-radius:6px;overflow:hidden}
@@ -37,11 +37,13 @@ html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,
 .friend{display:flex;flex-direction:column;align-items:center;padding:8px;background:#fff;border:1px solid var(--border);border-radius:6px;gap:8px}
 .friend img{width:54px;height:54px;border-radius:6px;object-fit:cover}
 .friend-name{font-weight:800;font-size:13px;text-align:center}
-.edit-area{display:flex;flex-direction:column;gap:8px}
+.edit-area{display:none;flex-direction:column;gap:8px}
 textarea{min-height:80px;border:1px solid var(--border);padding:8px;border-radius:6px;resize:vertical;font-family:inherit}
+.control-row{display:flex;gap:8px;justify-content:flex-end}
 button{padding:8px 12px;border-radius:6px;border:none;background:var(--accent);color:#fff;font-weight:800;cursor:pointer}
 .button-muted{background:#fff;border:1px solid var(--border);color:#111}
 .empty{color:var(--muted);padding:12px;text-align:center}
+.feedback{font-size:13px;color:var(--muted);text-align:right}
 .footer{margin-top:18px;background:var(--panel);border-top:1px solid var(--border);padding:10px 16px;color:var(--muted);font-weight:700;border-radius:0;text-align:center}
 @media(max-width:1000px){.layout{grid-template-columns:1fr}.sidebar{position:fixed;left:-360px;top:56px;height:calc(100% - 56px);width:280px;z-index:1200;transition:left .18s ease}.sidebar.open{left:0}}
 </style>
@@ -66,7 +68,6 @@ button{padding:8px 12px;border-radius:6px;border:none;background:var(--accent);c
         <div><div id="sideName" class="username">User</div></div>
       </div>
       <div id="navHome" class="nav-item" data-h="/web/home.html">Home</div>
-      <div id="navProfile" class="nav-item" data-h="/web/home.html">Profile</div>
       <div id="navFriends" class="nav-item" data-h="/web/friends.html">Friends</div>
       <div id="navGroups" class="nav-item" data-h="/web/groups.html">Groups</div>
       <div id="navForums" class="nav-item" data-h="/web/forums.html">Forums</div>
@@ -82,16 +83,30 @@ button{padding:8px 12px;border-radius:6px;border:none;background:var(--accent);c
       </div>
       <div class="divider"></div>
       <div>
-        <div class="section-title">Your Friends</div>
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div class="section-title">Your Friends</div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <button id="refreshFriends" class="button-muted">Refresh</button>
+          </div>
+        </div>
         <div id="friendsWrap" class="friends-panel"></div>
       </div>
       <div>
-        <div class="section-title">Profile Description</div>
-        <div class="edit-area">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div class="section-title">Profile Description</div>
+          <div id="editControls" style="display:flex;gap:8px;align-items:center">
+            <button id="editBtn" class="button-muted">Edit description</button>
+          </div>
+        </div>
+        <div id="descView" style="padding:12px;background:#fff;border:1px solid var(--border);border-radius:6px;min-height:80px"></div>
+        <div id="editArea" class="edit-area">
           <textarea id="descInput" placeholder="Write something about yourself..."></textarea>
-          <div style="display:flex;gap:8px;justify-content:flex-end">
-            <button id="saveDesc">Save</button>
-            <button id="cancelDesc" class="button-muted">Cancel</button>
+          <div class="control-row">
+            <div id="saveFeedback" class="feedback"></div>
+            <div>
+              <button id="saveDesc">Save</button>
+              <button id="cancelDesc" class="button-muted">Cancel</button>
+            </div>
           </div>
         </div>
       </div>
@@ -107,30 +122,64 @@ document.addEventListener('DOMContentLoaded',async function(){
   const sb=supabase.createClient(SUPA_URL,SUPA_KEY);
   var hamb=document.getElementById('hamb'),sidebar=document.getElementById('sidebar');
   hamb.addEventListener('click',function(){if(window.innerWidth<1000)sidebar.classList.toggle('open')});
-  var auth=null;try{auth=JSON.parse(localStorage.getItem('auth'))}catch(e){auth=null}
-  if(!auth||!auth.username){location.replace('/web/login.html');return}
   function nav(h){location.href=h}
   document.querySelectorAll('.nav-item').forEach(function(it){it.addEventListener('click',function(){nav(it.dataset.h)})});
-  document.getElementById('profileBtnTop').href='/web/home.html';
+  var auth=null;try{auth=JSON.parse(localStorage.getItem('auth'))}catch(e){auth=null}
+  var loginPath='/web/login.html';
+  if(!auth||!auth.username){location.replace(loginPath);return}
   document.getElementById('sideName').innerText=auth.username;
   document.getElementById('hello').innerText='Hello, '+auth.username+'!';
+  document.getElementById('profileBtnTop').href='/web/home.html';
   function setAv(u){var x=u||'/img/user.png';document.getElementById('heroAv').src=x;document.getElementById('sideAv').src=x;document.getElementById('topAv').src=x}
   setAv(auth.avatarUrl||'/img/user.png');
   document.getElementById('moneyIcon').src='/img/money.png';
   var localBal=(typeof auth.balance!=='undefined'&&auth.balance!==null)?auth.balance:0;
   document.getElementById('balanceText').innerText=String(localBal);
-  async function getUserRow(){var r=await sb.from('users').select('*').eq('username',auth.username).maybeSingle();if(r.error) return null;return r.data||null}
-  var userRow=await getUserRow();
+  async function getUserByUsername(u){var r=await sb.from('users').select('*').eq('username',u).maybeSingle();if(r.error) return null;return r.data||null}
+  async function getUserById(id){var r=await sb.from('users').select('*').eq('id',id).maybeSingle();if(r.error) return null;return r.data||null}
+  var userRow=await getUserByUsername(auth.username);
   if(userRow&&typeof userRow.balance!=='undefined')document.getElementById('balanceText').innerText=String(userRow.balance);
   if(userRow&&userRow.avatar_url)setAv(userRow.avatar_url);
-  if(userRow&&userRow.description)document.getElementById('descInput').value=userRow.description;
-  async function setLastActive(){ if(userRow&&userRow.id){ await sb.from('users').update({last_active:new Date().toISOString()}).eq('id',userRow.id) } }
-  await setLastActive();
+  if(userRow&&userRow.id)await sb.from('users').update({last_active:new Date().toISOString()}).eq('id',userRow.id);
+  var params=new URLSearchParams(location.search);
+  var viewUserId=params.get('u');
+  var viewingOwn=true;
+  var profileUser=userRow;
+  if(viewUserId){
+    var other=await getUserById(viewUserId);
+    if(other){profileUser=other;viewingOwn = (other.id === (userRow?userRow.id:null))}
+  }
+  function renderDesc(){
+    var dv=document.getElementById('descView');
+    dv.innerText=profileUser&&profileUser.description?profileUser.description:'No description';
+    if(viewingOwn){document.getElementById('editBtn').style.display='inline-flex'} else {document.getElementById('editBtn').style.display='none'}
+  }
+  renderDesc();
+  document.getElementById('editBtn').addEventListener('click',function(){
+    document.getElementById('editArea').style.display='flex';
+    document.getElementById('descInput').value=profileUser&&profileUser.description?profileUser.description:'';
+    document.getElementById('descInput').focus();
+    document.getElementById('saveFeedback').innerText='';
+  });
+  document.getElementById('cancelDesc').addEventListener('click',function(){
+    document.getElementById('editArea').style.display='none';
+    renderDesc();
+  });
+  document.getElementById('saveDesc').addEventListener('click',async function(){
+    var v=document.getElementById('descInput').value||'';
+    if(!profileUser||!profileUser.id) return;
+    var upd=await sb.from('users').update({description:v}).eq('id',profileUser.id);
+    if(upd.error){document.getElementById('saveFeedback').innerText='Save failed';return}
+    profileUser.description=v;
+    if(profileUser.id === userRow.id){localStorage.setItem('auth',JSON.stringify(Object.assign({},auth,{description:v})))}
+    document.getElementById('saveFeedback').innerText='Saved';
+    setTimeout(function(){document.getElementById('editArea').style.display='none';renderDesc();},800);
+  });
   async function loadFriends(){
     var wrap=document.getElementById('friendsWrap');wrap.innerHTML='';
-    if(!userRow){wrap.innerHTML='<div class="empty">You have no friends yet</div>';return}
-    var r1=await sb.from('friends').select('friend_id').eq('user_id',userRow.id);
-    var r2=await sb.from('friends').select('user_id').eq('friend_id',userRow.id);
+    if(!profileUser){wrap.innerHTML='<div class="empty">No friends</div>';return}
+    var r1=await sb.from('friends').select('friend_id').eq('user_id',profileUser.id);
+    var r2=await sb.from('friends').select('user_id').eq('friend_id',profileUser.id);
     var ids=[];
     if(r1.data)for(var a of r1.data)ids.push(a.friend_id);
     if(r2.data)for(var b of r2.data)ids.push(b.user_id);
@@ -148,13 +197,7 @@ document.addEventListener('DOMContentLoaded',async function(){
     }
   }
   await loadFriends();
-  document.getElementById('saveDesc').addEventListener('click',async function(){
-    var v=document.getElementById('descInput').value||'';
-    if(!userRow) userRow=await getUserRow();
-    var upd=await sb.from('users').update({description:v}).eq('id',userRow.id);
-    if(!upd.error){localStorage.setItem('auth',JSON.stringify(Object.assign({},auth,{description:v})));userRow.description=v}
-  });
-  document.getElementById('cancelDesc').addEventListener('click',function(){if(userRow&&userRow.description)document.getElementById('descInput').value=userRow.description;else document.getElementById('descInput').value=''});
+  document.getElementById('refreshFriends').addEventListener('click',function(){loadFriends()});
   window.addEventListener('resize',function(){if(window.innerWidth>=1000)sidebar.classList.remove('open')});
 });
 </script>
