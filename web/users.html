@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Users - OLDRBX</title>
+<link rel="icon" href="/img/ic.png">
+<style>
+:root{--bg:#efefef;--panel:#ffffff;--muted:#666;--border:#d7d7d7;--accent:#111}
+html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:#111}
+.topbar{height:56px;background:var(--accent);display:flex;align-items:center;padding:0 12px;gap:12px;box-sizing:border-box}
+.hamburger{width:44px;height:44px;border-radius:6px;border:none;background:transparent;color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.logo-img{height:32px}
+.container{max-width:1100px;margin:20px auto;padding:0 16px;box-sizing:border-box}
+.top-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.money-wrap{display:flex;align-items:center;gap:8px;color:#fff;font-weight:800}
+.money-wrap img{width:20px;height:20px}
+.balance{font-weight:800;color:#fff}
+.layout{display:grid;grid-template-columns:300px 1fr;gap:18px;align-items:start}
+.sidebar{background:var(--panel);border:1px solid var(--border);padding:12px;border-radius:6px;min-height:320px}
+.user-header{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+.user-header .mini{width:44px;height:44px;border-radius:6px;overflow:hidden}
+.user-header .mini img{width:100%;height:100%;object-fit:cover}
+.nav-item{padding:12px;border-radius:6px;background:#fff;border:1px solid var(--border);font-weight:800;margin-bottom:10px;cursor:pointer}
+.main{background:var(--panel);border:1px solid var(--border);padding:18px;border-radius:6px}
+.section-title{font-weight:900;margin-bottom:8px}
+.user-row{display:flex;align-items:center;justify-content:space-between;padding:8px;border:1px solid var(--border);border-radius:6px;margin-bottom:8px;background:#fff}
+.user-left{display:flex;align-items:center;gap:10px}
+.user-left img{width:48px;height:48px;border-radius:6px;object-fit:cover}
+.status-online{color:green;font-weight:800}
+.status-off{color:var(--muted)}
+.empty{color:var(--muted);padding:12px;text-align:center}
+.footer{margin-top:18px;background:var(--panel);border-top:1px solid var(--border);padding:10px 16px;color:var(--muted);font-weight:700;border-radius:0;text-align:center}
+@media(max-width:1000px){.layout{grid-template-columns:1fr}.sidebar{position:fixed;left:-360px;top:56px;height:calc(100% - 56px);width:280px;z-index:1200;transition:left .18s ease}.sidebar.open{left:0}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <button id="hamb" class="hamburger" aria-label="menu">&#9776;</button>
+  <img src="/img/logo.png" class="logo-img" alt="logo">
+  <div class="top-right">
+    <div class="money-wrap" title="Balance">
+      <img id="moneyIcon" src="/img/money.png" alt="money">
+      <div id="balanceText" class="balance">0</div>
+    </div>
+    <a id="topAvatar" class="avatar" href="/web/home.html"><img id="topAv" src="/img/user.png" alt="avatar"></a>
+  </div>
+</div>
+<div class="container">
+  <div class="layout">
+    <aside id="sidebar" class="sidebar" aria-label="Main navigation">
+      <div class="user-header"><div class="mini"><img id="sideAv" src="/img/user.png" alt=""></div><div><div id="sideName" class="username">User</div></div></div>
+      <div class="nav-item" data-h="/web/home.html">Home</div>
+      <div class="nav-item" data-h="/web/friends.html">Friends</div>
+      <div class="nav-item" data-h="/web/groups.html">Groups</div>
+      <div class="nav-item" data-h="/web/forums.html">Forums</div>
+      <div class="nav-item" data-h="/web/users.html">Users</div>
+    </aside>
+    <main class="main" role="main">
+      <div>
+        <div class="section-title">Users (sorted by activity)</div>
+        <div id="usersList"></div>
+      </div>
+    </main>
+  </div>
+  <div class="footer">© 2026 OLDRBX</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+function timeAgo(d){var s=Math.floor((Date.now()-new Date(d).getTime())/1000);if(s<60) return s+'s';var m=Math.floor(s/60);if(m<60) return m+'m';var h=Math.floor(m/60);if(h<24) return h+'h';var day=Math.floor(h/24);return day+'d'}
+document.addEventListener('DOMContentLoaded',async function(){
+  const SUPA_URL="https://nkvvnnjukqtfhmegyzek.supabase.co";
+  const SUPA_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rdnZubmp1a3R0ZmhtZWd5emVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2NjQ5MTIsImV4cCI6MjA4NDI0MDkxMn0.2jp9X2KQunFargrstYM7oGBYs75Kq7AEHs7iRARxexs";
+  const sb=supabase.createClient(SUPA_URL,SUPA_KEY);
+  var hamb=document.getElementById('hamb'),sidebar=document.getElementById('sidebar');
+  hamb.addEventListener('click',function(){if(window.innerWidth<1000)sidebar.classList.toggle('open')});
+  function navAll(h){location.href=h}
+  document.querySelectorAll('.nav-item').forEach(function(it){it.addEventListener('click',function(){navAll(it.dataset.h)})});
+  var auth=null;try{auth=JSON.parse(localStorage.getItem('auth'))}catch(e){auth=null}
+  if(!auth||!auth.username){location.replace('/web/login.html');return}
+  document.getElementById('sideName').innerText=auth.username;
+  function safeSrc(u){return u?u:'/img/user.png'}
+  function setAv(u){var x=safeSrc(u);document.getElementById('sideAv').src=x;document.getElementById('topAv').src=x}
+  setAv(auth.avatarUrl);
+  document.getElementById('moneyIcon').src='/img/money.png';
+  document.getElementById('balanceText').innerText=String(typeof auth.balance!=='undefined'&&auth.balance!==null?auth.balance:0);
+  async function getUser(){try{const res=await sb.from('users').select('*').eq('username',auth.username).maybeSingle();if(res.error) return null;return res.data||null}catch(e){return null}}
+  var userRow=await getUser();
+  if(userRow&&typeof userRow.balance!=='undefined')document.getElementById('balanceText').innerText=String(userRow.balance);
+  if(userRow&&userRow.avatar_url) setAv(userRow.avatar_url);
+  if(userRow&&userRow.id){ try{ await sb.from('users').update({last_active:new Date().toISOString()}).eq('id',userRow.id) }catch(e){} }
+  try{
+    const res=await sb.from('users').select('id,username,avatar_url,last_active,created_at').order('last_active',{ascending:false});
+    const wrap=document.getElementById('usersList');wrap.innerHTML='';
+    if(res.error||!res.data||!res.data.length){wrap.innerHTML='<div class="empty">No users</div>';return}
+    for(var u of res.data){
+      var row=document.createElement('div');row.className='user-row';
+      var left=document.createElement('div');left.className='user-left';
+      var av=document.createElement('img');av.src=u.avatar_url?u.avatar_url:'/img/user.png';
+      var nm=document.createElement('div');nm.innerHTML='<div style="font-weight:800">'+u.username+'</div><div style="font-size:12px;color:var(--muted)">'+(u.created_at?new Date(u.created_at).toLocaleDateString():'')+'</div>';
+      left.appendChild(av);left.appendChild(nm);
+      var right=document.createElement('div');
+      if(u.last_active){
+        var diff=(Date.now()-new Date(u.last_active).getTime())/1000;
+        if(diff<60) right.innerHTML='<div class="status-online">Online</div>'; else right.innerHTML='<div class="status-off">last seen '+timeAgo(u.last_active)+'</div>';
+      } else { right.innerHTML='<div class="status-off">never seen</div>' }
+      var view=document.createElement('button');view.className='btn';view.style.marginLeft='10px';view.innerText='View';view.addEventListener('click',(function(id){return function(){location.href='/web/home.html?u='+id}})(u.id));
+      right.appendChild(view);
+      row.appendChild(left);row.appendChild(right);
+      wrap.appendChild(row);
+    }
+  }catch(e){document.getElementById('usersList').innerHTML='<div class="empty">Failed to load users</div>'}
+  window.addEventListener('resize',function(){if(window.innerWidth>=1000)sidebar.classList.remove('open')});
+});
+</script>
+</body>
+</html>
