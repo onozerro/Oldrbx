@@ -3,17 +3,20 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Group - OLDRBX</title>
+<title>Groups - OLDRBX</title>
 <link rel="icon" href="/img/ic.png">
 <style>
 :root{--bg:#efefef;--panel:#ffffff;--muted:#666;--border:#d7d7d7;--accent:#111}
 html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:#111}
-.topbar{height:56px;background:var(--accent);display:flex;align-items:center;padding:0 12px;gap:12px}
+.topbar{height:56px;background:var(--accent);display:flex;align-items:center;padding:0 12px;gap:12px;box-sizing:border-box}
 .hamburger{width:44px;height:44px;border-radius:6px;border:none;background:transparent;color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer}
 .logo-img{height:32px}
 .top-right{margin-left:auto;display:flex;align-items:center;gap:12px}
 .money-wrap{display:flex;align-items:center;gap:8px;color:#fff;font-weight:800}
 .money-wrap img{width:20px;height:20px}
+.balance{font-weight:800;color:#fff}
+.avatar{width:36px;height:36px;border-radius:6px;overflow:hidden;background:#fff;display:inline-block}
+.avatar img{width:100%;height:100%;object-fit:cover}
 .container{max-width:1100px;margin:20px auto;padding:0 16px;box-sizing:border-box}
 .layout{display:grid;grid-template-columns:300px 1fr;gap:18px;align-items:start}
 .sidebar{background:var(--panel);border:1px solid var(--border);padding:12px;border-radius:6px;min-height:320px}
@@ -22,11 +25,15 @@ html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,
 .user-header .mini img{width:100%;height:100%;object-fit:cover}
 .nav-item{padding:12px;border-radius:6px;background:#fff;border:1px solid var(--border);font-weight:800;margin-bottom:10px;cursor:pointer}
 .main{background:var(--panel);border:1px solid var(--border);padding:18px;border-radius:6px}
-.group-header{display:flex;align-items:center;gap:16px}
-.group-img{width:96px;height:96px;border-radius:6px;overflow:hidden}
-.group-img img{width:100%;height:100%;object-fit:cover}
-.section-title{font-weight:900;margin-top:12px}
-.member-row{display:flex;align-items:center;justify-content:space-between;padding:8px;border:1px solid var(--border);border-radius:6px;margin-bottom:8px;background:#fff}
+.section-title{font-weight:900;margin-bottom:8px}
+.group-card{display:flex;align-items:center;justify-content:space-between;padding:10px;border:1px solid var(--border);border-radius:6px;margin-bottom:8px;background:#fff}
+.group-left{display:flex;align-items:center;gap:10px}
+.group-left img{width:60px;height:60px;border-radius:6px;object-fit:cover}
+.create-row{display:flex;gap:8px;align-items:center;margin-bottom:12px}
+input[type="text"]{padding:8px;border:1px solid var(--border);border-radius:6px}
+.btn{padding:8px 12px;border-radius:6px;border:none;font-weight:800;cursor:pointer}
+.btn-create{background:var(--accent);color:#fff}
+.btn-disabled{background:#fff;border:1px solid var(--border);color:#999;cursor:not-allowed}
 .empty{color:var(--muted);padding:12px;text-align:center}
 .footer{margin-top:18px;background:var(--panel);border-top:1px solid var(--border);padding:10px 16px;color:var(--muted);font-weight:700;border-radius:0;text-align:center}
 @media(max-width:1000px){.layout{grid-template-columns:1fr}.sidebar{position:fixed;left:-360px;top:56px;height:calc(100% - 56px);width:280px;z-index:1200;transition:left .18s ease}.sidebar.open{left:0}}
@@ -34,23 +41,20 @@ html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,
 </head>
 <body>
 <div class="topbar">
-  <button id="hamb" class="hamburger">&#9776;</button>
+  <button id="hamb" class="hamburger" aria-label="menu">&#9776;</button>
   <img src="/img/logo.png" class="logo-img" alt="logo">
   <div class="top-right">
     <div class="money-wrap" title="Balance">
       <img id="moneyIcon" src="/img/money.png" alt="money">
       <div id="balanceText" class="balance">0</div>
     </div>
-    <a id="profileTop" class="avatar" href="/web/home.html"><img id="topAv" src="/img/user.png" alt="avatar"></a>
+    <a id="topAvatar" class="avatar" href="/web/home.html"><img id="topAv" src="/img/user.png" alt="avatar"></a>
   </div>
 </div>
 <div class="container">
   <div class="layout">
-    <aside id="sidebar" class="sidebar">
-      <div class="user-header">
-        <div class="mini"><img id="sideAv" src="/img/user.png" alt=""></div>
-        <div><div id="sideName" class="username">User</div></div>
-      </div>
+    <aside id="sidebar" class="sidebar" aria-label="Main navigation">
+      <div class="user-header"><div class="mini"><img id="sideAv" src="/img/user.png" alt=""></div><div><div id="sideName" class="username">User</div></div></div>
       <div class="nav-item" data-h="/web/home.html">Home</div>
       <div class="nav-item" data-h="/web/friends.html">Friends</div>
       <div class="nav-item" data-h="/web/groups.html">Groups</div>
@@ -58,16 +62,18 @@ html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,
       <div class="nav-item" data-h="/web/users.html">Users</div>
     </aside>
     <main class="main" role="main">
-      <div class="group-header">
-        <div class="group-img"><img id="groupImg" src="/img/logo.png" alt=""></div>
-        <div>
-          <div id="groupName" style="font-weight:900;font-size:20px">Group</div>
-          <div id="groupDesc" style="color:var(--muted);margin-top:6px">Description</div>
+      <div>
+        <div class="section-title">Create Group (Cost: 100)</div>
+        <div class="create-row">
+          <input id="groupName" type="text" placeholder="Group name">
+          <button id="createBtn" class="btn btn-create">Create</button>
         </div>
+        <div id="createFeedback" class="empty"></div>
       </div>
-      <div class="section-title">Members</div>
-      <div id="membersList"></div>
-      <div id="groupActions" style="margin-top:12px"></div>
+      <div style="margin-top:14px">
+        <div class="section-title">Popular Groups</div>
+        <div id="groupsList"></div>
+      </div>
     </main>
   </div>
   <div class="footer">© 2026 OLDRBX</div>
@@ -80,66 +86,56 @@ document.addEventListener('DOMContentLoaded',async function(){
   const sb=supabase.createClient(SUPA_URL,SUPA_KEY);
   var hamb=document.getElementById('hamb'),sidebar=document.getElementById('sidebar');
   hamb.addEventListener('click',function(){if(window.innerWidth<1000)sidebar.classList.toggle('open')});
-  function nav(h){location.href=h}
-  document.querySelectorAll('.nav-item').forEach(function(it){it.addEventListener('click',function(){nav(it.dataset.h)})});
+  function navAll(h){location.href=h}
+  document.querySelectorAll('.nav-item').forEach(function(it){it.addEventListener('click',function(){navAll(it.dataset.h)})});
   var auth=null;try{auth=JSON.parse(localStorage.getItem('auth'))}catch(e){auth=null}
   if(!auth||!auth.username){location.replace('/web/login.html');return}
   document.getElementById('sideName').innerText=auth.username;
-  function setAv(u){var x=u||'/img/user.png';document.getElementById('sideAv').src=x;document.getElementById('topAv').src=x}
-  setAv(auth.avatarUrl||'/img/user.png');
+  function safeSrc(u){return u?u:'/img/user.png'}
+  function setAv(u){var x=safeSrc(u);document.getElementById('sideAv').src=x;document.getElementById('topAv').src=x}
+  setAv(auth.avatarUrl);
   document.getElementById('moneyIcon').src='/img/money.png';
-  var localBal=(typeof auth.balance!=='undefined'&&auth.balance!==null)?auth.balance:0;
-  document.getElementById('balanceText').innerText=String(localBal);
-  async function getUserRow(){var r=await sb.from('users').select('*').eq('username',auth.username).maybeSingle();if(r.error) return null;return r.data||null}
-  var userRow=await getUserRow();
+  document.getElementById('balanceText').innerText=String(typeof auth.balance!=='undefined'&&auth.balance!==null?auth.balance:0);
+  async function getUser(){try{const res=await sb.from('users').select('*').eq('username',auth.username).maybeSingle();if(res.error) return null;return res.data||null}catch(e){return null}}
+  var userRow=await getUser();
   if(userRow&&typeof userRow.balance!=='undefined')document.getElementById('balanceText').innerText=String(userRow.balance);
-  if(userRow&&userRow.id)await sb.from('users').update({last_active:new Date().toISOString()}).eq('id',userRow.id);
-  function getParam(name){var p=new URLSearchParams(location.search);return p.get(name)}
-  var gid=getParam('id');
-  if(!gid){document.getElementById('groupName').innerText='Group not found';document.getElementById('groupDesc').innerText='';document.getElementById('membersList').innerHTML='<div class="empty">No group specified</div>';return}
-  async function loadGroup(){
-    var g=await sb.from('groups').select('*').eq('id',gid).maybeSingle();
-    if(!g.data){document.getElementById('groupName').innerText='Group not found';document.getElementById('membersList').innerHTML='<div class="empty">Group missing</div>';return}
-    var group=g.data;
-    document.getElementById('groupName').innerText=group.name;
-    document.getElementById('groupDesc').innerText=group.description||'';
-    if(group.image_url)document.getElementById('groupImg').src=group.image_url;
-    var mem=await sb.from('group_members').select('user_id,joined_at, user_id(username,avatar_url)').eq('group_id',gid).order('joined_at',{ascending:true});
-    var wrap=document.getElementById('membersList');wrap.innerHTML='';
-    if(!mem.data||!mem.data.length){wrap.innerHTML='<div class="empty">No members</div>'} else {
-      for(var m of mem.data){
-        var row=document.createElement('div');row.className='member-row';
-        var left=document.createElement('div');left.style.display='flex';left.style.alignItems='center';left.style.gap='10px';
-        var av=document.createElement('img');av.src=(m.user_id&&m.user_id.avatar_url)?m.user_id.avatar_url:'/img/user.png';av.style.width='48px';av.style.height='48px';av.style.borderRadius='6px';
-        var nm=document.createElement('div');nm.innerHTML='<div style="font-weight:800">'+(m.user_id?m.user_id.username:'Unknown')+'</div><div style="font-size:12px;color:var(--muted)">joined '+(m.joined_at?new Date(m.joined_at).toLocaleDateString():'')+'</div>';
-        left.appendChild(av);left.appendChild(nm);
-        row.appendChild(left);
-        var right=document.createElement('div');
-        var btn=document.createElement('button');btn.className='btn button-muted';btn.style.background='#fff';btn.style.border='1px solid var(--border)';btn.innerText='View';btn.addEventListener('click',function(id){return function(){location.href='/web/home.html?u='+id}}(m.user_id?m.user_id.id:''));right.appendChild(btn);
-        row.appendChild(right);
-        wrap.appendChild(row);
+  if(userRow&&userRow.avatar_url) setAv(userRow.avatar_url);
+  if(userRow&&userRow.id){ try{ await sb.from('users').update({last_active:new Date().toISOString()}).eq('id',userRow.id) }catch(e){} }
+  async function refreshGroups(){
+    var wrap=document.getElementById('groupsList');wrap.innerHTML='';
+    try{
+      const res=await sb.from('groups').select('id,name,description,image_url,member_count').order('member_count',{ascending:false});
+      if(res.error||!res.data||!res.data.length){wrap.innerHTML='<div class="empty">No groups yet</div>';return}
+      for(var g of res.data){
+        var card=document.createElement('div');card.className='group-card';
+        var left=document.createElement('div');left.className='group-left';
+        var img=document.createElement('img');img.src=g.image_url?g.image_url:'/img/logo.png';
+        var txt=document.createElement('div');txt.innerHTML='<div style="font-weight:900">'+g.name+'</div><div style="font-size:12px;color:var(--muted)">'+(g.description||'')+'</div>';
+        left.appendChild(img);left.appendChild(txt);
+        var right=document.createElement('div');right.innerHTML='<div style="font-weight:800">'+(g.member_count||0)+' members</div>';
+        card.appendChild(left);card.appendChild(right);
+        card.addEventListener('click',function(id){return function(){location.href='/web/group.html?id='+id}}(g.id));
+        wrap.appendChild(card);
       }
-    }
-    var actions=document.getElementById('groupActions');actions.innerHTML='';
-    if(userRow && userRow.id === group.creator_id){
-      var edit=document.createElement('button');edit.className='btn';edit.innerText='Edit group';edit.addEventListener('click',function(){var newName=prompt('New name',group.name); if(newName){sb.from('groups').update({name:newName}).eq('id',gid); loadGroup()}});
-      actions.appendChild(edit);
-    } else {
-      var joined=false;
-      if(userRow){
-        var check=await sb.from('group_members').select('*').eq('group_id',gid).eq('user_id',userRow.id).maybeSingle();
-        if(check.data) joined=true;
-      }
-      if(joined){
-        var leave=document.createElement('button');leave.className='btn button-muted';leave.innerText='Leave group';leave.addEventListener('click',async function(){await sb.from('group_members').delete().eq('group_id',gid).eq('user_id',userRow.id); await sb.from('groups').update({member_count:sb.raw('member_count - 1')}).eq('id',gid); loadGroup()});
-        actions.appendChild(leave);
-      } else {
-        var join=document.createElement('button');join.className='btn';join.innerText='Join group';join.addEventListener('click',async function(){ if(!userRow) return; await sb.from('group_members').insert([{group_id:gid,user_id:userRow.id}]); await sb.from('groups').update({member_count:sb.raw('member_count + 1')}).eq('id',gid); loadGroup()});
-        actions.appendChild(join);
-      }
-    }
+    }catch(e){wrap.innerHTML='<div class="empty">Error loading groups</div>'}
   }
-  await loadGroup();
+  await refreshGroups();
+  document.getElementById('createBtn').addEventListener('click',async function(){
+    var name=document.getElementById('groupName').value.trim();
+    if(!name){document.getElementById('createFeedback').innerText='Enter group name';return}
+    userRow=await getUser();
+    var balance=(userRow&&typeof userRow.balance!=='undefined')?Number(userRow.balance):0;
+    if(balance<100){document.getElementById('createFeedback').innerText='Insufficient balance';return}
+    try{
+      const ins=await sb.from('groups').insert([{creator_id:userRow.id,name:name,description:'',member_count:1,cost:100}]).select().maybeSingle();
+      if(ins.error||!ins.data){document.getElementById('createFeedback').innerText='Failed to create group';return}
+      await sb.from('group_members').insert([{group_id:ins.data.id,user_id:userRow.id}]);
+      await sb.from('users').update({balance:balance-100}).eq('id',userRow.id);
+      document.getElementById('groupName').value='';
+      document.getElementById('createFeedback').innerText='Group created';
+      await refreshGroups();
+    }catch(e){document.getElementById('createFeedback').innerText='Failed to create group'}
+  });
   window.addEventListener('resize',function(){if(window.innerWidth>=1000)sidebar.classList.remove('open')});
 });
 </script>
