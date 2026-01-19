@@ -1,6 +1,7 @@
 <!doctype html>
-<html lang="en" class="h-100">
+<html lang="en">
 <head>
+<<<<<<< HEAD
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Homepaid - OLDRBX</title>
@@ -79,12 +80,149 @@ html,body{height:100%;margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;backg
         <div class="square">IN DEVELOPMENT</div>
         <div class="hint">Forums and more available via the menu</div>
       </div>
+=======
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Home - OLDRBX</title>
+<link rel="icon" href="img/ic.png">
+<style>
+  :root{
+    --blue:#0074bd;
+    --bg:#e9e9ea;
+    --panel:#ffffff;
+    --muted:#6d6d6d;
+    --border:#d5d7d9;
+  }
+  html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:#111}
+  a{color:inherit;text-decoration:none}
+
+  /* TOPBAR like forums */
+  .topbar{
+    height:56px;
+    background:var(--blue);
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:0 12px;
+    box-sizing:border-box;
+  }
+  .hamburger{
+    width:44px;height:44px;border-radius:6px;border:none;background:transparent;color:#fff;font-size:22px;
+    display:flex;align-items:center;justify-content:center;cursor:pointer;
+  }
+  .logo-img{height:34px}
+  .top-right{margin-left:auto;display:flex;align-items:center;gap:12px;padding-right:6px}
+
+  /* money: no white box */
+  .money-wrap{display:flex;align-items:center;gap:8px;color:#fff;font-weight:800}
+  .money-wrap img{width:22px;height:22px;display:block}
+  .balance{font-weight:800;color:#fff}
+
+  /* top small avatar */
+  .avatar{width:36px;height:36px;border-radius:50%;overflow:hidden;background:#fff;display:inline-block}
+  .avatar img{width:100%;height:100%;object-fit:cover;display:block}
+
+  /* layout */
+  .page{max-width:980px;margin:28px auto;padding:0 16px;box-sizing:border-box}
+  .container{display:grid;grid-template-columns:280px 1fr;gap:18px;align-items:start}
+  /* sidebar (same as forums) */
+  .sidebar{
+    background:var(--panel);
+    border:1px solid var(--border);
+    padding:12px;
+    box-sizing:border-box;
+  }
+  .nav-item{
+    padding:12px;border-radius:6px;display:flex;align-items:center;justify-content:space-between;font-weight:800;color:#111;
+    cursor:pointer;background:#fff;border:1px solid var(--border);margin-bottom:10px;
+  }
+
+  /* main panel minimal */
+  .main{
+    background:var(--panel);
+    border:1px solid var(--border);
+    padding:20px;
+    box-sizing:border-box;
+  }
+
+  .greet{display:flex;align-items:center;gap:14px}
+  .greet .big-av{width:72px;height:72px;border-radius:50%;overflow:hidden;box-shadow:0 6px 14px rgba(0,0,0,0.08)}
+  .greet .big-av img{width:100%;height:100%;object-fit:cover}
+  .greet h1{margin:0;font-size:44px;line-height:1;font-weight:900;color:#111}
+  .greet .sub{margin:0;color:var(--muted);font-size:14px}
+
+  .divider{height:1px;background:var(--border);margin:18px 0;border-radius:1px}
+
+  .splash{text-align:center;padding:8px}
+  .splash img{max-width:300px;width:100%;height:auto;display:block;margin:0 auto}
+  .splash p{margin-top:12px;color:var(--muted);font-size:15px}
+
+  /* footer like forums (not fixed) */
+  .footer{margin-top:18px;background:var(--panel);border-top:1px solid var(--border);padding:12px 16px;color:var(--muted);font-weight:700}
+
+  /* responsive: collapse sidebar on small screens */
+  @media(max-width:960px){
+    .container{grid-template-columns:1fr;gap:12px}
+    .sidebar{display:none} /* opened via hamburger */
+  }
+  /* mobile open sidebar */
+  .sidebar.open{display:block;position:fixed;left:0;top:56px;bottom:0;width:260px;z-index:1200;overflow:auto}
+</style>
+</head>
+<body>
+  <!-- TOPBAR (same structure as forums) -->
+  <div class="topbar">
+    <button id="hamb" class="hamburger" aria-label="menu">&#9776;</button>
+    <img src="img/logo.png" class="logo-img" alt="logo">
+    <div class="top-right">
+      <div class="money-wrap" title="Balance">
+        <img id="moneyIcon" src="img/money.png" alt="money">
+        <div class="balance" id="balanceText">0</div>
+      </div>
+      <a id="profileLinkTop" href="profile-paid.html" class="avatar" title="Profile">
+        <img id="topAv" src="img/user.png" alt="avatar">
+      </a>
+>>>>>>> 44e27bc366895070586737edb9ec240efa4d0367
     </div>
-  </main>
-</div>
-<footer class="footer">&copy; 2026 OLDRBX</footer>
+  </div>
+
+  <div class="page">
+    <div class="container">
+      <!-- SIDEBAR (like forums) -->
+      <aside id="sidebar" class="sidebar" aria-label="Main navigation">
+        <div class="nav-item" onclick="location.href='home-paid.html'">Home</div>
+        <div class="nav-item" onclick="location.href='forums-paid.html'">Forums</div>
+        <div class="nav-item" onclick="location.href='profile-paid.html'">Profile</div>
+      </aside>
+
+      <!-- MAIN -->
+      <main class="main" role="main" aria-labelledby="helloHeading">
+        <div class="greet">
+          <a id="profileLink" href="profile-paid.html" class="big-av">
+            <img id="heroAv" src="img/user.png" alt="user avatar">
+          </a>
+          <div>
+            <h1 id="helloHeading">Hello, User!</h1>
+            <p class="sub" id="greetSub"></p>
+          </div>
+        </div>
+
+        <div class="divider" aria-hidden="true"></div>
+
+        <div class="splash" role="note" aria-live="polite">
+          <img src="img/sorry.png" alt="working on site">
+          <p>I'm working on a full site — development is from scratch and takes time.</p>
+        </div>
+      </main>
+    </div>
+
+    <!-- footer stripe like forums -->
+    <footer class="footer">© 2026 OLDRBX</footer>
+  </div>
+
 <script>
 (function(){
+<<<<<<< HEAD
   var sid=document.getElementById('sidebar')
   var hamb=document.getElementById('hamb')
   try{var auth=JSON.parse(localStorage.getItem('auth'))}catch(e){auth=null}
@@ -105,3 +243,35 @@ html,body{height:100%;margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;backg
 
 
 
+=======
+  // sidebar toggle (same behavior as forums)
+  var hamb = document.getElementById('hamb');
+  var sidebar = document.getElementById('sidebar');
+  hamb.addEventListener('click', function(){
+    // on small screens show/hide sidebar
+    if(window.innerWidth < 960){
+      sidebar.classList.toggle('open');
+    }
+  });
+
+  // populate user data from localStorage.auth
+  var auth = null;
+  try{ auth = JSON.parse(localStorage.getItem('auth')) }catch(e){ auth = null }
+  if(!auth) auth = {}; // don't redirect here, just show defaults
+
+  var name = auth.username || 'User';
+  var avatar = auth.avatarUrl || 'img/user.png';
+  var balance = (typeof auth.balance !== 'undefined' && auth.balance !== null) ? auth.balance : 0;
+
+  document.getElementById('helloHeading').innerText = 'Hello, ' + name + '!';
+  document.getElementById('heroAv').src = avatar;
+  document.getElementById('topAv').src = avatar;
+  document.getElementById('balanceText').innerText = String(balance);
+
+  // ensure money icon is transparent PNG in img/money.png
+  document.getElementById('moneyIcon').src = 'img/money.png';
+})();
+</script>
+</body>
+</html>
+>>>>>>> 44e27bc366895070586737edb9ec240efa4d0367
