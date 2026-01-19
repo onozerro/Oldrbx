@@ -8,8 +8,8 @@
 <style>
 :root{--bg:#efefef;--panel:#ffffff;--muted:#666;--border:#d7d7d7;--accent:#111}
 html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:#111}
-.topbar{height:56px;background:var(--accent);display:flex;align-items:center;padding:0 12px;gap:12px;box-sizing:border-box}
-.hamburger{width:44px;height:44px;border-radius:6px;border:none;background:transparent;color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.topbar{height:56px;background:var(--accent);display:flex;align-items:center;padding:0 12px;gap:12px}
+.hamburger{width:44px;height:44px;border:none;background:transparent;color:#fff;font-size:22px;cursor:pointer}
 .logo-img{height:32px}
 .top-right{margin-left:auto;display:flex;align-items:center;gap:12px}
 .money-wrap{display:flex;align-items:center;gap:8px;color:#fff;font-weight:800}
@@ -17,9 +17,9 @@ html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,
 .balance{font-weight:800;color:#fff}
 .avatar{width:36px;height:36px;border-radius:6px;overflow:hidden;background:#fff;display:inline-block}
 .avatar img{width:100%;height:100%;object-fit:cover}
-.container{max-width:1100px;margin:20px auto;padding:0 16px;box-sizing:border-box}
+.container{max-width:1100px;margin:20px auto;padding:0 16px}
 .layout{display:grid;grid-template-columns:300px 1fr;gap:18px;align-items:start}
-.sidebar{background:var(--panel);border:1px solid var(--border);padding:12px;border-radius:6px;min-height:320px}
+.sidebar{background:var(--panel);border:1px solid var(--border);padding:12px;border-radius:6px}
 .user-header{display:flex;gap:12px;align-items:center;margin-bottom:8px}
 .user-header .mini{width:44px;height:44px;border-radius:6px;overflow:hidden}
 .user-header .mini img{width:100%;height:100%;object-fit:cover}
@@ -32,19 +32,15 @@ html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,
 .user-left img{width:48px;height:48px;border-radius:6px;object-fit:cover;flex-shrink:0}
 .status-online{color:green;font-weight:800}
 .status-off{color:var(--muted)}
-.btn{padding:8px 12px;border-radius:6px;border:none;font-weight:800;cursor:pointer;background:#fff;border:1px solid var(--border)}
+.btn{padding:8px 12px;border-radius:6px;border:1px solid var(--border);background:#fff;font-weight:800;cursor:pointer}
 .empty{color:var(--muted);padding:12px;text-align:center}
-.footer{margin-top:18px;background:var(--panel);border-top:1px solid var(--border);padding:10px 16px;color:var(--muted);font-weight:700;border-radius:0;text-align:center}
-@media(max-width:1000px){
-  .layout{grid-template-columns:1fr}
-  .sidebar{position:fixed;left:-360px;top:56px;height:calc(100% - 56px);width:280px;z-index:1200;transition:left .18s ease}
-  .sidebar.open{left:0}
-}
+.footer{margin-top:18px;background:var(--panel);border-top:1px solid var(--border);padding:10px 16px;color:var(--muted);font-weight:700;text-align:center}
+@media(max-width:1000px){.layout{grid-template-columns:1fr}.sidebar{position:fixed;left:-360px;top:56px;height:calc(100% - 56px);width:280px;z-index:1200;transition:left .18s ease}.sidebar.open{left:0}}
 </style>
 </head>
 <body>
 <div class="topbar">
-  <button id="hamb" class="hamburger" aria-label="menu">&#9776;</button>
+  <button id="hamb" class="hamburger">&#9776;</button>
   <img src="/img/logo.png" class="logo-img" alt="logo">
   <div class="top-right">
     <div class="money-wrap" title="Balance">
@@ -57,7 +53,7 @@ html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,
 
 <div class="container">
   <div class="layout">
-    <aside id="sidebar" class="sidebar" aria-label="Main navigation">
+    <aside id="sidebar" class="sidebar">
       <div class="user-header">
         <div class="mini"><img id="sideAv" src="/img/user.png" alt=""></div>
         <div><div id="sideName" class="username">User</div></div>
@@ -68,7 +64,6 @@ html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,
       <div class="nav-item" data-h="/web/forums.html">Forums</div>
       <div class="nav-item" data-h="/web/users.html">Users</div>
     </aside>
-
     <main class="main" role="main">
       <div class="section-title">Registered Users</div>
       <div id="usersList"></div>
@@ -79,15 +74,12 @@ html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-function timeAgo(d){
-  if(!d) return '';
-  const diffSec=Math.floor((Date.now()-new Date(d).getTime())/1000);
-  if(diffSec<60)return diffSec+'s ago';
-  const m=Math.floor(diffSec/60);if(m<60)return m+'m ago';
-  const h=Math.floor(m/60);if(h<24)return h+'h ago';
-  const day=Math.floor(h/24);return day+'d ago';
+function formatLastSeen(dateStr){
+  if(!dateStr) return "Never online";
+  const date=new Date(dateStr);
+  return "Last seen on "+date.toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"})+
+         " at "+date.toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit"});
 }
-
 document.addEventListener('DOMContentLoaded',async()=>{
   const SUPA_URL="https://nkvvnnjukqtfhmegyzek.supabase.co";
   const SUPA_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rdnZubmp1a3R0ZmhtZWd5emVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2NjQ5MTIsImV4cCI6MjA4NDI0MDkxMn0.2jp9X2KQunFargrstYM7oGBYs75Kq7AEHs7iRARxexs";
@@ -103,49 +95,35 @@ document.addEventListener('DOMContentLoaded',async()=>{
   if(!auth||!auth.username){location.replace('/web/login.html');return}
   document.getElementById('sideName').innerText=auth.username;
   function safeSrc(u){return u&&u.trim()?u:'/img/user.png'}
-  function setAv(u){
-    const src=safeSrc(u);
-    document.getElementById('sideAv').src=src;
-    document.getElementById('topAv').src=src;
-  }
+  function setAv(u){const s=safeSrc(u);document.getElementById('sideAv').src=s;document.getElementById('topAv').src=s}
   setAv(auth.avatarUrl);
   document.getElementById('moneyIcon').src='/img/money.png';
   document.getElementById('balanceText').innerText=String(auth.balance??0);
 
   async function getUser(){
-    const res=await sb.from('users').select('*').eq('username',auth.username).maybeSingle();
-    if(res.error)return null;
-    return res.data||null;
+    const r=await sb.from('users').select('*').eq('username',auth.username).maybeSingle();
+    return r.data||null;
   }
-  const userRow=await getUser();
-  if(userRow?.balance!=null)document.getElementById('balanceText').innerText=String(userRow.balance);
-  if(userRow?.avatar_url)setAv(userRow.avatar_url);
-  if(userRow?.id)await sb.from('users').update({last_active:new Date().toISOString()}).eq('id',userRow.id);
+  const me=await getUser();
+  if(me?.balance!=null)document.getElementById('balanceText').innerText=String(me.balance);
+  if(me?.avatar_url)setAv(me.avatar_url);
+  if(me?.id)await sb.from('users').update({last_active:new Date().toISOString()}).eq('id',me.id);
 
   const list=document.getElementById('usersList');
-  list.innerHTML='<div class="empty">Loading...</div>';
+  list.innerHTML='<div class="empty">Loading users...</div>';
 
   try{
-    const res=await sb.from('users').select('id,username,balance,avatar_url,registered_on,last_active').order('registered_on',{ascending:false});
-    if(res.error||!res.data||!res.data.length){
-      list.innerHTML='<div class="empty">No users registered</div>';
-      return;
-    }
+    const r=await sb.from('users').select('id,username,avatar_url,balance,last_active,registered_on').order('registered_on',{ascending:false});
+    if(!r.data||!r.data.length){list.innerHTML='<div class="empty">No registered users</div>';return;}
     list.innerHTML='';
-    for(const u of res.data){
-      const row=document.createElement('div');
-      row.className='user-row';
-
-      const left=document.createElement('div');
-      left.className='user-left';
-      const av=document.createElement('img');
-      av.src=safeSrc(u.avatar_url);
+    for(const u of r.data){
+      const row=document.createElement('div');row.className='user-row';
+      const left=document.createElement('div');left.className='user-left';
+      const av=document.createElement('img');av.src=safeSrc(u.avatar_url);
       const info=document.createElement('div');
-      info.innerHTML=`
-        <div style="font-weight:800">${u.username}</div>
-        <div style="font-size:12px;color:var(--muted)">Registered: ${u.registered_on?new Date(u.registered_on).toLocaleDateString():'unknown'}</div>
-        <div style="font-size:12px;color:var(--muted)">Balance: ${u.balance??0}</div>
-      `;
+      info.innerHTML=`<div style="font-weight:800">${u.username}</div>
+        <div style="font-size:12px;color:var(--muted)">Registered: ${u.registered_on?new Date(u.registered_on).toLocaleDateString("en-US"):''}</div>
+        <div style="font-size:12px;color:var(--muted)">Balance: ${u.balance??0}</div>`;
       left.appendChild(av);
       left.appendChild(info);
 
@@ -153,9 +131,17 @@ document.addEventListener('DOMContentLoaded',async()=>{
       const status=document.createElement('div');
       if(u.last_active){
         const diff=(Date.now()-new Date(u.last_active).getTime())/1000;
-        if(diff<60){status.className='status-online';status.innerText='Online';}
-        else{status.className='status-off';status.innerText='Last seen '+timeAgo(u.last_active);}
-      }else{status.className='status-off';status.innerText='Never online';}
+        if(diff<60){
+          status.className='status-online';
+          status.innerText='Online';
+        } else {
+          status.className='status-off';
+          status.innerText=formatLastSeen(u.last_active);
+        }
+      } else {
+        status.className='status-off';
+        status.innerText='Never online';
+      }
       const btn=document.createElement('button');
       btn.className='btn';
       btn.innerText='View';
