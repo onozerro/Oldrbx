@@ -55,7 +55,7 @@ button{padding:8px 12px;border-radius:6px;border:none;background:var(--accent);c
       <img id="moneyIcon" src="/img/money.png" alt="money">
       <div id="balanceText" class="balance">0</div>
     </div>
-    <a id="profileBtn" class="avatar" href="/web/home.html"><img id="topAv" src="/img/user.png" alt="avatar"></a>
+    <a id="profileBtnTop" class="avatar" href="/web/home.html"><img id="topAv" src="/img/user.png" alt="avatar"></a>
   </div>
 </div>
 <div class="container-wrap">
@@ -65,11 +65,12 @@ button{padding:8px 12px;border-radius:6px;border:none;background:var(--accent);c
         <div class="mini"><img id="sideAv" src="/img/user.png" alt=""></div>
         <div><div id="sideName" class="username">User</div></div>
       </div>
-      <div id="mHome" class="nav-item" data-h="/web/home.html">Home</div>
-      <div id="mProfile" class="nav-item" data-h="/web/home.html">Profile</div>
-      <div id="mFriends" class="nav-item" data-h="/web/friends.html">Friends</div>
-      <div id="mGroups" class="nav-item" data-h="/web/groups.html">Groups</div>
-      <div id="mForums" class="nav-item" data-h="/web/forums.html">Forums</div>
+      <div id="navHome" class="nav-item" data-h="/web/home.html">Home</div>
+      <div id="navProfile" class="nav-item" data-h="/web/home.html">Profile</div>
+      <div id="navFriends" class="nav-item" data-h="/web/friends.html">Friends</div>
+      <div id="navGroups" class="nav-item" data-h="/web/groups.html">Groups</div>
+      <div id="navForums" class="nav-item" data-h="/web/forums.html">Forums</div>
+      <div id="navUsers" class="nav-item" data-h="/web/users.html">Users</div>
     </aside>
     <main class="main" role="main">
       <div class="profile-row">
@@ -107,24 +108,24 @@ document.addEventListener('DOMContentLoaded',async function(){
   var hamb=document.getElementById('hamb'),sidebar=document.getElementById('sidebar');
   hamb.addEventListener('click',function(){if(window.innerWidth<1000)sidebar.classList.toggle('open')});
   var auth=null;try{auth=JSON.parse(localStorage.getItem('auth'))}catch(e){auth=null}
-  async function resolveLogin(){try{var r=await fetch('/web/login.html',{method:'HEAD'});if(r.ok) return '/web/login.html'}catch(e){}return '/web/login.html'}
-  var loginPath=await resolveLogin();
-  if(!auth||!auth.username){location.replace(loginPath);return}
+  if(!auth||!auth.username){location.replace('/web/login.html');return}
   function nav(h){location.href=h}
-  var menu=document.querySelectorAll('.nav-item');menu.forEach(function(it){it.addEventListener('click',function(){nav(it.dataset.h)})});
+  document.querySelectorAll('.nav-item').forEach(function(it){it.addEventListener('click',function(){nav(it.dataset.h)})});
+  document.getElementById('profileBtnTop').href='/web/home.html';
   document.getElementById('sideName').innerText=auth.username;
   document.getElementById('hello').innerText='Hello, '+auth.username+'!';
-  document.getElementById('profileBtn').href='/web/home.html';
   function setAv(u){var x=u||'/img/user.png';document.getElementById('heroAv').src=x;document.getElementById('sideAv').src=x;document.getElementById('topAv').src=x}
   setAv(auth.avatarUrl||'/img/user.png');
   document.getElementById('moneyIcon').src='/img/money.png';
   var localBal=(typeof auth.balance!=='undefined'&&auth.balance!==null)?auth.balance:0;
   document.getElementById('balanceText').innerText=String(localBal);
-  async function getUser(){var r=await sb.from('users').select('*').eq('username',auth.username).maybeSingle();if(r.error) return null;return r.data||null}
-  var userRow=await getUser();
+  async function getUserRow(){var r=await sb.from('users').select('*').eq('username',auth.username).maybeSingle();if(r.error) return null;return r.data||null}
+  var userRow=await getUserRow();
   if(userRow&&typeof userRow.balance!=='undefined')document.getElementById('balanceText').innerText=String(userRow.balance);
   if(userRow&&userRow.avatar_url)setAv(userRow.avatar_url);
   if(userRow&&userRow.description)document.getElementById('descInput').value=userRow.description;
+  async function setLastActive(){ if(userRow&&userRow.id){ await sb.from('users').update({last_active:new Date().toISOString()}).eq('id',userRow.id) } }
+  await setLastActive();
   async function loadFriends(){
     var wrap=document.getElementById('friendsWrap');wrap.innerHTML='';
     if(!userRow){wrap.innerHTML='<div class="empty">You have no friends yet</div>';return}
@@ -142,16 +143,16 @@ document.addEventListener('DOMContentLoaded',async function(){
       var img=document.createElement('img');img.src=u.avatar_url?u.avatar_url:'/img/user.png';
       var nm=document.createElement('div');nm.className='friend-name';nm.innerText=u.username;
       card.appendChild(img);card.appendChild(nm);
-      card.addEventListener('click',function(id){return function(){location.href='/web/profile.html?u='+id}}(u.id));
+      card.addEventListener('click',function(id){return function(){location.href='/web/home.html?u='+id}}(u.id));
       wrap.appendChild(card);
     }
   }
   await loadFriends();
   document.getElementById('saveDesc').addEventListener('click',async function(){
     var v=document.getElementById('descInput').value||'';
-    if(!userRow) userRow=await getUser();
+    if(!userRow) userRow=await getUserRow();
     var upd=await sb.from('users').update({description:v}).eq('id',userRow.id);
-    if(!upd.error){localStorage.setItem('auth',JSON.stringify(Object.assign({},auth,{description:v})))}
+    if(!upd.error){localStorage.setItem('auth',JSON.stringify(Object.assign({},auth,{description:v})));userRow.description=v}
   });
   document.getElementById('cancelDesc').addEventListener('click',function(){if(userRow&&userRow.description)document.getElementById('descInput').value=userRow.description;else document.getElementById('descInput').value=''});
   window.addEventListener('resize',function(){if(window.innerWidth>=1000)sidebar.classList.remove('open')});
