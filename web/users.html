@@ -11,27 +11,35 @@ html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,
 .topbar{height:56px;background:var(--accent);display:flex;align-items:center;padding:0 12px;gap:12px;box-sizing:border-box}
 .hamburger{width:44px;height:44px;border-radius:6px;border:none;background:transparent;color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer}
 .logo-img{height:32px}
-.container{max-width:1100px;margin:20px auto;padding:0 16px;box-sizing:border-box}
 .top-right{margin-left:auto;display:flex;align-items:center;gap:12px}
 .money-wrap{display:flex;align-items:center;gap:8px;color:#fff;font-weight:800}
 .money-wrap img{width:20px;height:20px}
 .balance{font-weight:800;color:#fff}
+.avatar{width:36px;height:36px;border-radius:6px;overflow:hidden;background:#fff;display:inline-block}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.container{max-width:1100px;margin:20px auto;padding:0 16px;box-sizing:border-box}
 .layout{display:grid;grid-template-columns:300px 1fr;gap:18px;align-items:start}
 .sidebar{background:var(--panel);border:1px solid var(--border);padding:12px;border-radius:6px;min-height:320px}
 .user-header{display:flex;gap:12px;align-items:center;margin-bottom:8px}
 .user-header .mini{width:44px;height:44px;border-radius:6px;overflow:hidden}
 .user-header .mini img{width:100%;height:100%;object-fit:cover}
+.username{font-weight:900}
 .nav-item{padding:12px;border-radius:6px;background:#fff;border:1px solid var(--border);font-weight:800;margin-bottom:10px;cursor:pointer}
 .main{background:var(--panel);border:1px solid var(--border);padding:18px;border-radius:6px}
 .section-title{font-weight:900;margin-bottom:8px}
-.user-row{display:flex;align-items:center;justify-content:space-between;padding:8px;border:1px solid var(--border);border-radius:6px;margin-bottom:8px;background:#fff}
+.user-row{display:flex;align-items:center;justify-content:space-between;padding:10px;border:1px solid var(--border);border-radius:6px;margin-bottom:8px;background:#fff}
 .user-left{display:flex;align-items:center;gap:10px}
-.user-left img{width:48px;height:48px;border-radius:6px;object-fit:cover}
+.user-left img{width:48px;height:48px;border-radius:6px;object-fit:cover;flex-shrink:0}
 .status-online{color:green;font-weight:800}
 .status-off{color:var(--muted)}
+.btn{padding:8px 12px;border-radius:6px;border:none;font-weight:800;cursor:pointer;background:#fff;border:1px solid var(--border)}
 .empty{color:var(--muted);padding:12px;text-align:center}
 .footer{margin-top:18px;background:var(--panel);border-top:1px solid var(--border);padding:10px 16px;color:var(--muted);font-weight:700;border-radius:0;text-align:center}
-@media(max-width:1000px){.layout{grid-template-columns:1fr}.sidebar{position:fixed;left:-360px;top:56px;height:calc(100% - 56px);width:280px;z-index:1200;transition:left .18s ease}.sidebar.open{left:0}}
+@media(max-width:1000px){
+  .layout{grid-template-columns:1fr}
+  .sidebar{position:fixed;left:-360px;top:56px;height:calc(100% - 56px);width:280px;z-index:1200;transition:left .18s ease}
+  .sidebar.open{left:0}
+}
 </style>
 </head>
 <body>
@@ -46,42 +54,45 @@ html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,
     <a id="topAvatar" class="avatar" href="/web/home.html"><img id="topAv" src="/img/user.png" alt="avatar"></a>
   </div>
 </div>
+
 <div class="container">
   <div class="layout">
     <aside id="sidebar" class="sidebar" aria-label="Main navigation">
-      <div class="user-header"><div class="mini"><img id="sideAv" src="/img/user.png" alt=""></div><div><div id="sideName" class="username">User</div></div></div>
+      <div class="user-header">
+        <div class="mini"><img id="sideAv" src="/img/user.png" alt=""></div>
+        <div><div id="sideName" class="username">User</div></div>
+      </div>
       <div class="nav-item" data-h="/web/home.html">Home</div>
       <div class="nav-item" data-h="/web/friends.html">Friends</div>
       <div class="nav-item" data-h="/web/groups.html">Groups</div>
       <div class="nav-item" data-h="/web/forums.html">Forums</div>
       <div class="nav-item" data-h="/web/users.html">Users</div>
     </aside>
+
     <main class="main" role="main">
-      <div>
-        <div class="section-title">Registered Users</div>
-        <div id="usersList"></div>
-      </div>
+      <div class="section-title">Registered Users</div>
+      <div id="usersList"></div>
     </main>
   </div>
   <div class="footer">© 2026 OLDRBX</div>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 function timeAgo(d){
   if(!d) return '';
-  const diffSec = Math.floor((Date.now()-new Date(d).getTime())/1000);
-  if(diffSec < 60) return diffSec+'s ago';
-  const m = Math.floor(diffSec/60);
-  if(m<60) return m+'m ago';
-  const h = Math.floor(m/60);
-  if(h<24) return h+'h ago';
-  const day = Math.floor(h/24);
-  return day+'d ago';
+  const diffSec=Math.floor((Date.now()-new Date(d).getTime())/1000);
+  if(diffSec<60)return diffSec+'s ago';
+  const m=Math.floor(diffSec/60);if(m<60)return m+'m ago';
+  const h=Math.floor(m/60);if(h<24)return h+'h ago';
+  const day=Math.floor(h/24);return day+'d ago';
 }
-document.addEventListener('DOMContentLoaded',async function(){
+
+document.addEventListener('DOMContentLoaded',async()=>{
   const SUPA_URL="https://nkvvnnjukqtfhmegyzek.supabase.co";
   const SUPA_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rdnZubmp1a3R0ZmhtZWd5emVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2NjQ5MTIsImV4cCI6MjA4NDI0MDkxMn0.2jp9X2KQunFargrstYM7oGBYs75Kq7AEHs7iRARxexs";
   const sb=supabase.createClient(SUPA_URL,SUPA_KEY);
+
   const hamb=document.getElementById('hamb');
   const sidebar=document.getElementById('sidebar');
   hamb.addEventListener('click',()=>{if(window.innerWidth<1000)sidebar.classList.toggle('open')});
@@ -91,51 +102,67 @@ document.addEventListener('DOMContentLoaded',async function(){
   try{auth=JSON.parse(localStorage.getItem('auth'))}catch(e){auth=null}
   if(!auth||!auth.username){location.replace('/web/login.html');return}
   document.getElementById('sideName').innerText=auth.username;
-  function safeSrc(u){return u?u:'/img/user.png'}
-  function setAv(u){const x=safeSrc(u);document.getElementById('sideAv').src=x;document.getElementById('topAv').src=x}
+  function safeSrc(u){return u&&u.trim()?u:'/img/user.png'}
+  function setAv(u){
+    const src=safeSrc(u);
+    document.getElementById('sideAv').src=src;
+    document.getElementById('topAv').src=src;
+  }
   setAv(auth.avatarUrl);
   document.getElementById('moneyIcon').src='/img/money.png';
   document.getElementById('balanceText').innerText=String(auth.balance??0);
 
   async function getUser(){
     const res=await sb.from('users').select('*').eq('username',auth.username).maybeSingle();
-    if(res.error) return null;
+    if(res.error)return null;
     return res.data||null;
   }
   const userRow=await getUser();
-  if(userRow?.balance!=null) document.getElementById('balanceText').innerText=String(userRow.balance);
-  if(userRow?.avatar_url) setAv(userRow.avatar_url);
-  if(userRow?.id) await sb.from('users').update({last_active:new Date().toISOString()}).eq('id',userRow.id);
+  if(userRow?.balance!=null)document.getElementById('balanceText').innerText=String(userRow.balance);
+  if(userRow?.avatar_url)setAv(userRow.avatar_url);
+  if(userRow?.id)await sb.from('users').update({last_active:new Date().toISOString()}).eq('id',userRow.id);
 
   const list=document.getElementById('usersList');
+  list.innerHTML='<div class="empty">Loading...</div>';
+
   try{
     const res=await sb.from('users').select('id,username,balance,avatar_url,registered_on,last_active').order('registered_on',{ascending:false});
-    if(res.error||!res.data||!res.data.length){list.innerHTML='<div class="empty">No users registered</div>';return}
+    if(res.error||!res.data||!res.data.length){
+      list.innerHTML='<div class="empty">No users registered</div>';
+      return;
+    }
+    list.innerHTML='';
     for(const u of res.data){
-      const row=document.createElement('div');row.className='user-row';
-      const left=document.createElement('div');left.className='user-left';
-      const av=document.createElement('img');av.src=u.avatar_url||'/img/user.png';
+      const row=document.createElement('div');
+      row.className='user-row';
+
+      const left=document.createElement('div');
+      left.className='user-left';
+      const av=document.createElement('img');
+      av.src=safeSrc(u.avatar_url);
       const info=document.createElement('div');
-      info.innerHTML=`<div style="font-weight:800">${u.username}</div>
-                      <div style="font-size:12px;color:var(--muted)">
-                        Registered: ${u.registered_on?new Date(u.registered_on).toLocaleDateString():'unknown'}
-                      </div>
-                      <div style="font-size:12px;color:var(--muted)">Balance: ${u.balance??0}</div>`;
+      info.innerHTML=`
+        <div style="font-weight:800">${u.username}</div>
+        <div style="font-size:12px;color:var(--muted)">Registered: ${u.registered_on?new Date(u.registered_on).toLocaleDateString():'unknown'}</div>
+        <div style="font-size:12px;color:var(--muted)">Balance: ${u.balance??0}</div>
+      `;
       left.appendChild(av);
       left.appendChild(info);
+
       const right=document.createElement('div');
       const status=document.createElement('div');
       if(u.last_active){
         const diff=(Date.now()-new Date(u.last_active).getTime())/1000;
-        if(diff<60) status.className='status-online',status.innerText='Online';
-        else status.className='status-off',status.innerText='Last seen '+timeAgo(u.last_active);
-      } else status.className='status-off',status.innerText='Never online';
+        if(diff<60){status.className='status-online';status.innerText='Online';}
+        else{status.className='status-off';status.innerText='Last seen '+timeAgo(u.last_active);}
+      }else{status.className='status-off';status.innerText='Never online';}
       const btn=document.createElement('button');
-      btn.className='btn';btn.innerText='View';
-      btn.style.marginLeft='10px';
+      btn.className='btn';
+      btn.innerText='View';
       btn.addEventListener('click',()=>location.href='/web/home.html?u='+u.id);
       right.appendChild(status);
       right.appendChild(btn);
+
       row.appendChild(left);
       row.appendChild(right);
       list.appendChild(row);
@@ -143,6 +170,7 @@ document.addEventListener('DOMContentLoaded',async function(){
   }catch(e){
     list.innerHTML='<div class="empty">Error loading users</div>';
   }
+
   window.addEventListener('resize',()=>{if(window.innerWidth>=1000)sidebar.classList.remove('open')});
 });
 </script>
