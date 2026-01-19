@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Home - OLDRBX</title>
+<link rel="icon" href="/img/ic.png">
+<style>
+:root{--bg:#efefef;--panel:#ffffff;--muted:#666;--border:#d7d7d7;--accent:#111;--shadow:rgba(0,0,0,0.06)}
+html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:#111}
+.topbar{height:56px;background:var(--accent);display:flex;align-items:center;padding:0 12px;gap:12px;box-sizing:border-box}
+.hamburger{width:44px;height:44px;border-radius:4px;border:none;background:transparent;color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.logo-img{height:32px}
+.top-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.money-wrap{display:flex;align-items:center;gap:8px;color:#fff;font-weight:800}
+.money-wrap img{width:20px;height:20px}
+.balance{font-weight:800;color:#fff}
+.avatar{width:36px;height:36px;border-radius:6px;overflow:hidden;background:#fff;display:inline-block}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.container-wrap{max-width:1100px;margin:20px auto;padding:0 16px;box-sizing:border-box}
+.layout{display:grid;grid-template-columns:300px 1fr;gap:18px;align-items:start}
+.sidebar{background:var(--panel);border:1px solid var(--border);padding:12px;border-radius:6px;min-height:320px}
+.user-header{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+.user-header .mini{width:44px;height:44px;border-radius:6px;overflow:hidden}
+.user-header .mini img{width:100%;height:100%;object-fit:cover}
+.username{font-weight:900}
+.nav-item{padding:12px;border-radius:6px;background:#fff;border:1px solid var(--border);font-weight:800;margin-bottom:10px;cursor:pointer}
+.main{background:var(--panel);border:1px solid var(--border);padding:18px;border-radius:6px;display:flex;flex-direction:column;gap:16px;min-height:420px}
+.profile-row{display:flex;gap:16px;align-items:center}
+.hero-av{width:88px;height:88px;border-radius:6px;overflow:hidden}
+.hero-av img{width:100%;height:100%;object-fit:cover}
+.greet h1{margin:0;font-size:28px;font-weight:900}
+.greet .sub{color:var(--muted);font-size:13px;margin-top:4px}
+.divider{height:1px;background:var(--border);border-radius:1px}
+.section-title{font-weight:900}
+.friends-panel{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:12px}
+.friend{display:flex;flex-direction:column;align-items:center;padding:8px;background:#fff;border:1px solid var(--border);border-radius:6px;gap:8px}
+.friend img{width:54px;height:54px;border-radius:6px;object-fit:cover}
+.friend-name{font-weight:800;font-size:13px;text-align:center}
+.edit-area{display:flex;flex-direction:column;gap:8px}
+textarea{min-height:80px;border:1px solid var(--border);padding:8px;border-radius:6px;resize:vertical;font-family:inherit}
+button{padding:8px 12px;border-radius:6px;border:none;background:var(--accent);color:#fff;font-weight:800;cursor:pointer}
+.button-muted{background:#fff;border:1px solid var(--border);color:#111}
+.empty{color:var(--muted);padding:12px;text-align:center}
+.footer{margin-top:18px;background:var(--panel);border-top:1px solid var(--border);padding:10px 16px;color:var(--muted);font-weight:700;border-radius:0;text-align:center}
+@media(max-width:1000px){.layout{grid-template-columns:1fr}.sidebar{position:fixed;left:-360px;top:56px;height:calc(100% - 56px);width:280px;z-index:1200;transition:left .18s ease}.sidebar.open{left:0}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <button id="hamb" class="hamburger" aria-label="menu">&#9776;</button>
+  <img src="/img/logo.png" class="logo-img" alt="logo">
+  <div class="top-right">
+    <div class="money-wrap" title="Balance">
+      <img id="moneyIcon" src="/img/money.png" alt="money">
+      <div id="balanceText" class="balance">0</div>
+    </div>
+    <a id="profileBtn" class="avatar" href="/web/home.html"><img id="topAv" src="/img/user.png" alt="avatar"></a>
+  </div>
+</div>
+<div class="container-wrap">
+  <div class="layout">
+    <aside id="sidebar" class="sidebar" aria-label="Main navigation">
+      <div class="user-header">
+        <div class="mini"><img id="sideAv" src="/img/user.png" alt=""></div>
+        <div><div id="sideName" class="username">User</div></div>
+      </div>
+      <div id="mHome" class="nav-item" data-h="/web/home.html">Home</div>
+      <div id="mProfile" class="nav-item" data-h="/web/home.html">Profile</div>
+      <div id="mFriends" class="nav-item" data-h="/web/friends.html">Friends</div>
+      <div id="mGroups" class="nav-item" data-h="/web/groups.html">Groups</div>
+      <div id="mForums" class="nav-item" data-h="/web/forums.html">Forums</div>
+    </aside>
+    <main class="main" role="main">
+      <div class="profile-row">
+        <div class="hero-av"><img id="heroAv" src="/img/user.png" alt=""></div>
+        <div class="greet">
+          <h1 id="hello">Hello, User!</h1>
+          <div class="sub" id="greetSub">Welcome back</div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div>
+        <div class="section-title">Your Friends</div>
+        <div id="friendsWrap" class="friends-panel"></div>
+      </div>
+      <div>
+        <div class="section-title">Profile Description</div>
+        <div class="edit-area">
+          <textarea id="descInput" placeholder="Write something about yourself..."></textarea>
+          <div style="display:flex;gap:8px;justify-content:flex-end">
+            <button id="saveDesc">Save</button>
+            <button id="cancelDesc" class="button-muted">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <div class="footer">© 2026 OLDRBX</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+document.addEventListener('DOMContentLoaded',async function(){
+  const SUPA_URL="https://nkvvnnjukqtfhmegyzek.supabase.co";
+  const SUPA_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rdnZubmp1a3R0ZmhtZWd5emVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2NjQ5MTIsImV4cCI6MjA4NDI0MDkxMn0.2jp9X2KQunFargrstYM7oGBYs75Kq7AEHs7iRARxexs";
+  const sb=supabase.createClient(SUPA_URL,SUPA_KEY);
+  var hamb=document.getElementById('hamb'),sidebar=document.getElementById('sidebar');
+  hamb.addEventListener('click',function(){if(window.innerWidth<1000)sidebar.classList.toggle('open')});
+  var auth=null;try{auth=JSON.parse(localStorage.getItem('auth'))}catch(e){auth=null}
+  async function resolveLogin(){try{var r=await fetch('/web/login.html',{method:'HEAD'});if(r.ok) return '/web/login.html'}catch(e){}return '/web/login.html'}
+  var loginPath=await resolveLogin();
+  if(!auth||!auth.username){location.replace(loginPath);return}
+  function nav(h){location.href=h}
+  var menu=document.querySelectorAll('.nav-item');menu.forEach(function(it){it.addEventListener('click',function(){nav(it.dataset.h)})});
+  document.getElementById('sideName').innerText=auth.username;
+  document.getElementById('hello').innerText='Hello, '+auth.username+'!';
+  document.getElementById('profileBtn').href='/web/home.html';
+  function setAv(u){var x=u||'/img/user.png';document.getElementById('heroAv').src=x;document.getElementById('sideAv').src=x;document.getElementById('topAv').src=x}
+  setAv(auth.avatarUrl||'/img/user.png');
+  document.getElementById('moneyIcon').src='/img/money.png';
+  var localBal=(typeof auth.balance!=='undefined'&&auth.balance!==null)?auth.balance:0;
+  document.getElementById('balanceText').innerText=String(localBal);
+  async function getUser(){var r=await sb.from('users').select('*').eq('username',auth.username).maybeSingle();if(r.error) return null;return r.data||null}
+  var userRow=await getUser();
+  if(userRow&&typeof userRow.balance!=='undefined')document.getElementById('balanceText').innerText=String(userRow.balance);
+  if(userRow&&userRow.avatar_url)setAv(userRow.avatar_url);
+  if(userRow&&userRow.description)document.getElementById('descInput').value=userRow.description;
+  async function loadFriends(){
+    var wrap=document.getElementById('friendsWrap');wrap.innerHTML='';
+    if(!userRow){wrap.innerHTML='<div class="empty">You have no friends yet</div>';return}
+    var r1=await sb.from('friends').select('friend_id').eq('user_id',userRow.id);
+    var r2=await sb.from('friends').select('user_id').eq('friend_id',userRow.id);
+    var ids=[];
+    if(r1.data)for(var a of r1.data)ids.push(a.friend_id);
+    if(r2.data)for(var b of r2.data)ids.push(b.user_id);
+    ids=[...new Set(ids)].filter(Boolean);
+    if(!ids.length){wrap.innerHTML='<div class="empty">You have no friends yet</div>';return}
+    var users=await sb.from('users').select('id,username,avatar_url').in('id',ids);
+    if(!users.data||!users.data.length){wrap.innerHTML='<div class="empty">You have no friends yet</div>';return}
+    for(var u of users.data){
+      var card=document.createElement('div');card.className='friend';
+      var img=document.createElement('img');img.src=u.avatar_url?u.avatar_url:'/img/user.png';
+      var nm=document.createElement('div');nm.className='friend-name';nm.innerText=u.username;
+      card.appendChild(img);card.appendChild(nm);
+      card.addEventListener('click',function(id){return function(){location.href='/web/profile.html?u='+id}}(u.id));
+      wrap.appendChild(card);
+    }
+  }
+  await loadFriends();
+  document.getElementById('saveDesc').addEventListener('click',async function(){
+    var v=document.getElementById('descInput').value||'';
+    if(!userRow) userRow=await getUser();
+    var upd=await sb.from('users').update({description:v}).eq('id',userRow.id);
+    if(!upd.error){localStorage.setItem('auth',JSON.stringify(Object.assign({},auth,{description:v})))}
+  });
+  document.getElementById('cancelDesc').addEventListener('click',function(){if(userRow&&userRow.description)document.getElementById('descInput').value=userRow.description;else document.getElementById('descInput').value=''});
+  window.addEventListener('resize',function(){if(window.innerWidth>=1000)sidebar.classList.remove('open')});
+});
+</script>
+</body>
+</html>
