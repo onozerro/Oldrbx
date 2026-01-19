@@ -58,7 +58,7 @@ html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,
     </aside>
     <main class="main" role="main">
       <div>
-        <div class="section-title">Users (sorted by activity)</div>
+        <div class="section-title">Registered Users</div>
         <div id="usersList"></div>
       </div>
     </main>
@@ -67,50 +67,83 @@ html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-function timeAgo(d){var s=Math.floor((Date.now()-new Date(d).getTime())/1000);if(s<60) return s+'s';var m=Math.floor(s/60);if(m<60) return m+'m';var h=Math.floor(m/60);if(h<24) return h+'h';var day=Math.floor(h/24);return day+'d'}
+function timeAgo(d){
+  if(!d) return '';
+  const diffSec = Math.floor((Date.now()-new Date(d).getTime())/1000);
+  if(diffSec < 60) return diffSec+'s ago';
+  const m = Math.floor(diffSec/60);
+  if(m<60) return m+'m ago';
+  const h = Math.floor(m/60);
+  if(h<24) return h+'h ago';
+  const day = Math.floor(h/24);
+  return day+'d ago';
+}
 document.addEventListener('DOMContentLoaded',async function(){
   const SUPA_URL="https://nkvvnnjukqtfhmegyzek.supabase.co";
   const SUPA_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rdnZubmp1a3R0ZmhtZWd5emVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2NjQ5MTIsImV4cCI6MjA4NDI0MDkxMn0.2jp9X2KQunFargrstYM7oGBYs75Kq7AEHs7iRARxexs";
   const sb=supabase.createClient(SUPA_URL,SUPA_KEY);
-  var hamb=document.getElementById('hamb'),sidebar=document.getElementById('sidebar');
-  hamb.addEventListener('click',function(){if(window.innerWidth<1000)sidebar.classList.toggle('open')});
-  function navAll(h){location.href=h}
-  document.querySelectorAll('.nav-item').forEach(function(it){it.addEventListener('click',function(){navAll(it.dataset.h)})});
-  var auth=null;try{auth=JSON.parse(localStorage.getItem('auth'))}catch(e){auth=null}
+  const hamb=document.getElementById('hamb');
+  const sidebar=document.getElementById('sidebar');
+  hamb.addEventListener('click',()=>{if(window.innerWidth<1000)sidebar.classList.toggle('open')});
+  document.querySelectorAll('.nav-item').forEach(it=>it.addEventListener('click',()=>location.href=it.dataset.h));
+
+  let auth=null;
+  try{auth=JSON.parse(localStorage.getItem('auth'))}catch(e){auth=null}
   if(!auth||!auth.username){location.replace('/web/login.html');return}
   document.getElementById('sideName').innerText=auth.username;
   function safeSrc(u){return u?u:'/img/user.png'}
-  function setAv(u){var x=safeSrc(u);document.getElementById('sideAv').src=x;document.getElementById('topAv').src=x}
+  function setAv(u){const x=safeSrc(u);document.getElementById('sideAv').src=x;document.getElementById('topAv').src=x}
   setAv(auth.avatarUrl);
   document.getElementById('moneyIcon').src='/img/money.png';
-  document.getElementById('balanceText').innerText=String(typeof auth.balance!=='undefined'&&auth.balance!==null?auth.balance:0);
-  async function getUser(){try{const res=await sb.from('users').select('*').eq('username',auth.username).maybeSingle();if(res.error) return null;return res.data||null}catch(e){return null}}
-  var userRow=await getUser();
-  if(userRow&&typeof userRow.balance!=='undefined')document.getElementById('balanceText').innerText=String(userRow.balance);
-  if(userRow&&userRow.avatar_url) setAv(userRow.avatar_url);
-  if(userRow&&userRow.id){ try{ await sb.from('users').update({last_active:new Date().toISOString()}).eq('id',userRow.id) }catch(e){} }
+  document.getElementById('balanceText').innerText=String(auth.balance??0);
+
+  async function getUser(){
+    const res=await sb.from('users').select('*').eq('username',auth.username).maybeSingle();
+    if(res.error) return null;
+    return res.data||null;
+  }
+  const userRow=await getUser();
+  if(userRow?.balance!=null) document.getElementById('balanceText').innerText=String(userRow.balance);
+  if(userRow?.avatar_url) setAv(userRow.avatar_url);
+  if(userRow?.id) await sb.from('users').update({last_active:new Date().toISOString()}).eq('id',userRow.id);
+
+  const list=document.getElementById('usersList');
   try{
-    const res=await sb.from('users').select('id,username,avatar_url,last_active,created_at').order('last_active',{ascending:false});
-    const wrap=document.getElementById('usersList');wrap.innerHTML='';
-    if(res.error||!res.data||!res.data.length){wrap.innerHTML='<div class="empty">No users</div>';return}
-    for(var u of res.data){
-      var row=document.createElement('div');row.className='user-row';
-      var left=document.createElement('div');left.className='user-left';
-      var av=document.createElement('img');av.src=u.avatar_url?u.avatar_url:'/img/user.png';
-      var nm=document.createElement('div');nm.innerHTML='<div style="font-weight:800">'+u.username+'</div><div style="font-size:12px;color:var(--muted)">'+(u.created_at?new Date(u.created_at).toLocaleDateString():'')+'</div>';
-      left.appendChild(av);left.appendChild(nm);
-      var right=document.createElement('div');
+    const res=await sb.from('users').select('id,username,balance,avatar_url,registered_on,last_active').order('registered_on',{ascending:false});
+    if(res.error||!res.data||!res.data.length){list.innerHTML='<div class="empty">No users registered</div>';return}
+    for(const u of res.data){
+      const row=document.createElement('div');row.className='user-row';
+      const left=document.createElement('div');left.className='user-left';
+      const av=document.createElement('img');av.src=u.avatar_url||'/img/user.png';
+      const info=document.createElement('div');
+      info.innerHTML=`<div style="font-weight:800">${u.username}</div>
+                      <div style="font-size:12px;color:var(--muted)">
+                        Registered: ${u.registered_on?new Date(u.registered_on).toLocaleDateString():'unknown'}
+                      </div>
+                      <div style="font-size:12px;color:var(--muted)">Balance: ${u.balance??0}</div>`;
+      left.appendChild(av);
+      left.appendChild(info);
+      const right=document.createElement('div');
+      const status=document.createElement('div');
       if(u.last_active){
-        var diff=(Date.now()-new Date(u.last_active).getTime())/1000;
-        if(diff<60) right.innerHTML='<div class="status-online">Online</div>'; else right.innerHTML='<div class="status-off">last seen '+timeAgo(u.last_active)+'</div>';
-      } else { right.innerHTML='<div class="status-off">never seen</div>' }
-      var view=document.createElement('button');view.className='btn';view.style.marginLeft='10px';view.innerText='View';view.addEventListener('click',(function(id){return function(){location.href='/web/home.html?u='+id}})(u.id));
-      right.appendChild(view);
-      row.appendChild(left);row.appendChild(right);
-      wrap.appendChild(row);
+        const diff=(Date.now()-new Date(u.last_active).getTime())/1000;
+        if(diff<60) status.className='status-online',status.innerText='Online';
+        else status.className='status-off',status.innerText='Last seen '+timeAgo(u.last_active);
+      } else status.className='status-off',status.innerText='Never online';
+      const btn=document.createElement('button');
+      btn.className='btn';btn.innerText='View';
+      btn.style.marginLeft='10px';
+      btn.addEventListener('click',()=>location.href='/web/home.html?u='+u.id);
+      right.appendChild(status);
+      right.appendChild(btn);
+      row.appendChild(left);
+      row.appendChild(right);
+      list.appendChild(row);
     }
-  }catch(e){document.getElementById('usersList').innerHTML='<div class="empty">Failed to load users</div>'}
-  window.addEventListener('resize',function(){if(window.innerWidth>=1000)sidebar.classList.remove('open')});
+  }catch(e){
+    list.innerHTML='<div class="empty">Error loading users</div>';
+  }
+  window.addEventListener('resize',()=>{if(window.innerWidth>=1000)sidebar.classList.remove('open')});
 });
 </script>
 </body>
