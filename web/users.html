@@ -86,49 +86,45 @@ document.addEventListener('DOMContentLoaded', async () => {
   const SUPA_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rdnZubmp1a3R0ZmhtZWd5emVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2NjQ5MTIsImV4cCI6MjA4NDI0MDkxMn0.2jp9X2KQunFargrstYM7oGBYs75Kq7AEHs7iRARxexs";
   const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
 
-  const hamb = document.getElementById('hamb');
-  const sidebar = document.getElementById('sidebar');
-  hamb.addEventListener('click', () => { if(window.innerWidth<1000) sidebar.classList.toggle('open') });
-  document.querySelectorAll('.nav-item').forEach(it => it.addEventListener('click', () => location.href=it.dataset.h));
+  const hamb=document.getElementById('hamb');
+  const sidebar=document.getElementById('sidebar');
+  hamb.addEventListener('click',()=>{if(window.innerWidth<1000)sidebar.classList.toggle('open')});
+  document.querySelectorAll('.nav-item').forEach(it=>it.addEventListener('click',()=>location.href=it.dataset.h));
 
-  let auth = null;
-  try { auth = JSON.parse(localStorage.getItem('auth')) } catch(e){ auth=null }
-  if(!auth||!auth.username){ location.replace('/web/login.html'); return }
-
+  let auth=null;
+  try{auth=JSON.parse(localStorage.getItem('auth'))}catch(e){auth=null}
+  if(!auth||!auth.username){location.replace('/web/login.html');return}
   document.getElementById('sideName').innerText=auth.username;
-  function safeSrc(u){ return u && u.trim() ? u : '/img/user.png' }
-  function setAv(u){ const s=safeSrc(u); document.getElementById('sideAv').src=s; document.getElementById('topAv').src=s }
+  function safeSrc(u){return u&&u.trim()?u:'/img/user.png'}
+  function setAv(u){const s=safeSrc(u);document.getElementById('sideAv').src=s;document.getElementById('topAv').src=s}
   setAv(auth.avatarUrl);
-  document.getElementById('moneyIcon').src='/img/money.png';
   document.getElementById('balanceText').innerText=String(auth.balance??0);
 
-  async function getUser(){
-    const r = await sb.from('users').select('*').eq('username', auth.username).maybeSingle();
-    return r.data || null;
-  }
-  const me = await getUser();
+  const me = await sb.from('users').select('*').eq('username',auth.username).maybeSingle().then(r=>r.data||null);
   if(me?.balance!=null) document.getElementById('balanceText').innerText=String(me.balance);
   if(me?.avatar_url) setAv(me.avatar_url);
-  if(me?.id) await sb.from('users').update({last_active:new Date().toISOString()}).eq('id', me.id);
+  if(me?.id) await sb.from('users').update({last_active:new Date().toISOString()}).eq('id',me.id);
 
-  const list = document.getElementById('usersList');
+  const list=document.getElementById('usersList');
   list.innerHTML='<div class="empty">Loading users...</div>';
 
-  try {
-    const r = await sb.from('users').select('id,username,avatar_url,balance,last_active,registered_on');
-    if(!r.data||!r.data.length){ list.innerHTML='<div class="empty">No registered users</div>'; return; }
+  try{
+    const r=await sb.from('users').select('id,username,avatar_url,balance,last_active,registered_on');
+    if(!r.data||!r.data.length){list.innerHTML='<div class="empty">No registered users</div>';return;}
 
-    let users = r.data.map(u => {
-      let diff = u.last_active ? (Date.now() - new Date(u.last_active).getTime())/1000 : Infinity;
-      u.online = diff < 60;
-      u.last_seen_seconds = diff;
+    let users=r.data.map(u=>{
+      let lastActive=u.last_active?new Date(u.last_active).getTime():0;
+      let diff=(Date.now()-lastActive)/1000;
+      u.online=diff<60;
+      u.last_seen_seconds=lastActive||0;
+      u.registered_on=u.registered_on||new Date().toISOString();
       return u;
     });
 
-    users.sort((a,b) => {
+    users.sort((a,b)=>{
       if(a.online && !b.online) return -1;
       if(!a.online && b.online) return 1;
-      return a.last_seen_seconds - b.last_seen_seconds;
+      return b.last_seen_seconds - a.last_seen_seconds;
     });
 
     list.innerHTML='';
@@ -138,23 +134,22 @@ document.addEventListener('DOMContentLoaded', async () => {
       const av=document.createElement('img'); av.src=safeSrc(u.avatar_url);
       const info=document.createElement('div');
       info.innerHTML=`<div style="font-weight:800">${u.username}</div>
-        <div style="font-size:12px;color:var(--muted)">Registered: ${u.registered_on?new Date(u.registered_on).toLocaleDateString("en-US"):''}</div>
+        <div style="font-size:12px;color:var(--muted)">Registered: ${new Date(u.registered_on).toLocaleDateString()}</div>
         <div style="font-size:12px;color:var(--muted)">Balance: ${u.balance??0}</div>`;
       left.appendChild(av); left.appendChild(info);
 
       const right=document.createElement('div');
       const status=document.createElement('div');
-      if(u.online){ status.className='status-online'; status.innerText='Online' }
-      else{ status.className='status-off'; status.innerText=formatLastSeen(u.last_active) }
-      const btn=document.createElement('button');
-      btn.className='btn'; btn.innerText='View';
+      if(u.online){status.className='status-online'; status.innerText='Online'}
+      else{status.className='status-off'; status.innerText=formatLastSeen(u.last_active)}
+      const btn=document.createElement('button'); btn.className='btn'; btn.innerText='View';
       btn.addEventListener('click',()=>location.href='/web/home.html?u='+u.id);
       right.appendChild(status); right.appendChild(btn);
 
       row.appendChild(left); row.appendChild(right);
       list.appendChild(row);
     }
-  } catch(e) {
+  }catch(e){
     list.innerHTML='<div class="empty">Error loading users</div>';
   }
 
