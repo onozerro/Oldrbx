@@ -30,8 +30,6 @@ html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,
 .user-row{display:flex;align-items:center;justify-content:space-between;padding:10px;border:1px solid var(--border);border-radius:6px;margin-bottom:8px;background:#fff}
 .user-left{display:flex;align-items:center;gap:10px}
 .user-left img{width:48px;height:48px;border-radius:6px;object-fit:cover;flex-shrink:0}
-.status-online{color:green;font-weight:800}
-.status-off{color:var(--muted)}
 .btn{padding:8px 12px;border-radius:6px;border:1px solid var(--border);background:#fff;font-weight:800;cursor:pointer}
 .empty{color:var(--muted);padding:12px;text-align:center}
 .footer{margin-top:18px;background:var(--panel);border-top:1px solid var(--border);padding:10px 16px;color:var(--muted);font-weight:700;text-align:center}
@@ -77,46 +75,33 @@ html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,
 document.addEventListener('DOMContentLoaded', async () => {
   const SUPA_URL="https://nkvvnnjukqtfhmegyzek.supabase.co";
   const SUPA_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rdnZubmp1a3R0ZmhtZWd5emVrIiwicm9sZSI6ImFscyIsImlhdCI6MTc2ODY2NDkxMiwiZXhwIjoyMDg0MjQwOTEyfQ.2jp9X2KQunFargrstYM7oGBYs75Kq7AEHs7iRARxexs";
-  const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
+  const sb = supabase.createClient(SUPA_URL,SUPA_KEY);
 
-  const hamb=document.getElementById('hamb');
-  const sidebar=document.getElementById('sidebar');
-  hamb.addEventListener('click',()=>{if(window.innerWidth<1000)sidebar.classList.toggle('open')});
-  document.querySelectorAll('.nav-item').forEach(it=>it.addEventListener('click',()=>location.href=it.dataset.h));
-
-  const auth=JSON.parse(localStorage.getItem('auth')||'{}');
-  if(!auth.username){location.replace('/web/login.html');return}
-  document.getElementById('sideName').innerText=auth.username;
-  const safeSrc=u=>u&&u.trim()?u:'/img/user.png';
-  const setAv=u=>{const s=safeSrc(u);document.getElementById('sideAv').src=s;document.getElementById('topAv').src=s}
-  setAv(auth.avatarUrl);
-  document.getElementById('balanceText').innerText=String(auth.balance??0);
-
-  const me=await sb.from('users').select('*').eq('username',auth.username).maybeSingle().then(r=>r.data||null);
-  if(me?.balance!=null)document.getElementById('balanceText').innerText=String(me.balance);
-  if(me?.avatar_url)setAv(me.avatar_url);
-
-  const list=document.getElementById('usersList');
-  list.innerHTML='<div class="empty">Loading users...</div>';
+  const list = document.getElementById('usersList');
+  list.innerHTML = '<div class="empty">Loading users...</div>';
 
   try{
-    const {data,error}=await sb.from('users').select('id,username,avatar_url,balance,registered_on').order('registered_on',{ascending:false});
-    if(error){list.innerHTML='<div class="empty">Error loading users</div>';return;}
-    if(!data||!data.length){list.innerHTML='<div class="empty">No registered users</div>';return;}
+    const {data,error} = await sb.from('users').select('id,username,avatar_url,balance,registered_on').order('id',{ascending:true});
+    if(error){list.innerHTML='<div class="empty">Error loading users</div>'; console.error(error); return;}
+    if(!data || !data.length){list.innerHTML='<div class="empty">No registered users</div>'; return;}
+
     list.innerHTML='';
     for(const u of data){
-      const row=document.createElement('div');row.className='user-row';
-      const left=document.createElement('div');left.className='user-left';
-      const av=document.createElement('img');av.src=safeSrc(u.avatar_url);
-      const info=document.createElement('div');
-      info.innerHTML=`<div style="font-weight:800">${u.username}</div>
-        <div style="font-size:12px;color:var(--muted)">Registered: ${u.registered_on?new Date(u.registered_on).toLocaleDateString():'-'}</div>
-        <div style="font-size:12px;color:var(--muted)">Balance: ${u.balance??0}</div>`;
-      left.appendChild(av);left.appendChild(info);
+      const row = document.createElement('div'); row.className='user-row';
+      const left = document.createElement('div'); left.className='user-left';
+      const av = document.createElement('img'); av.src = u.avatar_url?.trim() || '/img/user.png';
+      const info = document.createElement('div');
+      info.innerHTML = `<div style="font-weight:800">${u.username}</div>
+                        <div style="font-size:12px;color:var(--muted)">Registered: ${u.registered_on ? new Date(u.registered_on).toLocaleDateString() : '-'}</div>
+                        <div style="font-size:12px;color:var(--muted)">Balance: ${u.balance??0}</div>`;
+      left.appendChild(av); left.appendChild(info);
       row.appendChild(left);
       list.appendChild(row);
     }
-  }catch(e){list.innerHTML='<div class="empty">Error loading users</div>';console.error(e);}
+  }catch(e){
+    list.innerHTML='<div class="empty">Error loading users</div>';
+    console.error(e);
+  }
 });
 </script>
 </body>
