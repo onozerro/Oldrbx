@@ -6,171 +6,180 @@
 <title>Forums - OLDRBX</title>
 <link rel="icon" type="image/png" href="img/ic.png">
 <style>
-:root{--bg:#efefef;--panel:#fff;--border:#d7d7d7;--muted:#666;--accent:#111}
-html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:#111}
-.topbar{height:56px;background:var(--accent);display:flex;align-items:center;padding:0 12px;gap:12px}
-.hamburger{width:44px;height:44px;border-radius:6px;border:none;background:transparent;color:#fff;font-size:22px;cursor:pointer}
-.logo-img{height:32px}
-.top-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+:root{
+  --blue:#0074bd;
+  --bg:#e9e9ea;
+  --panel:#ffffff;
+  --muted:#6f6f6f;
+  --border:#d5d7d9;
+  --accent:#0074bd;
+  --shadow:rgba(0,0,0,0.06);
+}
+html,body{height:100%;margin:0;background:var(--bg);color:#111;font-family:Arial,Helvetica,sans-serif}
+.topbar{height:56px;background:var(--blue);display:flex;align-items:center;padding:0 12px;gap:12px;box-sizing:border-box}
+.hamburger{width:44px;height:44px;border-radius:6px;background:transparent;border:none;color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.logo-img{height:34px}
+.top-right{margin-left:auto;display:flex;align-items:center;gap:12px;padding-right:6px}
 .money-wrap{display:flex;align-items:center;gap:8px;color:#fff;font-weight:800}
-.money-wrap img{width:20px;height:20px}
-.balance{font-weight:800;color:#fff}
-.avatar{width:36px;height:36px;border-radius:6px;overflow:hidden;background:#fff;display:inline-block}
-.avatar img{width:100%;height:100%;object-fit:cover}
-.container-wrap{max-width:1100px;margin:20px auto;padding:0 16px;box-sizing:border-box}
-.layout{display:grid;grid-template-columns:280px 1fr;gap:18px;align-items:start}
-.sidebar{background:var(--panel);border:1px solid var(--border);padding:12px;border-radius:6px;min-height:320px}
-.nav-item{padding:12px;border-radius:6px;background:#fff;border:1px solid var(--border);font-weight:800;margin-bottom:10px;cursor:pointer;text-align:center}
-.nav-item:hover{background:#f3f3f3}
-.main{background:var(--panel);border:1px solid var(--border);padding:18px;border-radius:6px;display:flex;flex-direction:column;gap:16px}
-.section-title{font-weight:900}
+.money-wrap img{width:22px;height:22px;display:block}
+.balance{color:#fff;font-weight:800;line-height:1}
+.avatar{width:36px;height:36px;border-radius:50%;overflow:hidden;background:#fff;display:inline-block}
+.avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.page{max-width:980px;margin:28px auto;padding:0 16px;box-sizing:border-box}
+.header-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.header-title{font-weight:800;font-size:18px}
+.container-layout{display:grid;grid-template-columns:280px 1fr;gap:18px}
+.sidebar{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:12px;box-sizing:border-box}
+.nav-item{padding:12px;border-radius:6px;display:flex;align-items:center;justify-content:space-between;font-weight:800;color:#111;text-decoration:none;cursor:pointer;background:#fff;border:1px solid var(--border);box-shadow:0 6px 14px var(--shadow);margin-bottom:8px}
+.topics-panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:12px;box-sizing:border-box}
 .topics-grid{display:flex;flex-direction:column;gap:10px}
-.topic-btn{display:flex;align-items:center;justify-content:space-between;padding:12px;background:#fff;border:1px solid var(--border);border-radius:6px;cursor:pointer;font-weight:800;gap:12px}
+.topic-btn{display:flex;align-items:center;justify-content:space-between;padding:12px;background:#fff;border:1px solid var(--border);border-radius:6px;cursor:pointer;font-weight:800;box-shadow:0 6px 14px var(--shadow);gap:12px}
+.topic-btn .left{display:flex;flex-direction:column;gap:4px;align-items:flex-start}
+.topic-btn .title{font-weight:800}
 .topic-btn .meta{font-size:12px;color:var(--muted);font-weight:700}
-.back-btn{display:none;margin-bottom:12px;color:#111;font-weight:800;cursor:pointer;background:#fff;border:1px solid #111;padding:6px 10px;border-radius:6px}
-.posts{flex:1;max-height:360px;overflow:auto;padding-right:6px;scroll-behavior:smooth}
+.topic-btn .right{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.count-pill{background:#f3f5f6;border:1px solid var(--border);padding:6px 10px;border-radius:6px;font-weight:800;font-size:13px;color:#111}
+.mainpanel{background:transparent;border-radius:0;padding:14px;min-height:420px;display:flex;flex-direction:column}
+.back-btn{display:none;margin-bottom:12px;color:var(--accent);font-weight:800;cursor:pointer}
+.posts{flex:1;overflow:auto;padding-right:6px;display:flex;flex-direction:column-reverse;gap:10px}
 .post{display:flex;gap:12px;padding:12px;border-radius:6px;border-bottom:1px solid var(--border);align-items:flex-start;background:#fff}
-.post .avatar{width:52px;height:52px;border-radius:6px;overflow:hidden;background:var(--border)}
-.post .avatar img{width:100%;height:100%;object-fit:cover}
-.post .meta{font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:800}
+.post .avatar{width:52px;height:52px;border-radius:50%;overflow:hidden;background:var(--border);flex:0 0 52px}
+.post .avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.post .body{flex:1}
+.post .meta{font-size:12px;color:var(--muted);margin-bottom:6px}
 .composer{margin-top:12px;display:flex;gap:10px;align-items:flex-start}
 .composer textarea{flex:1;min-height:90px;background:#fafafa;border:1px solid var(--border);color:#111;padding:10px;border-radius:6px;resize:vertical}
-.btn{padding:8px 12px;border-radius:6px;border:1px solid #111;background:#111;color:#fff;font-weight:800;cursor:pointer}
-.empty{color:var(--muted);padding:18px;text-align:center}
-.footer{margin-top:18px;background:var(--panel);border-top:1px solid var(--border);padding:10px 16px;color:var(--muted);font-weight:700;text-align:center}
-@media(max-width:900px){
-  .layout{grid-template-columns:1fr}
-  .sidebar{position:fixed;top:56px;left:-300px;width:240px;height:calc(100% - 56px);z-index:1000;transition:left .2s ease}
+.composer button{height:40px;border-radius:6px;background:#111;color:#fff;border:none;padding:8px 14px;cursor:pointer;font-weight:800;box-shadow:none}
+.site-footer{width:100%;background:var(--panel);border-top:1px solid var(--border);padding:10px 18px;color:var(--muted);box-sizing:border-box;margin-top:18px;border-radius:0}
+@media(max-width:1000px){
+  .container-layout{grid-template-columns:1fr;padding:12px}
+  .sidebar{position:fixed;left:-360px;top:56px;height:calc(100% - 56px);z-index:1050;transition:left .18s ease}
   .sidebar.open{left:0}
 }
 </style>
 </head>
 <body>
 <div class="topbar">
-  <button id="hamb" class="hamburger">&#9776;</button>
-  <img src="img/logo.png" class="logo-img">
+  <button id="hamb" class="hamburger" aria-label="menu">&#9776;</button>
+  <img src="img/logo.png" class="logo-img" alt="logo">
   <div class="top-right">
-    <div class="money-wrap"><img src="img/money.png"><div id="balanceText">0</div></div>
-    <a href="profile-paid.html" class="avatar"><img id="topAv" src="img/user.png"></a>
+    <div class="money-wrap" title="Balance">
+      <img id="moneyIcon" src="img/money.png" alt="money">
+      <div class="balance" id="balanceText">0</div>
+    </div>
+    <a id="profileLink" href="profile-paid.html" title="Profile" class="avatar"><img id="topAv" src="img/user.png" alt="avatar"></a>
   </div>
 </div>
 
-<div class="container-wrap">
-  <div class="layout">
-    <aside class="sidebar" id="sidebar">
-      <div class="nav-item" onclick="location.href='home-paid.html'">Home</div>
-      <div class="nav-item" onclick="location.href='forums-paid.html'">Forums</div>
-      <div class="nav-item" onclick="location.href='profile-paid.html'">Profile</div>
+<div class="page">
+  <div class="container-layout">
+    <aside class="sidebar" id="leftSidebar">
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div class="nav-item" onclick="location.href='home-paid.html'">Home</div>
+        <div class="nav-item" onclick="location.href='forums-paid.html'">Forums</div>
+        <div class="nav-item locked" id="navProfile">Profile</div>
+      </div>
     </aside>
 
-    <main class="main">
-      <div class="section-title">Forums</div>
-      <div id="topicsPanel">
+    <main class="mainpanel">
+      <div id="topicsPanel" class="topics-panel">
         <div id="topicsList" class="topics-grid"></div>
       </div>
 
-      <button id="backBtn" class="back-btn">← Back</button>
-      <div id="topicHeader" class="topic-header"></div>
       <div class="posts" id="postsList"></div>
 
-      <div id="composerWrap" style="display:none">
+      <div id="composerWrap" style="margin-top:12px;display:none">
         <div style="font-size:13px;color:var(--muted);margin-bottom:6px">Post as <span id="meName"></span></div>
         <div class="composer">
-          <img id="meAv" src="img/user.png" style="width:52px;height:52px;border-radius:6px">
+          <img id="meAv" src="img/user.png" style="width:52px;height:52px;border-radius:50%" alt="avatar">
           <textarea id="msgInput" placeholder="Write your message..."></textarea>
         </div>
         <div style="margin-top:8px;display:flex;justify-content:flex-end">
-          <button id="sendBtn" class="btn">Send</button>
+          <button id="sendBtn">Send</button>
         </div>
       </div>
     </main>
   </div>
-  <div class="footer">© 2026 OLDRBX</div>
 </div>
+
+<div class="site-footer">© 2026 OLDRBX</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-document.addEventListener('DOMContentLoaded', async()=>{
-  const sb = supabase.createClient("https://nkvvnnjukqtfhmegyzek.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rdnZubmp1a3F0ZmhtZWd5emVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2NjQ5MTIsImV4cCI6MjA4NDI0MDkxMn0.2jp9X2KQunFargrstYM7oGBYs75Kq7AEHs7iRARxexs");
-  
-  const sidebar=document.getElementById('sidebar');
-  document.getElementById('hamb').onclick=()=>sidebar.classList.toggle('open');
+document.addEventListener('DOMContentLoaded', async function(){
+  const SUPA_URL = "https://nkvvnnjukqtfhmegyzek.supabase.co";
+  const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rdnZubmp1a3F0ZmhtZWd5emVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2NjQ5MTIsImV4cCI6MjA4NDI0MDkxMn0.2jp9X2KQunFargrstYM7oGBYs75Kq7AEHs7iRARxexs";
+  const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
+  let currentTopicId = null;
+  let auth = null;
+  try{ auth = JSON.parse(localStorage.getItem('auth')) }catch(e){ auth = null }
+  if(!auth || !auth.username){ location.replace('login.html'); return }
+  document.getElementById('meName').innerText = auth.username;
+  document.getElementById('meAv').src = auth.avatarUrl || 'img/user.png';
+  document.getElementById('topAv').src = auth.avatarUrl || 'img/user.png';
+  var bal = (typeof auth.balance !== 'undefined' && auth.balance !== null) ? auth.balance : 0;
+  document.getElementById('balanceText').innerText = String(bal);
+  document.getElementById('moneyIcon').src = 'img/money.png';
+  document.getElementById('hamb').addEventListener('click', function(){ document.getElementById('leftSidebar').classList.toggle('open') });
 
-  let auth=JSON.parse(localStorage.getItem('auth')||'{}');
-  if(!auth.username){location.replace('login.html');return;}
-
-  document.getElementById('meName').innerText=auth.username;
-  document.getElementById('meAv').src=auth.avatarUrl||'img/user.png';
-  document.getElementById('topAv').src=auth.avatarUrl||'img/user.png';
-  document.getElementById('balanceText').innerText=auth.balance||0;
-
-  let currentTopicId=null;
-
-  async function createDefaults(){
-    const { data } = await sb.from('forum_topics').select('*');
-    if(!data||!data.length){
-      const def=[{slug:'news',title:'News'},{slug:'updates',title:'Updates'},{slug:'general',title:"What's on your mind"}];
-      for(const d of def){await sb.from('forum_topics').insert(d);}
-    }
-  }
-
-  async function loadTopics(){
-    await createDefaults();
+  async function loadTopicsToUI(){
     const { data, error } = await sb.from('forum_topics').select('*').order('id',{ascending:true});
-    if(error)return;
-    const list=document.getElementById('topicsList');
-    list.innerHTML='';
-    for(const t of data){
-      const btn=document.createElement('div');
-      btn.className='topic-btn';
-      btn.innerHTML=`<div>${t.title}</div><div class="meta">#${t.id}</div>`;
-      btn.onclick=()=>selectTopic(t.id,t.title);
-      list.appendChild(btn);
+    const container = document.getElementById('topicsList');
+    container.innerHTML = '';
+    const topics = (data && data.length) ? data : [];
+    for(const t of topics){
+      const lastQ = await sb.from('forum_posts').select('created_at,username').eq('topic_id',t.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
+      const cntResp = await sb.from('forum_posts').select('id',{count:'exact',head:true}).eq('topic_id',t.id);
+      const count = cntResp.count || 0;
+      const el = document.createElement('div');
+      el.className = 'topic-btn';
+      el.dataset.id = t.id;
+      el.innerHTML = '<div class="left"><div class="title">'+t.title+'</div><div class="meta">'+(lastQ && lastQ.data && lastQ.data.username ? lastQ.data.username : 'No messages')+'</div></div><div class="right"><div class="count-pill">'+count+'</div></div>';
+      el.addEventListener('click', function(){ selectTopic(t.id) });
+      container.appendChild(el);
     }
   }
 
-  async function selectTopic(id,title){
-    currentTopicId=id;
-    document.getElementById('topicHeader').innerText=title;
-    document.getElementById('topicsPanel').style.display='none';
-    document.getElementById('backBtn').style.display='block';
-    document.getElementById('composerWrap').style.display='block';
+  async function selectTopic(id){
+    currentTopicId = id;
+    document.getElementById('topicsPanel').style.display = 'none';
+    document.getElementById('composerWrap').style.display = 'block';
     await loadPosts(id);
   }
 
-  async function loadPosts(id){
-    const { data } = await sb.from('forum_posts').select('*').eq('topic_id',id).order('created_at',{ascending:true});
-    const list=document.getElementById('postsList');
-    list.innerHTML='';
-    if(!data||!data.length){list.innerHTML='<div class="empty">No posts yet</div>';return;}
-    for(const p of data){
-      const el=document.createElement('div');
-      el.className='post';
-      el.innerHTML=`<div class="avatar"><img src="${p.avatar_url||'img/user.png'}"></div>
-      <div class="body"><div class="meta">${p.username} • ${new Date(p.created_at).toLocaleString()}</div><div>${p.content}</div></div>`;
-      list.appendChild(el);
+  async function loadPosts(topicId){
+    const { data: posts, error } = await sb.from('forum_posts').select('*').eq('topic_id',topicId).order('created_at',{ascending:true});
+    const list = document.getElementById('postsList');
+    list.innerHTML = '';
+    if(!posts || !posts.length) return;
+    for(const p of posts){
+      const d = document.createElement('div');
+      d.className='post';
+      const av = document.createElement('div'); av.className='avatar';
+      const img = document.createElement('img');
+      img.src = p.avatar_url || auth.avatarUrl || 'img/user.png';
+      av.appendChild(img);
+      const body = document.createElement('div'); body.className='body';
+      const meta = document.createElement('div'); meta.className='meta';
+      meta.innerText = (p.username||'Unknown')+' • '+(p.created_at?new Date(p.created_at).toLocaleString():'');
+      const msg = document.createElement('div'); msg.innerText = p.content||'';
+      body.appendChild(meta); body.appendChild(msg);
+      d.appendChild(av); d.appendChild(body);
+      list.appendChild(d);
     }
-    list.scrollTop=list.scrollHeight;
   }
 
-  document.getElementById('backBtn').onclick=()=>{
-    document.getElementById('topicsPanel').style.display='';
-    document.getElementById('backBtn').style.display='none';
-    document.getElementById('composerWrap').style.display='none';
-    document.getElementById('postsList').innerHTML='';
-  };
-
-  document.getElementById('sendBtn').onclick=async()=>{
-    const text=document.getElementById('msgInput').value.trim();
-    if(!text||!currentTopicId)return;
-    const payload={topic_id:currentTopicId,username:auth.username,content:text,avatar_url:auth.avatarUrl||'user.png'};
-    await sb.from('forum_posts').insert(payload);
+  document.getElementById('sendBtn').addEventListener('click', async function(){
+    const txt = document.getElementById('msgInput').value.trim();
+    if(!txt || !currentTopicId) return;
+    const payload = { topic_id: currentTopicId, username: auth.username, content: txt, avatar_url: auth.avatarUrl||'user.png' };
+    await sb.from('forum_posts').insert(payload).select().maybeSingle();
     document.getElementById('msgInput').value='';
     await loadPosts(currentTopicId);
-  };
+    await loadTopicsToUI();
+  });
 
-  await loadTopics();
+  await loadTopicsToUI();
 });
 </script>
 </body>
