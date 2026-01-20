@@ -6,12 +6,10 @@
 <title>Forums - OLDRBX</title>
 <link rel="icon" type="image/png" href="/img/ic.png">
 <style>
-:root{
-  --bg:#efefef; --panel:#fff; --muted:#666; --border:#d7d7d7; --accent:#111; --shadow:rgba(0,0,0,0.06)
-}
-html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,sans-serif;color:#111}
-.topbar{height:56px;background:var(--accent);display:flex;align-items:center;padding:0 12px;gap:12px}
-.hamburger{width:44px;height:44px;border:none;background:transparent;color:#fff;font-size:22px;cursor:pointer}
+:root{--bg:#efefef;--panel:#fff;--muted:#666;--border:#d7d7d7;--accent:#111;--shadow:rgba(0,0,0,0.06)}
+html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:#111}
+.topbar{height:56px;background:var(--accent);display:flex;align-items:center;padding:0 12px;gap:12px;box-sizing:border-box}
+.hamburger{width:44px;height:44px;border-radius:6px;border:none;background:transparent;color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer}
 .logo-img{height:32px}
 .top-right{margin-left:auto;display:flex;align-items:center;gap:12px}
 .money-wrap{display:flex;align-items:center;gap:8px;color:#fff;font-weight:800}
@@ -26,16 +24,18 @@ html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,sans-serif
 .user-header .mini{width:44px;height:44px;border-radius:6px;overflow:hidden}
 .user-header .mini img{width:100%;height:100%;object-fit:cover}
 .username{font-weight:900}
-.nav-item{padding:12px;border-radius:6px;background:#fff;border:1px solid var(--border);font-weight:800;margin-bottom:10px;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.nav-item{padding:12px;border-radius:6px;background:#fff;border:1px solid var(--border);font-weight:800;margin-bottom:10px;cursor:pointer;display:flex;align-items:center;justify-content:space-between}
 .main{background:var(--panel);border:1px solid var(--border);padding:18px;border-radius:6px;display:flex;flex-direction:column;gap:16px;min-height:420px}
 .section-title{font-weight:900}
 .topics-panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:12px;box-sizing:border-box}
 .topics-grid{display:flex;flex-direction:column;gap:10px}
-.topic-btn{display:flex;justify-content:space-between;padding:12px;background:#fff;border:1px solid var(--border);border-radius:6px;cursor:pointer;font-weight:800;gap:12px}
+.topic-btn{display:flex;align-items:center;justify-content:space-between;padding:12px;background:#fff;border:1px solid var(--border);border-radius:6px;cursor:pointer;font-weight:800;gap:12px}
 .topic-btn .left{display:flex;flex-direction:column;gap:4px;align-items:flex-start}
+.topic-btn .title{font-weight:800}
+.topic-btn .meta{font-size:12px;color:var(--muted);font-weight:700}
+.topic-btn .right{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
 .count-pill{background:#fff;color:#111;border:1px solid #111;padding:6px 10px;border-radius:6px;font-weight:800;font-size:13px}
-.back-btn{display:none;margin-bottom:12px;color:#111;font-weight:800;cursor:pointer;border:1px solid #111;padding:6px 10px;border-radius:6px;background:#fff}
-.topic-header{font-weight:900;margin-bottom:8px}
+.back-btn{display:none;margin-bottom:12px;color:#111;font-weight:800;cursor:pointer;background:#fff;border:1px solid #111;padding:6px 10px;border-radius:6px}
 .posts{flex:1;max-height:360px;overflow:auto;padding-right:6px;display:flex;flex-direction:column-reverse}
 .post{display:flex;gap:12px;padding:12px;border-radius:6px;border-bottom:1px solid var(--border);align-items:flex-start;background:#fff}
 .post .avatar{width:52px;height:52px;border-radius:6px;overflow:hidden;background:var(--border);flex:0 0 52px}
@@ -76,19 +76,10 @@ html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,sans-serif
     </aside>
 
     <main class="main">
-      <div style="display:flex;align-items:center;justify-content:space-between">
-        <div class="section-title">Forums</div>
-      </div>
-
-      <div id="topicsPanel" class="topics-panel">
-        <div id="topicsList" class="topics-grid"></div>
-      </div>
-
+      <div class="section-title">Forums</div>
+      <div id="topicsPanel" class="topics-panel"><div id="topicsList" class="topics-grid"></div></div>
       <button id="backBtn" class="back-btn">← Back</button>
-      <div id="topicHeader" class="topic-header"></div>
-
       <div class="posts" id="postsList"></div>
-
       <div id="composerWrap" style="margin-top:12px;display:none">
         <div style="font-size:13px;color:var(--muted);margin-bottom:6px">Post as <span id="meName"></span></div>
         <div class="composer">
@@ -106,43 +97,35 @@ html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,sans-serif
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-document.addEventListener('DOMContentLoaded', async ()=>{
-  const SUPA_URL="https://nkvvnnjukqtfhmegyzek.supabase.co";
-  const SUPA_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rdnZubmp1a3F0ZmhtZWd5emVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2NjQ5MTIsImV4cCI6MjA4NDI0MDkxMn0.2jp9X2KQunFargrstYM7oGBYs75Kq7AEHs7iRARxexs";
-  const sb = supabase.createClient(SUPA_URL,SUPA_KEY);
+document.addEventListener('DOMContentLoaded', async function(){
+  const SUPA_URL = "https://nkvvnnjukqtfhmegyzek.supabase.co";
+  const SUPA_KEY = "YOUR_SUPABASE_KEY_HERE";
+  const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
+  let currentTopicId = null;
   let auth = JSON.parse(localStorage.getItem('auth')||'{}');
-  if(!auth.username){ location.replace('/web/login.html'); return }
-
-  document.getElementById('meName').innerText=auth.username;
-  document.getElementById('meAv').src=auth.avatarUrl||'/img/user.png';
-  document.getElementById('topAv').src=auth.avatarUrl||'/img/user.png';
-  document.getElementById('sideName').innerText=auth.username;
-
-  document.getElementById('balanceText').innerText=auth.balance||0;
+  if(!auth.username){location.replace('/web/login.html');return}
+  document.getElementById('meName').innerText = auth.username;
+  document.getElementById('meAv').src = auth.avatarUrl||'/img/user.png';
+  document.getElementById('topAv').src = auth.avatarUrl||'/img/user.png';
+  document.getElementById('sideName').innerText = auth.username;
+  document.getElementById('balanceText').innerText = String(auth.balance||0);
+  document.getElementById('moneyIcon').src = '/img/money.png';
   document.getElementById('hamb').addEventListener('click',()=>document.getElementById('sidebar').classList.toggle('open'));
 
-  let currentTopicId=null;
-  const PAGE_SIZE=12;
-  let firstCursor=null,hasMoreAbove=false,loadingOlder=false;
-
-  function escapeHtml(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
-
   async function loadTopics(){
-    const { data }=await sb.from('forum_topics').select('*').order('id',{ascending:true});
-    const container=document.getElementById('topicsList');
+    const { data } = await sb.from('forum_topics').select('*').order('id',{ascending:true});
+    const container = document.getElementById('topicsList');
     container.innerHTML='';
-    for(const t of (data||[])){
-      const { data: lastPost } = await sb.from('forum_posts')
-        .select('created_at,username')
-        .eq('topic_id',t.id)
-        .order('created_at',{ascending:false})
-        .limit(1)
-        .maybeSingle();
-      const { count }=await sb.from('forum_posts').select('id',{count:'exact',head:true}).eq('topic_id',t.id);
-      const el=document.createElement('div');
+    for(const t of data||[]){
+      const lastQ = await sb.from('forum_posts').select('created_at,username').eq('topic_id',t.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
+      const countResp = await sb.from('forum_posts').select('id',{count:'exact',head:true}).eq('topic_id',t.id);
+      const count = countResp.count||0;
+      const lastAt = lastQ?.data ? new Date(lastQ.data.created_at) : null;
+      const lastText = lastAt ? new Date(lastAt).toLocaleString() : '—';
+      const el = document.createElement('div');
       el.className='topic-btn';
       el.dataset.id=t.id;
-      el.innerHTML=`<div class="left"><div class="title">${escapeHtml(t.title)}</div><div class="meta">${lastPost?.username?lastPost.username:'No messages'}</div></div><div class="right"><div class="count-pill">${count||0}</div></div>`;
+      el.innerHTML='<div class="left"><div class="title">'+t.title+'</div><div class="meta">'+(lastQ?.data?.username?lastQ.data.username+' • '+lastText:'No messages yet')+'</div></div><div class="right"><div class="count-pill">'+count+'</div><div style="font-size:12px;color:#666">'+lastText+'</div></div>';
       el.addEventListener('click',()=>selectTopic(t.id,t.title));
       container.appendChild(el);
     }
@@ -150,82 +133,50 @@ document.addEventListener('DOMContentLoaded', async ()=>{
 
   async function selectTopic(id,title){
     currentTopicId=id;
-    document.getElementById('topicHeader').innerText=title;
+    document.getElementById('topicHeader').innerText=title||'';
     document.getElementById('topicsPanel').style.display='none';
     document.getElementById('backBtn').style.display='inline-block';
     document.getElementById('composerWrap').style.display='block';
-    firstCursor=null; hasMoreAbove=false;
-    await loadInitialPosts(id);
-    const postsEl=document.getElementById('postsList');
-    postsEl.addEventListener('scroll',onPostsScroll);
+    await loadPosts();
   }
 
-  async function loadInitialPosts(topicId){
-    const list=document.getElementById('postsList');
-    list.innerHTML='';
-    const { data: posts }=await sb.from('forum_posts').select('*').eq('topic_id',topicId).order('created_at',{ascending:false}).limit(PAGE_SIZE);
-    const ordered=(posts||[]).slice().reverse();
-    for(const p of ordered) appendPost(list,p);
-    firstCursor=ordered[0]?.created_at||null;
-    hasMoreAbove=!!firstCursor;
+  async function loadPosts(){
+    const list=document.getElementById('postsList');list.innerHTML='';
+    const { data: posts } = await sb.from('forum_posts').select('*').eq('topic_id',currentTopicId).order('created_at',{ascending:true});
+    if(!posts?.length){list.innerHTML='<div class="empty">No messages yet</div>';return;}
+    for(const p of posts){
+      const d=document.createElement('div');d.className='post';
+      const av=document.createElement('div');av.className='avatar';
+      const img=document.createElement('img');img.src=p.avatar_url||auth.avatarUrl||'/img/user.png';av.appendChild(img);
+      const body=document.createElement('div');body.className='body';
+      const meta=document.createElement('div');meta.className='meta';meta.innerText=(p.username||'Unknown')+' • '+new Date(p.created_at).toLocaleString();
+      const msg=document.createElement('div');msg.innerText=p.content||'';
+      body.appendChild(meta);body.appendChild(msg);
+      d.appendChild(av);d.appendChild(body);
+      list.appendChild(d);
+    }
     list.scrollTop=list.scrollHeight;
   }
-
-  function appendPost(container,p){
-    const d=document.createElement('div'); d.className='post';
-    const av=document.createElement('div'); av.className='avatar';
-    const img=document.createElement('img');
-    const avatarUrl=p.avatar_url||auth.avatarUrl||'/img/user.png';
-    img.src=avatarUrl.startsWith('http')?avatarUrl:'/img/'+avatarUrl;
-    av.appendChild(img);
-    const body=document.createElement('div'); body.className='body';
-    const meta=document.createElement('div'); meta.className='meta';
-    meta.innerText=(p.username||'Unknown')+' • '+(p.created_at?new Date(p.created_at).toLocaleString():'');
-    const msg=document.createElement('div'); msg.innerText=p.content||'';
-    body.appendChild(meta); body.appendChild(msg);
-    d.appendChild(av); d.appendChild(body);
-    container.appendChild(d);
-  }
-
-  async function loadOlder(){
-    if(loadingOlder||!hasMoreAbove) return;
-    loadingOlder=true;
-    const list=document.getElementById('postsList');
-    const prevScrollTop=list.scrollTop;
-    const prevScrollHeight=list.scrollHeight;
-    const { data: posts }=await sb.from('forum_posts').select('*').eq('topic_id',currentTopicId).lt('created_at',firstCursor).order('created_at',{ascending:false}).limit(PAGE_SIZE);
-    const ordered=(posts||[]).slice().reverse();
-    for(const p of ordered) list.insertBefore(createPostEl(p),list.firstChild);
-    firstCursor=ordered[0]?.created_at||firstCursor;
-    list.scrollTop=prevScrollTop+(list.scrollHeight-prevScrollHeight);
-    loadingOlder=false;
-  }
-
-  function createPostEl(p){const d=document.createElement('div');d.className='post';const av=document.createElement('div');av.className='avatar';const img=document.createElement('img');img.src=p.avatar_url||auth.avatarUrl||'/img/user.png';av.appendChild(img);const body=document.createElement('div');body.className='body';const meta=document.createElement('div');meta.className='meta';meta.innerText=(p.username||'Unknown')+' • '+(p.created_at?new Date(p.created_at).toLocaleString():'');const msg=document.createElement('div');msg.innerText=p.content||'';body.appendChild(meta);body.appendChild(msg);d.appendChild(av);d.appendChild(body);return d;}
-
-  function onPostsScroll(){if(document.getElementById('postsList').scrollTop<=60) loadOlder();}
 
   document.getElementById('backBtn').addEventListener('click',()=>{
     document.getElementById('topicsPanel').style.display='';
     document.getElementById('backBtn').style.display='none';
-    document.getElementById('topicHeader').innerText='';
     document.getElementById('postsList').innerHTML='';
     document.getElementById('composerWrap').style.display='none';
-    currentTopicId=null; firstCursor=null; hasMoreAbove=false;
-    document.querySelectorAll('.topic-btn').forEach(e=>e.classList.remove('active'));
+    currentTopicId=null;
   });
 
   document.getElementById('sendBtn').addEventListener('click',async function(){
     const txt=document.getElementById('msgInput').value.trim();
     if(!txt||!currentTopicId) return;
-    this.disabled=true; this.innerText='Sending...';
+    this.disabled=true;this.innerText='Sending...';
     try{
-      const { error }=await sb.from('forum_posts').insert({topic_id:currentTopicId,username:auth.username,content:txt,avatar_url:auth.avatarUrl||'/img/user.png'});
-      if(error){alert('Error posting: '+error.message);return;}
+      const { error } = await sb.from('forum_posts').insert({topic_id:currentTopicId,username:auth.username,content:txt,avatar_url:auth.avatarUrl||'/img/user.png'});
+      if(error){alert('Error posting');return;}
       document.getElementById('msgInput').value='';
-      await loadInitialPosts(currentTopicId);
+      await loadPosts();
       await loadTopics();
-    }catch(e){console.error(e);}finally{this.disabled=false;this.innerText='Send'}
+    }finally{this.disabled=false;this.innerText='Send';}
   });
 
   await loadTopics();
