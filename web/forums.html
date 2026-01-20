@@ -4,157 +4,232 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Forums - OLDRBX</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="icon" type="image/png" href="img/ic.png">
+<link rel="icon" href="/img/ic.png">
 <style>
-:root{--bg:#121316;--panel:#1e2022;--border:#2b2d30;--muted:#b8b8b8;--accent:#98a3ad}
-html,body{height:100%;margin:0;background:var(--bg);color:#fff;font-family:Arial,Helvetica,sans-serif}
-.topbar{height:56px;background:var(--panel);border-bottom:2px solid var(--border);display:flex;align-items:center;padding:0 12px}
-.hamburger{width:40px;height:40px;border-radius:6px;background:transparent;border:none;color:var(--muted);font-size:20px;display:none;order:0}
-.logo-img{height:28px;order:1}
-.container-layout{display:grid;grid-template-columns:300px 1fr;gap:18px;padding:18px}
-.sidebar{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:12px}
-.topic{padding:10px;border-radius:6px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
-.topic:hover{background:rgba(255,255,255,0.02)}
-.topic.active{background:rgba(255,255,255,0.03);border-left:3px solid var(--accent)}
-.mainpanel{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:12px;min-height:420px;display:flex;flex-direction:column}
-.posts{flex:1;overflow:auto;padding-right:6px}
-.post{display:flex;gap:12px;padding:12px;border-radius:6px;border-bottom:1px solid var(--border);align-items:flex-start}
-.post .avatar{width:48px;height:48px;border-radius:50%;overflow:hidden;background:var(--border)}
-.post .avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
-.post .body{flex:1}
-.post .meta{font-size:12px;color:var(--muted);margin-bottom:6px}
-.composer{margin-top:12px;display:flex;gap:10px;align-items:flex-start}
-.composer textarea{flex:1;min-height:90px;background:#111;border:1px solid var(--border);color:#fff;padding:10px;border-radius:6px;resize:vertical}
-.composer button{height:40px;border-radius:6px}
-.empty{color:var(--muted);padding:18px;text-align:center}
-.footer{background:var(--panel);border-top:2px solid var(--border);padding:10px;text-align:center;color:var(--muted)}
-@media(max-width:900px){.container-layout{grid-template-columns:1fr;padding:12px}.sidebar{order:2}.mainpanel{order:1}.hamburger{display:inline-flex}}
+:root{--bg:#efefef;--panel:#ffffff;--muted:#666;--border:#d7d7d7;--accent:#111;--shadow:rgba(0,0,0,0.06)}
+html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:#111}
+.topbar{height:56px;background:var(--accent);display:flex;align-items:center;padding:0 12px;gap:12px;box-sizing:border-box}
+.hamburger{width:44px;height:44px;border-radius:6px;border:none;background:transparent;color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.logo-img{height:32px}
+.top-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.money-wrap{display:flex;align-items:center;gap:8px;color:#fff;font-weight:800}
+.money-wrap img{width:20px;height:20px}
+.balance{font-weight:800;color:#fff}
+.avatar{width:36px;height:36px;border-radius:6px;overflow:hidden;background:#fff;display:inline-block}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.container-wrap{max-width:1100px;margin:20px auto;padding:0 16px;box-sizing:border-box}
+.layout{display:grid;grid-template-columns:300px 1fr;gap:18px;align-items:start}
+.sidebar{background:var(--panel);border:1px solid var(--border);padding:12px;border-radius:6px;min-height:320px}
+.user-header{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+.user-header .mini{width:44px;height:44px;border-radius:6px;overflow:hidden}
+.user-header .mini img{width:100%;height:100%;object-fit:cover}
+.username{font-weight:900}
+.nav-item{padding:12px;border-radius:6px;background:#fff;border:1px solid var(--border);font-weight:800;margin-bottom:10px;cursor:pointer;display:flex;align-items:center;justify-content:space-between}
+.main{background:var(--panel);border:1px solid var(--border);padding:18px;border-radius:6px;display:flex;flex-direction:column;gap:16px;min-height:420px}
+.section-title{font-weight:900}
+.forum-list{display:flex;flex-direction:column;gap:10px}
+.forum-item{display:flex;align-items:center;gap:12px;padding:12px;background:#fff;border:1px solid var(--border);border-radius:6px;cursor:pointer}
+.forum-item img{width:48px;height:48px;border-radius:6px;object-fit:cover}
+.forum-meta{display:flex;flex-direction:column}
+.forum-title{font-weight:900}
+.forum-desc{font-size:13px;color:var(--muted)}
+.forum-controls{display:flex;gap:8px;align-items:center}
+.panel-box{background:#fff;border:1px solid var(--border);border-radius:6px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.panel-header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.back-btn{padding:6px 10px;border-radius:6px;border:1px solid var(--border);background:#fff;cursor:pointer;font-weight:800}
+.posts-box{max-height:360px;overflow:auto;padding:8px;display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--border)}
+.post{display:flex;gap:10px;padding:10px;border-radius:6px;background:linear-gradient(180deg,rgba(0,0,0,0.02),transparent)}
+.post .av{width:44px;height:44px;border-radius:6px;overflow:hidden;background:#efefef;flex-shrink:0}
+.post .av img{width:100%;height:100%;object-fit:cover}
+.post .body{display:flex;flex-direction:column}
+.post .meta{font-weight:800;font-size:13px}
+.post .time{font-size:12px;color:var(--muted)}
+.composer{display:flex;gap:10px;align-items:flex-start;margin-top:10px}
+.composer textarea{flex:1;min-height:72px;border:1px solid var(--border);padding:8px;border-radius:6px;resize:vertical}
+.btn{padding:8px 12px;border-radius:6px;border:1px solid var(--border);background:#fff;font-weight:800;cursor:pointer}
+.btn-primary{background:var(--accent);color:#fff;border:none}
+.empty{color:var(--muted);padding:12px;text-align:center}
+.footer{margin-top:18px;background:var(--panel);border-top:1px solid var(--border);padding:10px 16px;color:var(--muted);font-weight:700;text-align:center;border-radius:0}
+@media(max-width:1000px){.layout{grid-template-columns:1fr}.sidebar{position:fixed;left:-360px;top:56px;height:calc(100% - 56px);width:280px;z-index:1200;transition:left .18s ease}.sidebar.open{left:0}}
 </style>
 </head>
 <body>
 <div class="topbar">
   <button id="hamb" class="hamburger" aria-label="menu">&#9776;</button>
-  <img src="img/logo.png" class="logo-img" alt="logo">
-  <div style="margin-left:auto;display:flex;gap:12px;align-items:center">
-    <div class="avatar"><img id="topAv" src="img/user.png" style="width:36px;height:36px;border-radius:50%" alt="avatar"></div>
+  <img src="/img/logo.png" class="logo-img" alt="logo">
+  <div class="top-right">
+    <div class="money-wrap" title="Balance">
+      <img id="moneyIcon" src="/img/money.png" alt="money">
+      <div id="balanceText" class="balance">0</div>
+    </div>
+    <a id="profileBtnTop" class="avatar" href="/web/home.html"><img id="topAv" src="/img/user.png" alt="avatar"></a>
   </div>
 </div>
-<div class="container-layout">
-  <aside class="sidebar" id="sidebar">
-    <div style="font-weight:800;margin-bottom:8px">Forums</div>
-    <div id="topicsList"></div>
-  </aside>
-  <section class="mainpanel">
-    <div id="topicHeader" style="font-weight:800;margin-bottom:8px"></div>
-    <div class="posts" id="postsList"></div>
-    <div id="composerWrap" style="margin-top:12px;display:none">
-      <div style="font-size:13px;color:var(--muted);margin-bottom:6px">Post as <span id="meName"></span></div>
-      <div class="composer">
-        <img id="meAv" src="img/user.png" style="width:48px;height:48px;border-radius:50%" alt="avatar">
-        <textarea id="msgInput" placeholder="Write your message..."></textarea>
+<div class="container-wrap">
+  <div class="layout">
+    <aside id="sidebar" class="sidebar" aria-label="Main navigation">
+      <div class="user-header">
+        <div class="mini"><img id="sideAv" src="/img/user.png" alt=""></div>
+        <div><div id="sideName" class="username">User</div></div>
       </div>
-      <div style="margin-top:8px;display:flex;justify-content:flex-end">
-        <button id="sendBtn" class="btn btn-primary">Send</button>
+      <div id="navHome" class="nav-item" data-h="/web/home.html">Home</div>
+      <div id="navFriends" class="nav-item" data-h="/web/friends.html">Friends</div>
+      <div id="navGroups" class="nav-item" data-h="/web/groups.html">Groups</div>
+      <div id="navForums" class="nav-item" data-h="/web/forums.html">Forums</div>
+      <div id="navUsers" class="nav-item" data-h="/web/users.html">Users</div>
+    </aside>
+    <main class="main" role="main">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div class="section-title">Forums</div>
+        <div class="forum-controls">
+          <button id="newForumBtn" class="btn">New Forum</button>
+        </div>
       </div>
-    </div>
-  </section>
+      <div id="centerContent" class="forum-list panel-box">
+        <div id="forumsContainer"></div>
+      </div>
+    </main>
+  </div>
+  <div class="footer">© 2026 OLDRBX</div>
 </div>
-<footer class="footer">&copy; 2026 OLDRBX</footer>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const SUPA_URL = "https://nkvvnnjukqtfhmegyzek.supabase.co";
-const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rdnZubmp1a3R0ZmhtZWd5emVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2NjQ5MTIsImV4cCI6MjA4NDI0MDkxMn0.2jp9X2KQunFargrstYM7oGBYs75Kq7AEHs7iRARxexs";
-const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
-let auth = null;
-try{auth = JSON.parse(localStorage.getItem('auth'))}catch(e){auth=null}
-if(!auth||!auth.username){location.replace('login.html')}
-document.getElementById('meName').innerText = auth.username;
-document.getElementById('meAv').src = auth.avatarUrl || 'img/user.png';
-document.getElementById('topAv').src = auth.avatarUrl || 'img/user.png';
-document.getElementById('hamb').addEventListener('click',function(){document.getElementById('sidebar').classList.toggle('open')});
-document.querySelectorAll('.nav-item').forEach(it=>it.addEventListener('click',()=>location.href=it.dataset.h));
-const topicsList = document.getElementById('topicsList');
-const postsList = document.getElementById('postsList');
-const topicHeader = document.getElementById('topicHeader');
-const composerWrap = document.getElementById('composerWrap');
-const sendBtn = document.getElementById('sendBtn');
-const msgInput = document.getElementById('msgInput');
-async function loadTopics(){
-  topicsList.innerHTML = '<div class="empty">Loading topics...</div>';
-  try{
-    const res = await sb.from('forum_topics').select('id,title,slug').order('id',{ascending:true});
-    if(res.error||!res.data||!res.data.length){
-      const defaults = [{title:'News',slug:'news'},{title:'Updates',slug:'updates'},{title:"What's on your mind",slug:'whats-on-your-mind'}];
-      topicsList.innerHTML = '';
-      defaults.forEach((t,i)=>{const el=document.createElement('div');el.className='topic';el.innerText=t.title;el.dataset.slug=t.slug;el.addEventListener('click',()=>selectTopic(t.slug,t.title));topicsList.appendChild(el);if(i===0)selectTopic(t.slug,t.title)});
-      return;
-    }
-    topicsList.innerHTML = '';
-    res.data.forEach((t,i)=>{const el=document.createElement('div');el.className='topic';el.innerText=t.title;el.dataset.slug=t.slug||t.title.toLowerCase().replace(/\s+/g,'-');el.addEventListener('click',()=>selectTopic(el.dataset.slug,t.title));topicsList.appendChild(el);if(i===0)selectTopic(el.dataset.slug,t.title)});
-  }catch(e){
-    topicsList.innerHTML = '<div class="empty">Unable to load topics</div>';
-  }
-}
-async function selectTopic(slug,title){
-  currentSlug = slug;
-  Array.from(document.querySelectorAll('.topic')).forEach(x=>x.classList.remove('active'));
-  const clicked = [...document.querySelectorAll('.topic')].find(x=>x.dataset.slug===slug);
-  if(clicked) clicked.classList.add('active');
-  topicHeader.innerText = title;
-  composerWrap.style.display = 'none';
-  postsList.innerHTML = '<div class="empty">Loading posts...</div>';
-  try{
-    const r = await sb.from('forum_topics').select('id').eq('slug',slug).limit(1).maybeSingle();
-    let topicId = null;
-    if(r && r.data && r.data.id) topicId = r.data.id;
-    else {
-      const ins = await sb.from('forum_topics').insert({title:title,slug:slug}).select().maybeSingle();
-      if(ins && ins.data && ins.data.id) topicId = ins.data.id;
-    }
-    if(!topicId){postsList.innerHTML = '<div class="empty">Unable to load posts</div>';return}
-    const p = await sb.from('forum_posts').select('id,username,content,avatar_url,created_at').eq('topic_id',topicId).order('created_at',{ascending:true});
-    if(p.error){postsList.innerHTML = '<div class="empty">Error loading posts</div>';return}
-    postsList.innerHTML = '';
-    if(!p.data||!p.data.length){postsList.innerHTML = '<div class="empty">No posts yet. Be the first to post.</div>';composerWrap.style.display='block';return}
-    p.data.forEach(post=>{const d=document.createElement('div');d.className='post';const av=document.createElement('div');av.className='avatar';const img=document.createElement('img');img.src=post.avatar_url||'img/user.png';av.appendChild(img);const body=document.createElement('div');body.className='body';const meta=document.createElement('div');meta.className='meta';const date=new Date(post.created_at).toLocaleString();meta.innerText=post.username+' • '+date;const msg=document.createElement('div');msg.innerText=post.content;body.appendChild(meta);body.appendChild(msg);d.appendChild(av);d.appendChild(body);postsList.appendChild(d)});
-    composerWrap.style.display='block';
-    postsList.scrollTop = postsList.scrollHeight;
-    currentTopicId = r && r.data && r.data.id ? r.data.id : (p.data[0] ? p.data[0].topic_id : null);
-  }catch(e){
-    postsList.innerHTML = '<div class="empty">Error loading posts</div>';
-  }
-}
-let currentSlug = null;
-let currentTopicId = null;
-sendBtn.addEventListener('click',async function(){
-  const txt = msgInput.value.trim();
-  if(!txt) return;
-  sendBtn.disabled = true;
-  sendBtn.innerText = 'Sending...';
-  try{
-    if(!currentTopicId){
-      const r = await sb.from('forum_topics').select('id').eq('slug',currentSlug).limit(1).maybeSingle();
-      if(r && r.data && r.data.id) currentTopicId = r.data.id;
-      else {
-        const ins = await sb.from('forum_topics').insert({title:topicHeader.innerText,slug:currentSlug}).select().maybeSingle();
-        if(ins && ins.data && ins.data.id) currentTopicId = ins.data.id;
+document.addEventListener('DOMContentLoaded',async function(){
+  const SUPA_URL="https://nkvvnnjukqtfhmegyzek.supabase.co";
+  const SUPA_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rdnZubmp1a3R0ZmhtZWd5emVrIiwicm9sZSI6ImFscyIsImlhdCI6MTc2ODY2NDkxMiwiZXhwIjoyMDg0MjQwOTEyfQ.2jp9X2KQunFargrstYM7oGBYs75Kq7AEHs7iRARxexs";
+  const sb=supabase.createClient(SUPA_URL,SUPA_KEY);
+  var hamb=document.getElementById('hamb'),sidebar=document.getElementById('sidebar');
+  hamb.addEventListener('click',function(){if(window.innerWidth<1000)sidebar.classList.toggle('open')});
+  function nav(h){location.href=h}
+  document.querySelectorAll('.nav-item').forEach(function(it){it.addEventListener('click',function(){nav(it.dataset.h)})});
+  var auth=null;try{auth=JSON.parse(localStorage.getItem('auth'))}catch(e){auth=null}
+  if(!auth||!auth.username){location.replace('/web/login.html');return}
+  document.getElementById('sideName').innerText=auth.username;
+  document.getElementById('profileBtnTop').href='/web/home.html';
+  function setAv(u){var x=u||'/img/user.png';document.getElementById('sideAv').src=x;document.getElementById('topAv').src=x}
+  setAv(auth.avatarUrl||'/img/user.png');
+  document.getElementById('moneyIcon').src='/img/money.png';
+  var localBal=(typeof auth.balance!=='undefined'&&auth.balance!==null)?auth.balance:0;
+  document.getElementById('balanceText').innerText=String(localBal);
+  async function getUserByUsername(u){var r=await sb.from('users').select('*').eq('username',u).maybeSingle();if(r.error) return null;return r.data||null}
+  var userRow=await getUserByUsername(auth.username);
+  if(userRow&&typeof userRow.balance!=='undefined')document.getElementById('balanceText').innerText=String(userRow.balance);
+  if(userRow&&userRow.avatar_url)setAv(userRow.avatar_url);
+  if(userRow&&userRow.id)await sb.from('users').update({last_active:new Date().toISOString()}).eq('id',userRow.id);
+  var centerContent=document.getElementById('centerContent');
+  var forumsContainer=document.getElementById('forumsContainer');
+  async function loadForums(){
+    forumsContainer.innerHTML='<div class="empty">Loading forums...</div>';
+    try{
+      var res=await sb.from('forum_topics').select('id,title,slug,description').order('id',{ascending:true});
+      if(res.error||!res.data||!res.data.length){
+        var defaults=[{title:'News',slug:'news',description:'Latest announcements'},{title:'Updates',slug:'updates',description:'Product updates'},{title:'General',slug:'general',description:'General discussion'}];
+        renderForumList(defaults);
+        return;
       }
+      renderForumList(res.data);
+    }catch(e){
+      forumsContainer.innerHTML='<div class="empty">Unable to load forums</div>';
     }
-    if(!currentTopicId){alert('Unable to post: topic not found');sendBtn.disabled=false;sendBtn.innerText='Send';return}
-    const payload = {topic_id:currentTopicId,username:auth.username,content:txt,avatar_url:auth.avatarUrl||'img/user.png'};
-    const ins = await sb.from('forum_posts').insert(payload);
-    if(ins.error){alert('Unable to post');sendBtn.disabled=false;sendBtn.innerText='Send';return}
-    msgInput.value = '';
-    await selectTopic(currentSlug,topicHeader.innerText);
-  }catch(e){
-    alert('Error creating post');
-  }finally{
-    sendBtn.disabled = false;
-    sendBtn.innerText = 'Send';
   }
+  function renderForumList(list){
+    forumsContainer.innerHTML='';
+    list.forEach(function(f){
+      var item=document.createElement('div');item.className='forum-item';
+      var img=document.createElement('img');img.src='/img/forum.png';
+      var meta=document.createElement('div');meta.className='forum-meta';
+      var title=document.createElement('div');title.className='forum-title';title.innerText=f.title||'Untitled';
+      var desc=document.createElement('div');desc.className='forum-desc';desc.innerText=f.description||'';
+      meta.appendChild(title);meta.appendChild(desc);
+      item.appendChild(img);item.appendChild(meta);
+      item.addEventListener('click',function(){openForum(f)});
+      forumsContainer.appendChild(item);
+    });
+  }
+  function createPanelHeader(title){
+    var header=document.createElement('div');header.className='panel-header';
+    var left=document.createElement('div');left.style.display='flex';left.style.alignItems='center';left.style.gap='10px';
+    var back=document.createElement('button');back.className='back-btn';back.innerText='← Back';back.addEventListener('click',backToList);
+    var ttl=document.createElement('div');ttl.style.fontWeight='900';ttl.innerText=title||'Forum';
+    left.appendChild(back);left.appendChild(ttl);
+    var right=document.createElement('div');
+    header.appendChild(left);header.appendChild(right);
+    return {header,back};
+  }
+  async function openForum(f){
+    centerContent.scrollTop=0;
+    forumsContainer.innerHTML='';
+    var id=f.id||null;
+    if(!id){
+      var ins=await sb.from('forum_topics').insert({title:f.title,slug:f.slug,description:f.description}).select().maybeSingle();
+      if(ins && ins.data && ins.data.id) id=ins.data.id;
+    }
+    var ph=createPanelHeader(f.title);
+    var panel=document.createElement('div');panel.className='panel-box';
+    panel.appendChild(ph.header);
+    var postsBox=document.createElement('div');postsBox.className='posts-box';
+    postsBox.innerHTML='<div class="empty">Loading messages...</div>';
+    panel.appendChild(postsBox);
+    var composer=document.createElement('div');composer.className='composer';
+    var av=document.createElement('div');av.className='av';av.style.width='44px';av.style.height='44px';
+    var avimg=document.createElement('img');avimg.src=auth.avatarUrl||'/img/user.png';avimg.style.width='100%';avimg.style.height='100%';avimg.style.objectFit='cover';
+    av.appendChild(avimg);
+    var textarea=document.createElement('textarea');textarea.placeholder='Write your message...';
+    var send=document.createElement('button');send.className='btn btn-primary';send.innerText='Send';
+    composer.appendChild(av);composer.appendChild(textarea);composer.appendChild(send);
+    panel.appendChild(composer);
+    forumsContainer.appendChild(panel);
+    ph.back.addEventListener('click',backToList);
+    send.addEventListener('click',async function(){
+      var txt=textarea.value.trim();
+      if(!txt) return;
+      send.disabled=true;send.innerText='Sending...';
+      var payload={topic_id:id,username:auth.username,content:txt,avatar_url:auth.avatarUrl||'/img/user.png'};
+      try{
+        var ins=await sb.from('forum_posts').insert(payload);
+        if(ins.error){alert('Unable to post');}
+        else{textarea.value='';await loadPostsInto(postsBox,id);}
+      }catch(e){alert('Error posting');}
+      send.disabled=false;send.innerText='Send';
+    });
+    await loadPostsInto(postsBox,id);
+  }
+  async function loadPostsInto(container,topicId){
+    container.innerHTML='<div class="empty">Loading messages...</div>';
+    try{
+      var p=await sb.from('forum_posts').select('id,username,content,avatar_url,created_at').eq('topic_id',topicId).order('created_at',{ascending:false});
+      if(p.error){container.innerHTML='<div class="empty">Error loading messages</div>';return}
+      var rows=p.data&&p.data.length?p.data:[];
+      container.innerHTML='';
+      if(!rows.length){container.innerHTML='<div class="empty">No messages yet</div>';return}
+      rows.forEach(function(r){
+        var el=document.createElement('div');el.className='post';
+        var av=document.createElement('div');av.className='av';var i=document.createElement('img');i.src=r.avatar_url||'/img/user.png';i.style.width='100%';i.style.height='100%';i.style.objectFit='cover';av.appendChild(i);
+        var body=document.createElement('div');body.className='body';
+        var meta=document.createElement('div');meta.className='meta';meta.innerText=(r.username||'Anonymous');
+        var time=document.createElement('div');time.className='time';time.innerText=r.created_at?new Date(r.created_at).toLocaleString():'';
+        var content=document.createElement('div');content.style.marginTop='6px';content.innerText=r.content||'';
+        body.appendChild(meta);body.appendChild(time);body.appendChild(content);
+        el.appendChild(av);el.appendChild(body);
+        container.appendChild(el);
+      });
+    }catch(e){
+      container.innerHTML='<div class="empty">Error loading messages</div>';
+    }
+  }
+  function backToList(){
+    loadForums();
+  }
+  document.getElementById('newForumBtn').addEventListener('click',async function(){
+    var title=prompt('New forum title:');
+    if(!title) return;
+    var slug=title.toLowerCase().replace(/[^\w\s-]/g,'').trim().replace(/\s+/g,'-');
+    var ins=await sb.from('forum_topics').insert({title:title,slug:slug}).select().maybeSingle();
+    if(ins && ins.data){loadForums(); setTimeout(function(){var items=document.querySelectorAll('.forum-item'); if(items && items.length){items[items.length-1].scrollIntoView({behavior:'smooth'})}},200)}
+  });
+  await loadForums();
+  window.addEventListener('resize',function(){if(window.innerWidth>=1000)sidebar.classList.remove('open')});
 });
-loadTopics();
 </script>
 </body>
 </html>
