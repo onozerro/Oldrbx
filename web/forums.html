@@ -45,7 +45,6 @@ html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,
 .composer{margin-top:12px;display:flex;gap:10px;align-items:flex-start}
 .composer textarea{flex:1;min-height:90px;background:#fafafa;border:1px solid var(--border);color:#111;padding:10px;border-radius:6px;resize:vertical}
 .btn{padding:8px 12px;border-radius:6px;border:1px solid #111;background:#111;color:#fff;font-weight:800;cursor:pointer}
-.btn-ghost{padding:8px 12px;border-radius:6px;border:1px solid #111;background:#fff;color:#111;font-weight:800;cursor:pointer}
 .empty{color:var(--muted);padding:18px;text-align:center}
 .footer{margin-top:18px;background:var(--panel);border-top:1px solid var(--border);padding:10px 16px;color:var(--muted);font-weight:700;text-align:center;border-radius:0}
 @media(max-width:1000px){.layout{grid-template-columns:1fr}.sidebar{position:fixed;left:-360px;top:56px;height:calc(100% - 56px);width:280px;z-index:1200;transition:left .18s ease}.sidebar.open{left:0}}
@@ -98,33 +97,29 @@ html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async function(){
-  const SUPA_URL = "https://nkvvnnjukqtfhmegyzek.supabase.co";
-  const SUPA_KEY = "YOUR_SUPABASE_KEY_HERE";
-  const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
-  let currentTopicId = null;
-  let auth = JSON.parse(localStorage.getItem('auth')||'{}');
+  const SUPA_URL="https://nkvvnnjukqtfhmegyzek.supabase.co";
+  const SUPA_KEY="YOUR_SUPABASE_KEY_HERE";
+  const sb=supabase.createClient(SUPA_URL,SUPA_KEY);
+  let currentTopicId=null;
+  let auth=JSON.parse(localStorage.getItem('auth')||'{}');
   if(!auth.username){location.replace('/web/login.html');return}
-  document.getElementById('meName').innerText = auth.username;
-  document.getElementById('meAv').src = auth.avatarUrl||'/img/user.png';
-  document.getElementById('topAv').src = auth.avatarUrl||'/img/user.png';
-  document.getElementById('sideName').innerText = auth.username;
-  document.getElementById('balanceText').innerText = String(auth.balance||0);
-  document.getElementById('moneyIcon').src = '/img/money.png';
+  document.getElementById('meName').innerText=auth.username;
+  document.getElementById('meAv').src=auth.avatarUrl||'/img/user.png';
+  document.getElementById('topAv').src=auth.avatarUrl||'/img/user.png';
+  document.getElementById('sideName').innerText=auth.username;
+  document.getElementById('balanceText').innerText=String(auth.balance||0);
   document.getElementById('hamb').addEventListener('click',()=>document.getElementById('sidebar').classList.toggle('open'));
 
   async function loadTopics(){
-    const { data } = await sb.from('forum_topics').select('*').order('id',{ascending:true});
-    const container = document.getElementById('topicsList');
-    container.innerHTML='';
+    const {data}=await sb.from('forum_topics').select('*').order('id',{ascending:true});
+    const container=document.getElementById('topicsList');container.innerHTML='';
     for(const t of data||[]){
-      const lastQ = await sb.from('forum_posts').select('created_at,username').eq('topic_id',t.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
-      const countResp = await sb.from('forum_posts').select('id',{count:'exact',head:true}).eq('topic_id',t.id);
-      const count = countResp.count||0;
-      const lastAt = lastQ?.data ? new Date(lastQ.data.created_at) : null;
-      const lastText = lastAt ? new Date(lastAt).toLocaleString() : '—';
-      const el = document.createElement('div');
-      el.className='topic-btn';
-      el.dataset.id=t.id;
+      const lastQ=await sb.from('forum_posts').select('created_at,username').eq('topic_id',t.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
+      const countResp=await sb.from('forum_posts').select('id',{count:'exact',head:true}).eq('topic_id',t.id);
+      const count=countResp.count||0;
+      const lastAt=lastQ?.data?new Date(lastQ.data.created_at):null;
+      const lastText=lastAt?new Date(lastAt).toLocaleString():'—';
+      const el=document.createElement('div');el.className='topic-btn';el.dataset.id=t.id;
       el.innerHTML='<div class="left"><div class="title">'+t.title+'</div><div class="meta">'+(lastQ?.data?.username?lastQ.data.username+' • '+lastText:'No messages yet')+'</div></div><div class="right"><div class="count-pill">'+count+'</div><div style="font-size:12px;color:#666">'+lastText+'</div></div>';
       el.addEventListener('click',()=>selectTopic(t.id,t.title));
       container.appendChild(el);
@@ -142,7 +137,7 @@ document.addEventListener('DOMContentLoaded', async function(){
 
   async function loadPosts(){
     const list=document.getElementById('postsList');list.innerHTML='';
-    const { data: posts } = await sb.from('forum_posts').select('*').eq('topic_id',currentTopicId).order('created_at',{ascending:true});
+    const {data:posts}=await sb.from('forum_posts').select('*').eq('topic_id',currentTopicId).order('created_at',{ascending:true});
     if(!posts?.length){list.innerHTML='<div class="empty">No messages yet</div>';return;}
     for(const p of posts){
       const d=document.createElement('div');d.className='post';
@@ -151,8 +146,7 @@ document.addEventListener('DOMContentLoaded', async function(){
       const body=document.createElement('div');body.className='body';
       const meta=document.createElement('div');meta.className='meta';meta.innerText=(p.username||'Unknown')+' • '+new Date(p.created_at).toLocaleString();
       const msg=document.createElement('div');msg.innerText=p.content||'';
-      body.appendChild(meta);body.appendChild(msg);
-      d.appendChild(av);d.appendChild(body);
+      body.appendChild(meta);body.appendChild(msg);d.appendChild(av);d.appendChild(body);
       list.appendChild(d);
     }
     list.scrollTop=list.scrollHeight;
@@ -171,7 +165,7 @@ document.addEventListener('DOMContentLoaded', async function(){
     if(!txt||!currentTopicId) return;
     this.disabled=true;this.innerText='Sending...';
     try{
-      const { error } = await sb.from('forum_posts').insert({topic_id:currentTopicId,username:auth.username,content:txt,avatar_url:auth.avatarUrl||'/img/user.png'});
+      const {error}=await sb.from('forum_posts').insert({topic_id:currentTopicId,username:auth.username,content:txt,avatar_url:auth.avatarUrl||'/img/user.png'});
       if(error){alert('Error posting');return;}
       document.getElementById('msgInput').value='';
       await loadPosts();
