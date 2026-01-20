@@ -98,6 +98,7 @@ html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,
   </div>
   <div class="footer">© 2026 OLDRBX</div>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async function(){
@@ -114,7 +115,7 @@ document.addEventListener('DOMContentLoaded', async function(){
   document.getElementById('sideName').innerText=auth.username;
   document.getElementById('sideAv').src=auth.avatarUrl||'/img/user.png';
   document.getElementById('balanceText').innerText=String(auth.balance||0);
-  document.getElementById('hamb').addEventListener('click',function(){document.getElementById('sidebar').classList.toggle('open')});
+  document.getElementById('hamb').addEventListener('click',()=>document.getElementById('sidebar').classList.toggle('open'));
   document.querySelectorAll('.nav-item').forEach(el=>el.addEventListener('click',()=>location.href=el.dataset.h));
   async function ensureTopics(){
     const {data}=await sb.from('forum_topics').select('*').order('id',{ascending:true});
@@ -133,9 +134,7 @@ document.addEventListener('DOMContentLoaded', async function(){
     for(const t of topics){
       const {data:lastPost}=await sb.from('forum_posts').select('created_at,username').eq('topic_id',t.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
       const {count}=await sb.from('forum_posts').select('id',{count:'exact',head:true}).eq('topic_id',t.id);
-      const el=document.createElement('div');
-      el.className='topic-btn';
-      el.dataset.id=t.id;
+      const el=document.createElement('div');el.className='topic-btn';el.dataset.id=t.id;
       const lastText=lastPost&&lastPost.created_at?lastPost.username+' • '+new Date(lastPost.created_at).toLocaleString():'No messages yet';
       el.innerHTML=`<div class="left"><div class="title">${escapeHtml(t.title)}</div><div class="meta">${lastText}</div></div><div class="right"><div class="count-pill">${count||0}</div></div>`;
       el.addEventListener('click',()=>selectTopic(t.id,t.title));
@@ -153,7 +152,7 @@ document.addEventListener('DOMContentLoaded', async function(){
   async function loadPosts(topicId){
     const list=document.getElementById('postsList');
     list.innerHTML='';
-    const {data:posts}=await sb.from('forum_posts').select('*').eq('topic_id',topicId).order('created_at',{ascending:false});
+    const {data:posts}=await sb.from('forum_posts').select('*').eq('topic_id',topicId).order('created_at',{ascending:true});
     if(!posts||!posts.length){list.innerHTML='<div class="empty">No messages yet</div>';return;}
     for(const p of posts){
       const d=document.createElement('div');d.className='post';
@@ -164,7 +163,7 @@ document.addEventListener('DOMContentLoaded', async function(){
       const msg=document.createElement('div');msg.innerText=p.content||'';
       body.appendChild(meta);body.appendChild(msg);d.appendChild(av);d.appendChild(body);list.appendChild(d);
     }
-    list.scrollTop=0;
+    list.scrollTop=list.scrollHeight;
   }
   document.getElementById('backBtn').addEventListener('click',()=>{
     document.getElementById('topicsPanel').style.display='';
