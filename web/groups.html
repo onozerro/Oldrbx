@@ -23,6 +23,7 @@ html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,
 .user-header{display:flex;gap:12px;align-items:center;margin-bottom:8px}
 .user-header .mini{width:44px;height:44px;border-radius:6px;overflow:hidden}
 .user-header .mini img{width:100%;height:100%;object-fit:cover}
+#sideName{font-weight:900;} /* Ник жирный */
 .nav-item{padding:12px;border-radius:6px;background:#fff;border:1px solid var(--border);font-weight:800;margin-bottom:10px;cursor:pointer}
 .main{background:var(--panel);border:1px solid var(--border);padding:18px;border-radius:6px}
 .section-title{font-weight:900;margin-bottom:8px}
@@ -54,7 +55,10 @@ input[type="text"]{padding:8px;border:1px solid var(--border);border-radius:6px}
 <div class="container">
   <div class="layout">
     <aside id="sidebar" class="sidebar" aria-label="Main navigation">
-      <div class="user-header"><div class="mini"><img id="sideAv" src="/img/user.png" alt=""></div><div><div id="sideName" class="username">User</div></div></div>
+      <div class="user-header">
+        <div class="mini"><img id="sideAv" src="/img/user.png" alt=""></div>
+        <div><div id="sideName" class="username">User</div></div>
+      </div>
       <div class="nav-item" data-h="/web/home.html">Home</div>
       <div class="nav-item" data-h="/web/friends.html">Friends</div>
       <div class="nav-item" data-h="/web/groups.html">Groups</div>
@@ -83,100 +87,81 @@ input[type="text"]{padding:8px;border:1px solid var(--border);border-radius:6px}
 <script>
 document.addEventListener('DOMContentLoaded', async function() {
   const SUPA_URL = "https://nkvvnnjukqtfhmegyzek.supabase.co";
-  const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rdnZubmp1a3R0ZmhtZWd5emVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2NjQ5MTIsImV4cCI6MjA4NDI0MDkxMn0.2jp9X2KQunFargrstYM7oGBYs75Kq7AEHs7iRARxexs";
+  const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rdnNuanVrdGZobWVneXpla2siLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc2ODY2NDkxMiwiZXhwIjoyMDg0MjQwOTEyfQ.2jp9X2KQunFargrstYM7oGBYs75Kq7AEHs7iRARxexs";
   const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
 
-  // Sidebar toggle
   const hamb = document.getElementById('hamb'), sidebar = document.getElementById('sidebar');
-  hamb.addEventListener('click', () => { if(window.innerWidth<1000) sidebar.classList.toggle('open'); });
-  document.querySelectorAll('.nav-item').forEach(it => it.addEventListener('click', () => location.href = it.dataset.h));
+  hamb.addEventListener('click', ()=>{ if(window.innerWidth<1000) sidebar.classList.toggle('open'); });
+  document.querySelectorAll('.nav-item').forEach(it => it.addEventListener('click', ()=> location.href = it.dataset.h));
 
-  // Auth check
   let auth = null;
-  try { auth = JSON.parse(localStorage.getItem('auth')); } catch(e) { auth = null; }
+  try { auth = JSON.parse(localStorage.getItem('auth')); } catch(e){ auth=null; }
   if(!auth || !auth.username){ location.replace('/web/login.html'); return; }
 
   document.getElementById('sideName').innerText = auth.username;
   function safeSrc(u){ return u ? u : '/img/user.png'; }
-  function setAv(u){ let x = safeSrc(u); document.getElementById('sideAv').src = x; document.getElementById('topAv').src = x; }
+  function setAv(u){ let x = safeSrc(u); document.getElementById('sideAv').src=x; document.getElementById('topAv').src=x; }
   setAv(auth.avatarUrl);
 
-  async function getUser() {
-    try {
+  async function getUser(){
+    try{
       const res = await sb.from('users').select('*').eq('username', auth.username).maybeSingle();
       return res.data || null;
     } catch(e){ return null; }
   }
 
   let userRow = await getUser();
-  if(userRow) {
-    if(userRow.balance !== undefined) document.getElementById('balanceText').innerText = String(userRow.balance);
+  if(userRow){
+    if(userRow.balance!==undefined) document.getElementById('balanceText').innerText = String(userRow.balance);
     if(userRow.avatar_url) setAv(userRow.avatar_url);
-    try { await sb.from('users').update({last_active: new Date().toISOString()}).eq('id', userRow.id); } catch(e){}
+    try{ await sb.from('users').update({last_active: new Date().toISOString()}).eq('id', userRow.id); }catch(e){}
   }
 
-  async function refreshGroups() {
+  async function refreshGroups(){
     const wrap = document.getElementById('groupsList');
-    wrap.innerHTML = '';
-    try {
+    wrap.innerHTML='';
+    try{
       const res = await sb.from('groups')
-        .select('id, name, description, image_url, member_count')
-        .order('member_count', {ascending:false});
-      console.log('Groups fetch result:', res);
-      if(res.error || !res.data || !res.data.length){
-        wrap.innerHTML = '<div class="empty">No groups yet</div>';
-        return;
-      }
+        .select('id,name,description,image_url,member_count')
+        .order('member_count',{ascending:false});
+      console.log('Groups fetch:', res);
+      if(res.error || !res.data || !res.data.length){ wrap.innerHTML='<div class="empty">No groups yet</div>'; return; }
       for(const g of res.data){
-        const card = document.createElement('div');
-        card.className = 'group-card';
-        const left = document.createElement('div');
-        left.className = 'group-left';
-        const img = document.createElement('img');
-        img.src = g.image_url || '/img/logo.png';
+        const card = document.createElement('div'); card.className='group-card';
+        const left = document.createElement('div'); left.className='group-left';
+        const img = document.createElement('img'); img.src=g.image_url||'/img/logo.png';
         const txt = document.createElement('div');
-        txt.innerHTML = `<div style="font-weight:900">${g.name}</div><div style="font-size:12px;color:var(--muted)">${g.description||''}</div>`;
-        left.appendChild(img);
-        left.appendChild(txt);
-        const right = document.createElement('div');
-        right.innerHTML = `<div style="font-weight:800">${g.member_count||0} members</div>`;
-        card.appendChild(left);
-        card.appendChild(right);
-        card.addEventListener('click', ()=>{ location.href='/web/group.html?id='+g.id; });
+        txt.innerHTML=`<div style="font-weight:900">${g.name}</div><div style="font-size:12px;color:var(--muted)">${g.description||''}</div>`;
+        left.appendChild(img); left.appendChild(txt);
+        const right = document.createElement('div'); right.innerHTML=`<div style="font-weight:800">${g.member_count||0} members</div>`;
+        card.appendChild(left); card.appendChild(right);
+        card.addEventListener('click', ()=> location.href='/web/group.html?id='+g.id);
         wrap.appendChild(card);
       }
-    } catch(e){ wrap.innerHTML='<div class="empty">Error loading groups</div>'; }
+    }catch(e){ wrap.innerHTML='<div class="empty">Error loading groups</div>'; }
   }
 
   await refreshGroups();
 
-  document.getElementById('createBtn').addEventListener('click', async function(){
+  document.getElementById('createBtn').addEventListener('click', async ()=>{
     const name = document.getElementById('groupName').value.trim();
-    const feedback = document.getElementById('createFeedback');
-    feedback.innerText = '';
+    const feedback = document.getElementById('createFeedback'); feedback.innerText='';
     if(!name){ feedback.innerText='Enter group name'; return; }
 
     userRow = await getUser();
     const balance = userRow && userRow.balance ? Number(userRow.balance) : 0;
-    if(balance < 100){ feedback.innerText='Insufficient balance'; return; }
+    if(balance<100){ feedback.innerText='Insufficient balance'; return; }
 
     try{
-      const ins = await sb.from('groups').insert([{
-        creator_id: userRow.id,
-        name,
-        description:'',
-        member_count:1,
-        cost:100
-      }]).select().maybeSingle();
-      if(ins.error || !ins.data){ feedback.innerText='Failed to create group'; return; }
-
-      await sb.from('group_members').insert([{group_id: ins.data.id, user_id: userRow.id}]);
-      await sb.from('users').update({balance: balance-100}).eq('id', userRow.id);
+      const ins = await sb.from('groups').insert([{creator_id:userRow.id,name,description:'',member_count:1,cost:100}]).select().maybeSingle();
+      if(ins.error||!ins.data){ feedback.innerText='Failed to create group'; return; }
+      await sb.from('group_members').insert([{group_id:ins.data.id,user_id:userRow.id}]);
+      await sb.from('users').update({balance:balance-100}).eq('id',userRow.id);
       document.getElementById('groupName').value='';
       feedback.innerText='Group created';
+      document.getElementById('balanceText').innerText=String(balance-100);
       await refreshGroups();
-      document.getElementById('balanceText').innerText = String(balance-100);
-    } catch(e){ feedback.innerText='Failed to create group'; }
+    }catch(e){ feedback.innerText='Failed to create group'; }
   });
 
   window.addEventListener('resize', ()=>{ if(window.innerWidth>=1000) sidebar.classList.remove('open'); });
