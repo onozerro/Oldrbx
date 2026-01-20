@@ -29,7 +29,6 @@ html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,
 .section-title{font-weight:900}
 .forum-list{display:flex;flex-direction:column;gap:10px}
 .forum-item{display:flex;align-items:center;gap:12px;padding:12px;background:#fff;border:1px solid var(--border);border-radius:6px;cursor:pointer}
-.forum-item img{width:48px;height:48px;border-radius:6px;object-fit:cover}
 .forum-meta{display:flex;flex-direction:column}
 .forum-title{font-weight:900}
 .forum-desc{font-size:13px;color:var(--muted)}
@@ -81,9 +80,7 @@ html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,
     <main class="main" role="main">
       <div style="display:flex;align-items:center;justify-content:space-between">
         <div class="section-title">Forums</div>
-        <div class="forum-controls">
-          <button id="newForumBtn" class="btn">New Forum</button>
-        </div>
+        <div class="forum-controls"></div>
       </div>
       <div id="centerContent" class="forum-list panel-box">
         <div id="forumsContainer"></div>
@@ -136,12 +133,11 @@ document.addEventListener('DOMContentLoaded',async function(){
     forumsContainer.innerHTML='';
     list.forEach(function(f){
       var item=document.createElement('div');item.className='forum-item';
-      var img=document.createElement('img');img.src='/img/forum.png';
       var meta=document.createElement('div');meta.className='forum-meta';
       var title=document.createElement('div');title.className='forum-title';title.innerText=f.title||'Untitled';
       var desc=document.createElement('div');desc.className='forum-desc';desc.innerText=f.description||'';
       meta.appendChild(title);meta.appendChild(desc);
-      item.appendChild(img);item.appendChild(meta);
+      item.appendChild(meta);
       item.addEventListener('click',function(){openForum(f)});
       forumsContainer.appendChild(item);
     });
@@ -160,9 +156,15 @@ document.addEventListener('DOMContentLoaded',async function(){
     centerContent.scrollTop=0;
     forumsContainer.innerHTML='';
     var id=f.id||null;
-    if(!id){
-      var ins=await sb.from('forum_topics').insert({title:f.title,slug:f.slug,description:f.description}).select().maybeSingle();
-      if(ins && ins.data && ins.data.id) id=ins.data.id;
+    try{
+      var res=await sb.from('forum_topics').select('id,title,slug,description').eq('slug',f.slug).limit(1).maybeSingle();
+      if(res && res.data && res.data.id) id=res.data.id;
+      else if(!id){
+        var ins=await sb.from('forum_topics').insert({title:f.title,slug:f.slug,description:f.description}).select().maybeSingle();
+        if(ins && ins.data && ins.data.id) id=ins.data.id;
+      }
+    }catch(e){
+      console.error(e);
     }
     var ph=createPanelHeader(f.title);
     var panel=document.createElement('div');panel.className='panel-box';
@@ -186,19 +188,20 @@ document.addEventListener('DOMContentLoaded',async function(){
       send.disabled=true;send.innerText='Sending...';
       var payload={topic_id:id,username:auth.username,content:txt,avatar_url:auth.avatarUrl||'/img/user.png'};
       try{
-        var ins=await sb.from('forum_posts').insert(payload);
-        if(ins.error){alert('Unable to post');}
-        else{textarea.value='';await loadPostsInto(postsBox,id);}
-      }catch(e){alert('Error posting');}
+        var ins=await sb.from('forum_posts').insert(payload).select().maybeSingle();
+        if(ins && ins.error){console.error(ins.error);alert('Unable to post');}
+        else await loadPostsInto(postsBox,id);
+      }catch(e){console.error(e);alert('Error posting');}
       send.disabled=false;send.innerText='Send';
     });
-    await loadPostsInto(postsBox,id);
+    if(id) await loadPostsInto(postsBox,id);
+    else postsBox.innerHTML='<div class="empty">Unable to load messages for this forum</div>';
   }
   async function loadPostsInto(container,topicId){
     container.innerHTML='<div class="empty">Loading messages...</div>';
     try{
-      var p=await sb.from('forum_posts').select('id,username,content,avatar_url,created_at').eq('topic_id',topicId).order('created_at',{ascending:false});
-      if(p.error){container.innerHTML='<div class="empty">Error loading messages</div>';return}
+      var p=await sb.from('forum_posts').select('id,username,content,avatar_url,created_at,topic_id').eq('topic_id',topicId).order('created_at',{ascending:false});
+      if(p.error){console.error(p.error);container.innerHTML='<div class="empty">Error loading messages</div>';return}
       var rows=p.data&&p.data.length?p.data:[];
       container.innerHTML='';
       if(!rows.length){container.innerHTML='<div class="empty">No messages yet</div>';return}
@@ -214,19 +217,11 @@ document.addEventListener('DOMContentLoaded',async function(){
         container.appendChild(el);
       });
     }catch(e){
+      console.error(e);
       container.innerHTML='<div class="empty">Error loading messages</div>';
     }
   }
-  function backToList(){
-    loadForums();
-  }
-  document.getElementById('newForumBtn').addEventListener('click',async function(){
-    var title=prompt('New forum title:');
-    if(!title) return;
-    var slug=title.toLowerCase().replace(/[^\w\s-]/g,'').trim().replace(/\s+/g,'-');
-    var ins=await sb.from('forum_topics').insert({title:title,slug:slug}).select().maybeSingle();
-    if(ins && ins.data){loadForums(); setTimeout(function(){var items=document.querySelectorAll('.forum-item'); if(items && items.length){items[items.length-1].scrollIntoView({behavior:'smooth'})}},200)}
-  });
+  function backToList(){loadForums()}
   await loadForums();
   window.addEventListener('resize',function(){if(window.innerWidth>=1000)sidebar.classList.remove('open')});
 });
