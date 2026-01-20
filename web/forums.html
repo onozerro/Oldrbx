@@ -34,8 +34,8 @@ html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,
 .topic-btn .title{font-weight:800}
 .topic-btn .meta{font-size:12px;color:var(--muted);font-weight:700}
 .topic-btn .right{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
-.count-pill{background:#f3f5f6;border:1px solid var(--border);padding:6px 10px;border-radius:6px;font-weight:800;font-size:13px}
-.back-btn{display:none;margin-bottom:12px;color:var(--muted);font-weight:800;cursor:pointer}
+.count-pill{background:#fff;color:#111;border:1px solid #111;padding:6px 10px;border-radius:6px;font-weight:800;font-size:13px}
+.back-btn{display:none;margin-bottom:12px;color:#111;font-weight:800;cursor:pointer;background:#fff;border:1px solid #111;padding:6px 10px;border-radius:6px}
 .topic-header{font-weight:900;margin-bottom:8px}
 .posts{flex:1;max-height:360px;overflow:auto;padding-right:6px}
 .post{display:flex;gap:12px;padding:12px;border-radius:6px;border-bottom:1px solid var(--border);align-items:flex-start;background:#fff}
@@ -45,8 +45,8 @@ html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,
 .post .meta{font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:800}
 .composer{margin-top:12px;display:flex;gap:10px;align-items:flex-start}
 .composer textarea{flex:1;min-height:90px;background:#fafafa;border:1px solid var(--border);color:#111;padding:10px;border-radius:6px;resize:vertical}
-.composer button{height:40px;border-radius:6px;background:var(--accent);color:#fff;border:none;padding:8px 14px;cursor:pointer;font-weight:800;box-shadow:0 6px 14px var(--shadow)}
-.load-more{padding:8px 12px;border-radius:6px;border:1px solid var(--border);background:#fff;cursor:pointer;font-weight:800;margin:8px auto;display:block}
+.btn{padding:8px 12px;border-radius:6px;border:1px solid #111;background:#111;color:#fff;font-weight:800;cursor:pointer}
+.btn-ghost{padding:8px 12px;border-radius:6px;border:1px solid #111;background:#fff;color:#111;font-weight:800;cursor:pointer}
 .empty{color:var(--muted);padding:18px;text-align:center}
 .footer{margin-top:18px;background:var(--panel);border-top:1px solid var(--border);padding:10px 16px;color:var(--muted);font-weight:700;text-align:center;border-radius:0}
 @media(max-width:1000px){.layout{grid-template-columns:1fr}.sidebar{position:fixed;left:-360px;top:56px;height:calc(100% - 56px);width:280px;z-index:1200;transition:left .18s ease}.sidebar.open{left:0}}
@@ -88,11 +88,10 @@ html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,
         <div id="topicsList" class="topics-grid"></div>
       </div>
 
-      <div id="backBtn" class="back-btn" onclick="backToTopics()">← Back to topics</div>
+      <button id="backBtn" class="back-btn" style="display:none">← Back</button>
       <div id="topicHeader" class="topic-header"></div>
 
       <div class="posts" id="postsList"></div>
-      <button id="loadMoreBtn" class="load-more" style="display:none">Load older messages</button>
 
       <div id="composerWrap" style="margin-top:12px;display:none">
         <div style="font-size:13px;color:var(--muted);margin-bottom:6px">Post as <span id="meName"></span></div>
@@ -101,7 +100,7 @@ html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,
           <textarea id="msgInput" placeholder="Write your message..."></textarea>
         </div>
         <div style="margin-top:8px;display:flex;justify-content:flex-end">
-          <button id="sendBtn">Send</button>
+          <button id="sendBtn" class="btn">Send</button>
         </div>
       </div>
     </main>
@@ -113,7 +112,7 @@ html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,
 <script>
 document.addEventListener('DOMContentLoaded', async function(){
   const SUPA_URL = "https://nkvvnnjukqtfhmegyzek.supabase.co";
-  const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rdnZubmp1a3F0ZmhtZWd5emVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2NjQ5MTIsImV4cCI6MjA4NDI0MDkxMn0.2jp9X2KQunFargrstYM7oGBYs75Kq7AEHs7iRARxexs";
+  const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFub24iLCJpYXQiOjE3Njg2NjQ5MTIsImV4cCI6MjA4NDI0MDkxMn0.2jp9X2KQunFargrstYM7oGBYs75Kq7AEHs7iRARxexs";
   const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
 
   let currentTopicId = null;
@@ -130,9 +129,11 @@ document.addEventListener('DOMContentLoaded', async function(){
   document.getElementById('moneyIcon').src = '/img/money.png';
   document.getElementById('hamb').addEventListener('click', function(){ document.getElementById('sidebar').classList.toggle('open') });
 
-  const PAGE_SIZE = 10;
-  let oldestCursor = null;
-  let moreAvailable = false;
+  const PAGE_SIZE = 12;
+  let firstCursor = null;
+  let lastCursor = null;
+  let hasMoreAbove = false;
+  let loadingOlder = false;
 
   async function ensureTopics(){
     const { data, error } = await sb.from('forum_topics').select('*').order('id',{ascending:true});
@@ -148,7 +149,7 @@ document.addEventListener('DOMContentLoaded', async function(){
         { slug: 'general', title: "What's on your mind" }
       ];
       for(const d of defaults){
-        await sb.from('forum_topics').insert(d).select().maybeSingle();
+        await sb.from('forum_topics').insert(d);
       }
     }
   }
@@ -167,7 +168,7 @@ document.addEventListener('DOMContentLoaded', async function(){
 
   async function loadTopicsToUI(){
     await createDefaultTopicsIfMissing();
-    const { data, error } = await sb.from('forum_topics').select('*').order('id',{ascending:true});
+    const { data } = await sb.from('forum_topics').select('*').order('id',{ascending:true});
     const container = document.getElementById('topicsList');
     container.innerHTML = '';
     const topics = (data && data.length) ? data : [];
@@ -195,72 +196,103 @@ document.addEventListener('DOMContentLoaded', async function(){
     const clicked = [...elems].find(x => Number(x.dataset.id) === Number(id));
     if(clicked) clicked.classList.add('active');
     document.getElementById('topicsPanel').style.display = 'none';
-    document.getElementById('backBtn').style.display = 'block';
+    document.getElementById('backBtn').style.display = 'inline-block';
     document.getElementById('composerWrap').style.display = 'block';
-    oldestCursor = null;
-    await loadPostsPage(id, true);
+    firstCursor = null;
+    lastCursor = null;
+    hasMoreAbove = false;
+    await loadInitialPage(id);
+    const postsEl = document.getElementById('postsList');
+    postsEl.addEventListener('scroll', onPostsScroll);
   }
 
-  async function loadPostsPage(topicId, reset){
+  async function loadInitialPage(topicId){
     const list = document.getElementById('postsList');
-    if(reset){
-      list.innerHTML = '';
-      oldestCursor = null;
-      moreAvailable = false;
-      document.getElementById('loadMoreBtn').style.display = 'none';
-    }
-    let query = sb.from('forum_posts').select('id,username,content,avatar_url,created_at').eq('topic_id',topicId).order('created_at',{ascending:false}).limit(PAGE_SIZE);
-    if(oldestCursor){
-      query = sb.from('forum_posts').select('id,username,content,avatar_url,created_at').lt('created_at', oldestCursor).eq('topic_id',topicId).order('created_at',{ascending:false}).limit(PAGE_SIZE);
-    }
-    const { data: posts, error } = await query;
-    if(error){
-      list.innerHTML = '<div class="empty">Error loading messages</div>';
+    list.innerHTML = '';
+    const { data: posts, error } = await sb.from('forum_posts').select('id,username,content,avatar_url,created_at').eq('topic_id',topicId).order('created_at',{ascending:false}).limit(PAGE_SIZE);
+    if(error || !posts || !posts.length){
+      list.innerHTML = '<div class="empty">No messages yet</div>';
       return;
     }
-    if(!posts || !posts.length){
-      if(reset) list.innerHTML = '<div class="empty">No messages yet</div>';
-      return;
+    const ordered = posts.slice().reverse();
+    for(const p of ordered){
+      appendPostElement(list, p);
     }
-    for(const p of posts){
-      const d = document.createElement('div');
-      d.className = 'post';
-      const av = document.createElement('div'); av.className='avatar';
-      const img = document.createElement('img');
-      const avatarUrl = p.avatar_url || auth.avatarUrl || 'user.png';
-      if(avatarUrl.indexOf('http')===0 || avatarUrl.indexOf('//')===0) img.src = avatarUrl;
-      else if(avatarUrl.indexOf('/')===0) img.src = avatarUrl;
-      else img.src = '/img/' + avatarUrl;
-      av.appendChild(img);
-      const body = document.createElement('div'); body.className='body';
-      const meta = document.createElement('div'); meta.className='meta';
-      meta.innerText = (p.username || 'Unknown') + ' • ' + (p.created_at ? new Date(p.created_at).toLocaleString() : '');
-      const msg = document.createElement('div'); msg.innerText = p.content || '';
-      body.appendChild(meta); body.appendChild(msg);
-      d.appendChild(av); d.appendChild(body);
-      list.appendChild(d);
-    }
-    if(posts.length === PAGE_SIZE){
-      oldestCursor = posts[posts.length - 1].created_at;
-      moreAvailable = true;
-      document.getElementById('loadMoreBtn').style.display = 'block';
-    } else {
-      oldestCursor = posts[posts.length - 1].created_at;
-      moreAvailable = false;
-      document.getElementById('loadMoreBtn').style.display = 'none';
-    }
-    if(reset){
-      const node = list.firstChild;
-      if(node) node.scrollIntoView({behavior:'auto', block:'start'});
-    } else {
-      list.scrollTop = list.scrollHeight;
-    }
+    firstCursor = ordered[0].created_at;
+    lastCursor = ordered[ordered.length - 1].created_at;
+    const { count } = await sb.from('forum_posts').select('id', { count: 'exact', head: true }).lt('created_at', firstCursor).eq('topic_id', topicId);
+    hasMoreAbove = !!(count && count > 0);
+    list.scrollTop = list.scrollHeight;
   }
 
-  document.getElementById('loadMoreBtn').addEventListener('click', async function(){
-    if(!currentTopicId || !moreAvailable) return;
-    await loadPostsPage(currentTopicId, false);
-  });
+  function appendPostElement(container, p){
+    const d = document.createElement('div');
+    d.className = 'post';
+    const av = document.createElement('div'); av.className='avatar';
+    const img = document.createElement('img');
+    const avatarUrl = p.avatar_url || auth.avatarUrl || 'user.png';
+    if(avatarUrl.indexOf('http')===0 || avatarUrl.indexOf('//')===0) img.src = avatarUrl;
+    else if(avatarUrl.indexOf('/')===0) img.src = avatarUrl;
+    else img.src = '/img/' + avatarUrl;
+    av.appendChild(img);
+    const body = document.createElement('div'); body.className='body';
+    const meta = document.createElement('div'); meta.className='meta';
+    meta.innerText = (p.username || 'Unknown') + ' • ' + (p.created_at ? new Date(p.created_at).toLocaleString() : '');
+    const msg = document.createElement('div'); msg.innerText = p.content || '';
+    body.appendChild(meta); body.appendChild(msg);
+    d.appendChild(av); d.appendChild(body);
+    container.appendChild(d);
+  }
+
+  function prependPostElement(container, p){
+    const d = document.createElement('div');
+    d.className = 'post';
+    const av = document.createElement('div'); av.className='avatar';
+    const img = document.createElement('img');
+    const avatarUrl = p.avatar_url || auth.avatarUrl || 'user.png';
+    if(avatarUrl.indexOf('http')===0 || avatarUrl.indexOf('//')===0) img.src = avatarUrl;
+    else if(avatarUrl.indexOf('/')===0) img.src = avatarUrl;
+    else img.src = '/img/' + avatarUrl;
+    av.appendChild(img);
+    const body = document.createElement('div'); body.className='body';
+    const meta = document.createElement('div'); meta.className='meta';
+    meta.innerText = (p.username || 'Unknown') + ' • ' + (p.created_at ? new Date(p.created_at).toLocaleString() : '');
+    const msg = document.createElement('div'); msg.innerText = p.content || '';
+    body.appendChild(meta); body.appendChild(msg);
+    d.appendChild(av); d.appendChild(body);
+    container.insertBefore(d, container.firstChild);
+  }
+
+  async function loadOlder(topicId){
+    if(loadingOlder || !hasMoreAbove) return;
+    loadingOlder = true;
+    const list = document.getElementById('postsList');
+    const prevScrollTop = list.scrollTop;
+    const prevScrollHeight = list.scrollHeight;
+    const { data: posts, error } = await sb.from('forum_posts').select('id,username,content,avatar_url,created_at').lt('created_at', firstCursor).eq('topic_id',topicId).order('created_at',{ascending:false}).limit(PAGE_SIZE);
+    if(error || !posts || !posts.length){
+      hasMoreAbove = false;
+      loadingOlder = false;
+      return;
+    }
+    const ordered = posts.slice().reverse();
+    for(const p of ordered){
+      prependPostElement(list, p);
+    }
+    firstCursor = ordered[0].created_at;
+    const { count } = await sb.from('forum_posts').select('id', { count: 'exact', head: true }).lt('created_at', firstCursor).eq('topic_id', topicId);
+    hasMoreAbove = !!(count && count > 0);
+    const addedHeight = list.scrollHeight - prevScrollHeight;
+    list.scrollTop = prevScrollTop + addedHeight;
+    loadingOlder = false;
+  }
+
+  function onPostsScroll(){
+    const list = document.getElementById('postsList');
+    if(list.scrollTop <= 60 && hasMoreAbove && !loadingOlder){
+      loadOlder(currentTopicId);
+    }
+  }
 
   document.getElementById('backBtn').addEventListener('click', function(){
     document.getElementById('topicsPanel').style.display = '';
@@ -271,24 +303,26 @@ document.addEventListener('DOMContentLoaded', async function(){
     currentTopicId = null;
     const elems = document.querySelectorAll('.topic-btn');
     elems.forEach(e => e.classList.remove('active'));
-    document.getElementById('loadMoreBtn').style.display = 'none';
+    firstCursor = null;
+    lastCursor = null;
+    hasMoreAbove = false;
   });
 
   document.getElementById('sendBtn').addEventListener('click', async function(){
     const txt = document.getElementById('msgInput').value.trim();
     if(!txt || !currentTopicId) return;
-    const payload = { topic_id: currentTopicId, username: auth.username, content: txt, avatar_url: auth.avatarUrl || 'user.png' };
     this.disabled = true;
     this.innerText = 'Sending...';
+    const payload = { topic_id: currentTopicId, username: auth.username, content: txt, avatar_url: auth.avatarUrl || 'user.png' };
     try{
-      const { data, error } = await sb.from('forum_posts').insert(payload);
+      const { error } = await sb.from('forum_posts').insert(payload);
       if(error){
         console.error(error);
         alert('Unable to post: ' + (error.message || 'unknown'));
         return;
       }
       document.getElementById('msgInput').value = '';
-      await loadPostsPage(currentTopicId, true);
+      await loadInitialPage(currentTopicId);
       await loadTopicsToUI();
     }catch(e){
       console.error(e);
