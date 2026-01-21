@@ -222,7 +222,7 @@
       const token = randToken(16);
       localStorage.setItem('auth', JSON.stringify({username: username, token: token, ts: Date.now()}));
       displayMsg("success","Login successful. Redirecting...");
-      setTimeout(()=>{ location.href = "home-paid.html"; }, 350);
+      setTimeout(()=>{ location.href = "web/home.html"; }, 350);
     } else {
       displayMsg("error","Invalid username or password");
     }
