@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.querySelectorAll('.nav-item').forEach(it=>it.addEventListener('click',()=>location.href=it.dataset.h));
 
   const auth = JSON.parse(localStorage.getItem('auth')||'{}');
-  if(!auth.username){location.replace('/web/login.html');return}
+  if(!auth.username){location.replace('login.html');return}
   document.getElementById('sideName').innerText = auth.username;
   const safeSrc = u => u && u.trim() ? u : '/img/user.png';
   const setAv = u => {const s = safeSrc(u);document.getElementById('sideAv').src=s;document.getElementById('topAv').src=s;}

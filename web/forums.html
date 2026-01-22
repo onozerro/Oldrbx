@@ -108,7 +108,7 @@ const sb=supabase.createClient(SUPA_URL,SUPA_KEY);
 let currentTopicId=null;
 let auth=null;
 try{auth=JSON.parse(localStorage.getItem('auth'))}catch(e){auth=null}
-if(!auth||!auth.username){location.replace('/web/login.html');return}
+if(!auth||!auth.username){location.replace('login.html');return}
 document.getElementById('meName').innerText=auth.username;
 document.getElementById('meAv').src='/img/user.png';
 document.getElementById('topAv').src='/img/user.png';

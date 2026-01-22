@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded',async function(){
   function nav(h){location.href=h}
   document.querySelectorAll('.nav-item').forEach(function(it){it.addEventListener('click',function(){nav(it.dataset.h)})});
   var auth=null;try{auth=JSON.parse(localStorage.getItem('auth'))}catch(e){auth=null}
-  var loginPath='/web/login.html';
+  var loginPath='login.html';
   if(!auth||!auth.username){location.replace(loginPath);return}
   document.getElementById('sideName').innerText=auth.username;
   document.getElementById('hello').innerText='Hello, '+auth.username+'!';

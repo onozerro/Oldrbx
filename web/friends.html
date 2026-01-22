@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded',async function(){
   function navAll(h){location.href=h}
   document.querySelectorAll('.nav-item').forEach(function(it){it.addEventListener('click',function(){navAll(it.dataset.h)})});
   var auth=null;try{auth=JSON.parse(localStorage.getItem('auth'))}catch(e){auth=null}
-  if(!auth||!auth.username){location.replace('/web/login.html');return}
+  if(!auth||!auth.username){location.replace('login.html');return}
   document.getElementById('sideName').innerText=auth.username;
   function safeSrc(u){return u?u:'/img/user.png'}
   function setAv(u){var x=safeSrc(u);document.getElementById('sideAv').src=x;document.getElementById('topAv').src=x}

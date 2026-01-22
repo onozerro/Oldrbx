@@ -23,7 +23,7 @@ html,body{height:100%;margin:0;background:var(--bg);font-family:Arial,Helvetica,
 .user-header{display:flex;gap:12px;align-items:center;margin-bottom:8px}
 .user-header .mini{width:44px;height:44px;border-radius:6px;overflow:hidden}
 .user-header .mini img{width:100%;height:100%;object-fit:cover}
-#sideName{font-weight:900;} /* Ник жирный */
+#sideName{font-weight:900;} 
 .nav-item{padding:12px;border-radius:6px;background:#fff;border:1px solid var(--border);font-weight:800;margin-bottom:10px;cursor:pointer}
 .main{background:var(--panel);border:1px solid var(--border);padding:18px;border-radius:6px}
 .section-title{font-weight:900;margin-bottom:8px}
@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
   let auth = null;
   try { auth = JSON.parse(localStorage.getItem('auth')); } catch(e){ auth=null; }
-  if(!auth || !auth.username){ location.replace('/web/login.html'); return; }
+  if(!auth || !auth.username){ location.replace('login.html'); return; }
 
   document.getElementById('sideName').innerText = auth.username;
   function safeSrc(u){ return u ? u : '/img/user.png'; }
